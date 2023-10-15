@@ -12,7 +12,7 @@ The code for this firmware was heavily modified and it has not been fully tested
 
 ### If you flash this firmware onto your WARBL, all your custom settings will be erased.
 
-Also, your WARBL will not work with the official Configuration tools (Web page and apps) anymore. You will have to use the [Configuration page](webconfig/configureForApp.html) contained in this repository (which works with with the original firmware also).
+Also, your WARBL will not work with the official Configuration tools (Web page and apps) anymore. You will have to use the [Configuration page](https://barbaro.it/web/static/warbl/configure.html) contained in this repository (which works with with the original firmware also).
 
 #### This software is provided “as is," and you use the software at your own risk. I make no warranties as to performance, merchantability, fitness for a particular purpose, or any other warranties whether expressed or implied.
 
