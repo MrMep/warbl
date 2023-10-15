@@ -1,0 +1,190 @@
+.DA-Keyboardcontainer {
+    font: 16px Lucida Sans, Trebuchet MS, Tahoma, sans-serif;
+    color: #000;
+    padding: 20px;
+}
+
+ul.DA-PianoKeyboard {
+    position: relative;
+    display: inline-block;
+    height:100px;
+    padding: 0;
+    cursor: pointer;
+    list-style-type: none;
+}
+
+ul.DA-PianoKeyboard li {
+    position: relative;
+    float: left;
+    border-style: solid;
+    border-color: #000;
+    border-width: 2px 1px 2px 1px;
+    border-radius: 0 0 4px 4px;
+    color: #000;
+    text-align: center;
+}
+
+.whiteKey>p {
+    margin-top: 55px;
+    margin-left: -10px;
+}
+
+ul.DA-PianoKeyboard li:first-of-type {
+    border-left-width: 2px;
+    border-top-left-radius: 4px;
+}
+
+ul.DA-PianoKeyboard li:last-of-type {
+    border-right-width: 2px;
+    border-top-right-radius: 4px;
+}
+
+.whiteKey {
+    width: 25px;
+    height: 75px;
+    background: #fff;
+    margin-left: -12px;
+
+}
+.startKey {
+    width: 25px;
+    height: 75px;
+    background: #000000;
+    margin-left: -12px;
+
+}
+
+.endKey {
+    width: 12px;
+    height: 75px;
+    background: #000000;
+    margin-left: -12px;
+
+}
+.whiteKey:hover:active {
+    background: #eee;
+}
+
+.whiteKey:hover {
+    background: #f9f9f9;
+}
+
+.blackKey {
+    background: #000;
+    z-index: 10;
+    width: 10px;
+    height: 45px;
+    margin: 0 0 0 -18px;
+}
+
+
+.blackKey:hover:active {
+    background: #555;
+}
+
+.blackKey:hover {
+    background: #444;
+}
+
+
+.blackKeyFlat:hover {
+    background: #444;
+}
+
+/* positioning */
+
+.blackKeyFlat + .whiteKey {
+    margin-left: -12px;
+}
+
+.blackKey + .blackKeyFlat{
+    margin-left: -22px;
+}
+
+
+/* Octave shift */
+
+.DA-Keyboardcontainer button {
+    display: inline-block;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.0);
+    margin: 10px;
+    border-style: none;
+    padding: 10px;
+    text-align: center;
+    vertical-align: top;
+    font-size: 50px;
+    height: 160px;
+    color: #999;
+}
+
+.DA-Keyboardcontainer button:hover {
+    background-color: #eeeeee;
+}
+
+
+.DA-Keyboardcontainer button:disabled {
+    color: #fff;
+    cursor: default;
+}
+
+.DA-Keyboardcontainer button:disabled:hover {
+    background-color: #fff;
+}
+
+
+/* Notes Selection */
+
+#DA-NoteSelection {
+    display: inline-block;
+    margin-left: 50px;
+    height: 40px;
+}
+
+
+.performanceLabel {
+	display: block;
+	position: relative;
+	text-align: left;
+	line-height: 20px;
+    margin-left: 20px;
+	z-index: 99;
+	font-size: 14px;
+
+}
+
+.box {
+    float: left;
+    height: 15px;
+    width: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: 1px solid black;
+    clear: both;
+  }
+
+  .dot {
+    height: 10px;
+    width: 10px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  
+  .currentDiatonic {
+    background-color: #60f775;
+  }
+  
+  .currentChromatic {
+    background-color: #e51c23;
+  }
+  
+  .harmonizerDiatonic {
+    background-color: #d1cafa;
+  }
+
+  .harmonizerChromatic {
+    background-color: #fed330;
+  }

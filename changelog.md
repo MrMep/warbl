@@ -2,6 +2,29 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+
+## [Unreleased]
+
+## [2.3/BARBARO] - 2023-10-15
+### Changed
+
+- Having a single "mode" or instrument and load the corresponding prefs runtime, when the instrument is changed - to release memory and flash footprint
+- Added a defines.h file for (almost) all constants used in the sketch
+- Added a type.h file for (almost) all type defs used in the sketch
+- Modified the Settings CC message mapping to allocate for more button actions (now up to 20 different actions)
+- Moved some Midi CC messages to make room for new ones.
+ 
+### Added
+- General Tranposer (substitutes previous semitone and octave actions)
+- Fixed note action (to keep the current note always on - not a drone, it switches off with the main note)
+- 3-voice harmonizer where you can select the interval and a reference scale. If you activate the harmonizer while playing a note, it will adjust the interval to keep it "diatonic" to the selected scale.
+- Perfomance Monitor section in the Config tool, with a piano keyboard and current state of the fingering, the hamonizer, the transpose, etc.
+- New custom fingering management. There are up to 30 custom fingering slot.
+- New fingering Barbaro's EWI
+- Half hole management for left thumb and R3-R4, with calibration in the config tool.
+
+
+# Previous Official WARBL Firmware Changelog
 ## [Unreleased]
 
 ## [2.2] - 2023-7-20

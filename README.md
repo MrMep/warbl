@@ -5,6 +5,118 @@ Please see the web site for more info:
 
 https://warbl.xyz
 
+
+## This is a Custom Build for WARLB!
+
+The code for this firmware was heavily modified and it has not been fully tested yet! You are welcome to try it and give some feedback.
+
+### If you flash this firmware onto your WARBL, all your custom settings will be erased.
+
+Also, your WARBL will not work with the official Configuration tools (Web page and apps) anymore. You will have to use the [Configuration page](webconfig/configureForApp.html) contained in this repository (which works with with the original firmware also).
+
+#### This software is provided “as is," and you use the software at your own risk. I make no warranties as to performance, merchantability, fitness for a particular purpose, or any other warranties whether expressed or implied.
+
+
+## New Features
+
+## Custom Fingering
+![Custom Fingering](readme_files/custom_fingering.png)
+
+The original "Custom Fingering" tool has been replaced by a new tool that allows you to memorize up to 30 override fingerings, each pertinent to the currently selected fingering schema.
+To add a new override, while the WARBL is connected to the Configuration Tool:
+- Open the "Custom Fingering" section
+- Enter a fingering pattern on the WARBL
+- Blow once to freeze it
+- Modify the corresponding note and press "Modify".
+
+- Press "Reset" to restore the default note.
+- Enter "0" to silent a position.
+
+## 3-voice Diatonic/Chromatic Harmonizer
+![Harmonizer](readme_files/harmonizer.png)
+
+You can add an "harmonizing" action to the buttons. You can then select the interval (at which the additional voice will be played) and a reference scale.
+
+If you activate the harmonizer while playing a note, it will take that note as tonic and it will dinamically adjust the interval to keep it "diatonic" to the selected scale.
+
+If you activate the harmonizer without playing a note, the harmonizer will keep the selected interval unaltered.
+
+
+## General Transposer
+
+There are two type of Tranposer actions for the buttons: normal and "progressive".
+
+If you select the "normal" transposer, then you can select an interval: all your notes will be transposed by that interval. The button will act as an on/off switch.
+
+If you select the progressive transposer then, every time you activate it with a button, the interval will be added (or subtracted) to the current transposition (much like the original octave and semitone up/down action).
+
+
+## Fixed Note
+
+When you activate it while playing a note, that note will be kept active.
+
+It is not a drone: the fixed note will switch on/off along with the main note.
+
+
+## Performance Monitor
+![Performance Monitor 2](readme_files/p_monitor_2.png)
+![Performance Monitor](readme_files/p_monitor.png)
+
+This new section in the Configuration tool will show you some real time information.
+
+- The current note you are playing
+- The current fingering on WARBL
+- The current state of Transposer, Fixed note and Harmonizer
+- Eventual harmonizer-generated notes.
+- When the diatonic harmonizer is selected, it will color code the notes on the piano keyboard to indicate whether they are diatonic or chromatic in the current context. This could be useful for learning purposes also!
+
+
+## New Fingering: Barbaro's EWI
+
+I have added a new fingering pattern of my own invention that allows for a two and a half octaves full chromatic range.
+
+You can download [the chart here](readme_files/Barbaro_s_EWI_Fingering%20Chart.pdf).
+
+
+## Half-hole Detection
+
+Experimentally, and only for the Barbaro's EWI fingering scheme, I have activated an half-hole detection function.
+
+This function is active on three holes only: thumb, R4 and R3.
+
+- Half hole on R4 and R3 will raise the corresponding pitches (C and D), by one semitone.
+- Half thumb hole will raise all pitches by one octave, effectively adding a third register to the instrument.
+
+### Half-hole Calibration
+Half-hole detection needs to be calibrated first.
+In the "Calibration" section of the Configuration tools there is a new "Half Hole Calibration" button that shows the following section:
+
+![Half Hole Calibration](readme_files/half_hole_calib.png)
+
+Basically, you can select the exact interval for each hole to be detected as half-open, while a real-time vertical bar shows you where the current value is.
+
+There is a configurable small delay in the detection to make it more accurate. You can change its duration with the "Half Hole Transient" control.
+
+The detection also depends upon the "Finger-sensing distance" paramenter, and more heavily upon the hole calibration value.
+
+An auto-calibration feature for the half-hole detection is in the TODO list.
+
+### Half-hole Hardware modification
+Due to hardware limitations, the half thumb hole detection works way better with a small modification, as shown in the following picture:
+![Half Hole Modification](readme_files/thumb_hole.png)
+
+As seen in the picture, you have to put some transparent 3M-like tape around the thumb hole and gently shape a little concavity in the hole. This improves a lot the quality of detection.
+
+There is no need to modify the front holes (R3 and R4).
+
+A 3D printable clip-on accessory is in the TODO list.
+
+
+
+---
+
+# Original README:
+
 For updating the software, typical users would just install the .hex file using the installer that you can [download here](https://warbl.xyz/documentation.html).
  
 Advanced users can use the Arduino IDE to modify and upload the code. WARBL uses some special settings for USB MIDI that make the initial IDE setup more complicated than with a normal Arduino. However, you only have to follow most of the steps once.
@@ -20,6 +132,10 @@ Advanced users can use the Arduino IDE to modify and upload the code. WARBL uses
 #### General considerations
 
 * If you plan to do editing, please note that we are using 4-space indentation with a specific formatting style. To use this style in the Arduino editor, go to the Arduino preferences, and at the bottom where it says `More preferences can be edited directly in the file`, open and edit the preferences.txt file mentioned there, and add or change the `editor.tabs.size=4` line as shown. Also, copy the file **formatter.conf** from this repository to the same directory that the preferences.txt is, this will let you use the Auto Format feature in the Arduino Tools menu to properly format the code. ToDO: add .clang-format file for IDE 2.0
+* On MacOS version of Arduino IDE you have to edit a JSON file located at `/Users/(username)/.arduinoIDE/settings.json `   
+ For the 4-space indentation, it should be enough to add the following key-value pair:
+
+  `"editor.tabSize": 4`
 
 #### Editing the Warbl firmware
 
@@ -32,6 +148,9 @@ Advanced users can use the Arduino IDE to modify and upload the code. WARBL uses
    * Windows: `C:\Users\(username)\AppData\Local\Arduino15\packages\adafruit\hardware\avr\1.4.12` 
    
    * Linux: `/home/(username)/.arduino15/packages/adafruit/hardware/avr/1.4.15`
+
+   * Mac: `/Users/(username)/Library/Arduino15/packages/adafruit/hardware/avr/1.4.15`
+
 
     I use the free NotePad++ app to edit this. First, change the VID and PID to the WARBL USB VID and PID:
 
@@ -59,6 +178,7 @@ Advanced users can use the Arduino IDE to modify and upload the code. WARBL uses
   
     * Windows: `C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\USBCore.h`
     * Linux: `/home/(username)/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino/USBCore.h`
+    * Mac: `/Users/(username)/Library/Arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino/USBCore.h`
   
     > **Please note:** You may want to make a backup copy of this file before changing it. Changing it will affect all USB boards that you program with the IDE. The setting that we’re changing probably won’t make a difference in most cases, but it’s important to know this. 
 

@@ -1,3 +1,4 @@
+
 <!doctype html>
 
 <html>
@@ -29,12 +30,12 @@
     
     <link href='https://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet'/>
 
-    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../font-awesome/css/font-awesome.min.css">
     
-    <link href="css/nouislider.css" rel="stylesheet" type="text/css">
+    <link href="../../css/nouislider.css" rel="stylesheet" type="text/css">
 
-    <link href="css/config.min.css" rel="stylesheet" type="text/css">
-    
+    <link href="css/config.css" rel="stylesheet" type="text/css">
+
     <style>
 
       .topnav.responsive {background: transparent;}
@@ -44,16 +45,21 @@
     </style>
     
     
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-129157937-1">
-    </script>
+
 
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'UA-129157937-1');
-    </script>
+    if (window.isSecureContext) {
+  // Page is a secure context so service workers are now available
+
+  
+  console.log("secure");
+}
+  </script>   
+    <script src="../../js/jquery-3.3.1.min.js"></script>
+    <script src="../../js/nouislider.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+
+    
     
   </head>
 
@@ -63,7 +69,7 @@
 
       <a href="index.html">
 
-        <img src="img/small_logo.png" width="50">
+        <img src="../../img/small_logo.png" width="50">
 
       </a>
 
@@ -71,7 +77,7 @@
 
     <div class="topnav" id="myTopnav">
       
-      <a href="index.html">Home</a>
+      <a href="../../index.html">Home</a>
 
       <a href="https://warbl.xyz/documentation.html">Documentation</a>
       
@@ -131,7 +137,7 @@
           <p id="current" class="noTouch">Your firmware is up to date.</p>
         </div>
 
-        <div class="middleControlBox">
+        <div class="middleControlBox" id="middleControlBox">
         
         
         
@@ -142,7 +148,7 @@
 
             <div class="tab tab0">
 
-              <input type="radio" value="0" name="quality" id="fingering0" onChange="sendFingeringRadio(value)" checked>
+              <input type="radio" value="0" name="quality" id="fingering0" onChange="sendFingeringRadio(this)" checked>
 
               <label for="fingering0"> <span><span></span></span><div class="fingeringLabelDiv" id="fingeringLabel1">Tin whistle/flute</div><div class="instrument" id=instrument1Label>Instrument 1:</div></label>
 
@@ -150,7 +156,7 @@
 
             <div class="tab tab1">
 
-              <input type="radio" value="1" name="quality" id="fingering1" onChange="sendFingeringRadio(value)">
+              <input type="radio" value="1" name="quality" id="fingering1" onChange="sendFingeringRadio(this)">
 
               <label for="fingering1"><span><span></span></span><div class="fingeringLabelDiv" id="fingeringLabel2">Tin whistle/flute</div><div class="instrument" id=instrument2Label>Instrument 2:</div></label>
 
@@ -158,7 +164,7 @@
 
             <div class="tab tab2">
 
-              <input type="radio" value="2" name="quality" id="fingering2" onChange="sendFingeringRadio(value)">
+              <input type="radio" value="2" name="quality" id="fingering2" onChange="sendFingeringRadio(this)">
 
               <label for="fingering2"><span><span></span></span><div class="fingeringLabelDiv" id="fingeringLabel3">Tin whistle/flute</div><div class="instrument" id=instrument3Label>Instrument 3:</div></label>
 
@@ -179,11 +185,101 @@
         
         
         
-        
-        
-        
-        
-        <div id="customControls">
+          <div id="customFingering" style="display: none;">
+			
+			
+            <h2 class="controlboxtitle noTouch" id="customFingeringsHeader">Custom Fingering Configuration
+
+              <button type="button" class="infocircle" onClick="modal(31)"><i class="fa fa-info-circle"></i></button>
+
+            </h2>
+            
+            <div id="customChart">	
+          
+                  <div class="customFingeringLabel noTouch">Fingering pattern</div>		
+                  <div class="MIDILabel noTouch">MIDI Note</div>
+                  <div class="customThumbLabel noTouch">thumb</div>		
+                  <div class="customR4Label noTouch">R4</div>
+              
+              <div class="fingering" id="customFingeringDots">
+                <svg version="1.1" baseProfile="tiny" id="WARBL_3.0_top_holes"
+                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="792px" height="612px"
+                viewBox="0 0 792 612" xml:space="preserve">
+                  <!-- Open: fill="#C3C0C0" - Closed: fill="#262626" - Ignored: fill="#555"-->
+                  <circle id="fingeringDot8" fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="140.123" cy="425.345" r="7.56"/>
+                    <path id="fingeringDotHalfA8" d="M 140.123 418.345
+                            A 7.56 7.56 0 0 1 140.123 434.345
+                            L 140.123 418.345
+                            Z" 
+                       fill="#262626" style="display: none;"/>
+                    <path  id="fingeringDotHalfB8"  d="M 140.123 418.345
+                       A 7.56 7.56 0 0 0 140.123 433.345
+                       L 140.123 418.345
+                       Z" 
+                  fill="#C3C0C0" style="display: none;"/>
+                  <circle id="fingeringDot7" fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="160.123" cy="425.345" r="7.56"/>
+                  <circle id="fingeringDot6" fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="188.104" cy="425.345" r="7.56"/>
+                  <circle id="fingeringDot5" fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="214.207" cy="425.345" r="7.56"/>
+                  <circle id="fingeringDot4" fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="247.269" cy="425.345" r="7.56"/>
+                  <circle id="fingeringDot3" fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="275.739" cy="425.345" r="7.56"/>
+                  <circle id="fingeringDot2" fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="310.605" cy="425.345" r="7.56"/>
+                    <path id="fingeringDotHalfA2" d="M 310.605 418.345
+                            A 7.56 7.56 0 0 1 310.605 434.345
+                            L 310.605 418.345
+                            Z" 
+                      fill="#262626" style="display: none;"/>
+                    <path  id="fingeringDotHalfB2"  d="M 310.605 418.345
+                      A 7.56 7.56 0 0 0 310.605 433.345
+                      L 310.605 418.345
+                      Z" 
+                    fill="#C3C0C0" style="display: none;"/>
+
+                  <circle id="fingeringDot1" fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="350.453" cy="425.345" r="7.56"/>
+                    <path id="fingeringDotHalfA1" d="M 350.453 418.345
+                        A 7.56 7.56 0 0 1 350.453 434.345
+                        L 350.453 418.345
+                        Z" 
+                    fill="#262626" style="display: none;"/>
+                  <path  id="fingeringDotHalfB1"  d="M 350.453 418.345
+                    A 7.56 7.56 0 0 0 350.453 433.345
+                    L 350.453 418.345
+                    Z" 
+                  fill="#C3C0C0" style="display: none;"/>
+                </svg>
+              </div>
+              
+              <input class="fingeringInput" id="customFingeringInput" type="text" onChange="customFingeringInput();" onkeyup="customFingeringInput();">
+              <div class="fingeringInputNote" id="customFingeringInputNoteLabel">-</div>
+              <div class="fingeringInputNote" id="customFingeringDefaultInputNote">Default Midi note: <span id="defaultMidiNote">-</span></div>
+              <div class="fingeringInputNote" id="customFingeringCustomInputNote">Custom Midi note: <span id="overrideMidiNote">-</span></div>
+              <button type="button" class="smallbutton noTouch customFingeringReset" id="customFingeringReset" onClick="onCustomFingeringReset()">Reset</button>
+              <button type="button" class="smallbutton noTouch customFingeringModify" id="customFingeringModify" onClick="sendCustomFingering()">Modify</button>
+
+
+              <div class="fingeringInputNote" id="customFingeringCustomNumberDiv">Custom fingerings (for current): <span id="customFingeringCustomNumber">-</span></div>
+              <div class="fingeringInputNote" id="customFingeringTotalNumberDiv">Custom fingerings (total): <span id="customFingeringTotalNumber">-</span></div>
+
+
+              <button type="button" class="smallbutton noTouch customFingeringDeleteAllCurrent" id="customFingeringDeleteAllCurrent" onClick="onCustomFingeringDeleteAllCurrent()">Delete All for Current</button>
+              <button type="button" class="smallbutton noTouch customFingeringDeleteAll" id="customFingeringDeleteAll" onClick="onCustomFingeringDeleteAll()">Delete All</button>
+
+
+              <p id="customFingeringHelpText">
+                1. Enter a fingering pattern on the WARBL;<br><br>
+                2. Blow once to freeze it;<br><br>
+                3. Modify the corresponding note and press "Modify".<br><br><br>
+                - Press "Reset" to restore the default note.<br><br>
+                - Enter "0" to silent a position.
+
+              </p>
+          </div>
+          
+          <button type="button" class="smallbutton noTouch customFingeringOkay" onClick="customFingeringOkay()">OK</button>
+	   
+     </div>
+
+                
+      <div id="customControls" style="display: none;">
 			
 			
             <h2 class="controlboxtitle noTouch" id="customControlsHeader">Custom Fingering Configuration
@@ -199,11 +295,11 @@
             <div class="customThumbLabel noTouch">thumb</div>		
             <div class="customR4Label noTouch">R4</div>
         
-        <div class="fingering" id="fingering1">
+        <div class="fingering" id="fingeringCurrent">
 			<svg version="1.1" baseProfile="tiny" id="WARBL_3.0_top_holes"
 			 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="792px" height="612px"
 			 viewBox="0 0 792 612" xml:space="preserve">
-            <circle fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="140.123" cy="425.345" r="7.56"/>
+      <circle fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="140.123" cy="425.345" r="7.56"/>
 			<circle fill="#555" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="160.123" cy="425.345" r="7.56"/>
 			<circle fill="#555" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="188.104" cy="425.345" r="7.56"/>
 			<circle fill="#555" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="214.207" cy="425.345" r="7.56"/>
@@ -510,7 +606,7 @@
                 <option value="17">Säckpipa (major)</option>
                 <option value="18">Säckpipa (minor)</option> 
                 <option value="20">Bombarde</option>
-                <option value="21">Baroque flute</option>                
+                <option value="21">Baroque flute</option>            
                 <option value="19">Custom</option>       
               </select>
 
@@ -538,7 +634,7 @@
                 <option value="17">Säckpipa (major)</option>
                 <option value="18">Säckpipa (minor)</option>
                 <option value="20">Bombarde</option>
-                <option value="21">Baroque flute</option>                  
+                <option value="21">Baroque flute</option>                 
                 <option value="19">Custom</option> 
               </select>
 
@@ -566,7 +662,7 @@
                 <option value="17">Säckpipa (major)</option>
                 <option value="18">Säckpipa (minor)</option>
                 <option value="20">Bombarde</option>
-                <option value="21">Baroque flute</option>                
+                <option value="21">Baroque flute</option>              
                 <option value="19">Custom</option>
               </select>
 
@@ -576,109 +672,8 @@
 
           <div class="keySelectLabel noTouch">Key</div>
           
-          <div class="keySelectContainer">
-
-            <div class="styled-key-select blue semi-square" id="key0">
-
-              <select id="keySelect0" onChange="sendKey(0,value)">
-                <option value="113">C3</option>
-                <option value="114">C#</option>
-                <option value="115">D</option>
-                <option value="116">Eb</option>
-                <option value="117">E</option>
-                <option value="118">F</option>
-                <option value="119">F#</option>
-                <option value="120">G</option>
-                <option value="121">G#</option>
-                <option value="122">A</option>
-                <option value="123">Bb</option>
-                <option value="124">B</option>
-                <option value="125">C4</option>
-                <option value="126">C#</option>
-                <option selected="selected" value="0">D</option>
-                <option value="1">Eb</option>
-                <option value="2">E</option>
-                <option value="3">F</option>
-                <option value="4">F#</option>
-                <option value="5">G</option>
-                <option value="6">G#</option>
-                <option value="7">A</option>
-                <option value="8">Bb</option>
-                <option value="9">B</option>
-                <option value="10">C5</option>
-                <option value="11">C#</option>
-                <option value="12">D</option>
-              </select>
-
-            </div>
-
-            <div class="styled-key-select blue semi-square" id="key1">
-
-              <select id="keySelect1" onChange="sendKey(1,value)">
-                <option value="113">C3</option>
-                <option value="114">C#</option>
-                <option value="115">D</option>
-                <option value="116">Eb</option>
-                <option value="117">E</option>
-                <option value="118">F</option>
-                <option value="119">F#</option>
-                <option value="120">G</option>
-                <option value="121">G#</option>
-                <option value="122">A</option>
-                <option value="123">Bb</option>
-                <option value="124">B</option>
-                <option value="125">C4</option>
-                <option value="126">C#</option>
-                <option selected="selected" value="0">D</option>
-                <option value="1">Eb</option>
-                <option value="2">E</option>
-                <option value="3">F</option>
-                <option value="4">F#</option>
-                <option value="5">G</option>
-                <option value="6">G#</option>
-                <option value="7">A</option>
-                <option value="8">Bb</option>
-                <option value="9">B</option>
-                <option value="10">C5</option>
-                <option value="11">C#</option>
-                <option value="12">D</option>
-              </select>
-
-            </div>
-
-            <div class="styled-key-select blue semi-square" id="key2">
-
-              <select id="keySelect2" onChange="sendKey(2,value)">
-                <option value="113">C3</option>
-                <option value="114">C#</option>
-                <option value="115">D</option>
-                <option value="116">Eb</option>
-                <option value="117">E</option>
-                <option value="118">F</option>
-                <option value="119">F#</option>
-                <option value="120">G</option>
-                <option value="121">G#</option>
-                <option value="122">A</option>
-                <option value="123">Bb</option>
-                <option value="124">B</option>
-                <option value="125">C4</option>
-                <option value="126">C#</option>
-                <option value="0">D</option>
-                <option value="1">Eb</option>
-                <option value="2">E</option>
-                <option value="3">F</option>
-                <option value="4">F#</option>
-                <option value="5">G</option>
-                <option value="6">G#</option>
-                <option value="7">A</option>
-                <option selected="selected" value="8">Bb</option>
-                <option value="9">B</option>
-                <option value="10">C5</option>
-                <option value="11">C#</option>
-                <option value="12">D</option>
-              </select>
-
-            </div>
+          <div class="keySelectContainer" id ="keySelectContainer">
+              <!-- To be populated -->
 
           </div>
           
@@ -708,9 +703,10 @@
 
           </div>
           
-           <button type="button" class="headerbuttons noTouch" id="configureCustomFingering" onClick="configureCustomFingering()">Configure custom fingering...</button>
-		  
-                     <div class="headerbuttonwrapper">
+          <button type="button" class="headerbuttons noTouch" id="configureCustomFingering" onClick="configureCustomFingering()">Custom fingering...</button>
+
+
+            <div class="headerbuttonwrapper">
 
             <button type="button" class="headerbuttons noTouch" id="saveasdefaults" onClick="modal(2)">Save settings for current instrument</button>
 
@@ -1725,10 +1721,7 @@
             </h2>
             
             
-            <button type="button" class="smallbutton noTouch openConsole" onClick="modal(18)">MIDI Console...</button>
-            
- 
- 
+          
             
             <div class="secretLabel noTouch">Use "secret" button commands</div>
             
@@ -1786,268 +1779,12 @@
 
             </div>
 
-            <div class="selectContainer">
-
-              <div class="styled-select blue semi-square">
-
-                <select id="row0" onChange="sendRow(0)">
-                  <option value="0">none</option>
-                  <option selected="selected" value="1">Send MIDI message:</option>
-                  <option value="2">Change slide/vibrato mode</option>
-                  <option value="3">Change instrument</option>
-                  <option value="4">Play/stop (bagless mode)</option>
-                  <option value="5">Octave shift up</option>
-                  <option value="6">Octave shift down</option>
-                  <option value="10">Semitone shift up</option>
-                  <option value="11">Semitone shift down</option>
-                  <option value="7">MIDI Panic</option>
-                  <option value="8">Change register control mode</option>
-                  <option value="9">Turn drones on/off</option>
-                  <option value="19">Begin autocalibration</option>
-                </select>
-
-              </div>
-
-              <div class="styled-select blue semi-square">
-
-                <select id="row1" onChange="sendRow(1)">
-                  <option value="0">none</option>
-                  <option value="1">Send MIDI message:</option>
-                  <option selected="selected" value="2">Change slide/vibrato mode</option>
-                  <option value="3">Change instrument</option>
-                  <option value="4">Play/stop (bagless mode)</option>
-                  <option value="5">Octave shift up</option>
-                  <option value="6">Octave shift down</option>
-                  <option value="10">Semitone shift up</option>
-                  <option value="11">Semitone shift down</option>
-                  <option value="7">MIDI Panic</option>
-                  <option value="8">Change register control mode</option>
-                  <option value="9">Turn drones on/off</option>
-                  <option value="19">Begin autocalibration</option>
-                </select>
-
-              </div>
-
-              <div class="styled-select blue semi-square">
-
-                <select id="row2" onChange="sendRow(2)">
-                  <option value="0">none</option>
-                  <option value="1">Send MIDI message:</option>
-                  <option value="2">Change slide/vibrato mode</option>
-                  <option selected="selected" value="3">Change instrument</option>
-                  <option value="4">Play/stop (bagless mode)</option>
-                  <option value="5">Octave shift up</option>
-                  <option value="6">Octave shift down</option>
-                  <option value="10">Semitone shift up</option>
-                  <option value="11">Semitone shift down</option>
-                  <option value="7">MIDI Panic</option>
-                  <option value="8">Change register control mode</option>
-                  <option value="9">Turn drones on/off</option>
-                  <option value="19">Begin autocalibration</option>
-                </select>
-
-              </div>
-
-              <div class="styled-select blue semi-square">
-
-                <select id="row3" onChange="sendRow(3)">
-                  <option value="0">none</option>
-                  <option value="1">Send MIDI message:</option>
-                  <option value="2">Change slide/vibrato mode</option>
-                  <option value="3">Change instrument</option>
-                  <option value="4">Play/stop (bagless mode)</option>
-                  <option selected="selected" value="5">Octave shift up</option>
-                  <option value="6">Octave shift down</option>
-                  <option value="10">Semitone shift up</option>
-                  <option value="11">Semitone shift down</option>
-                  <option value="7">MIDI Panic</option>
-                  <option value="8">Change register control mode</option>
-                  <option value="9">Turn drones on/off</option>
-                  <option value="19">Begin autocalibration</option>
-                </select>
-
-              </div>
-
-              <div class="styled-select blue semi-square">
-
-                <select id="row4" onChange="sendRow(4)">
-                  <option value="0">none</option>
-                  <option value="1">Send MIDI message:</option>
-                  <option value="2">Change slide/vibrato mode</option>
-                  <option value="3">Change instrument</option>
-                  <option value="4">Play/stop (bagless mode)</option>
-                  <option value="5">Octave shift up</option>
-                  <option selected="selected" value="6">Octave shift down</option>
-                  <option value="10">Semitone shift up</option>
-                  <option value="11">Semitone shift down</option>
-                  <option value="7">MIDI Panic</option>
-                  <option value="8">Change register control mode</option>
-                  <option value="9">Turn drones on/off</option>
-                  <option value="19">Begin autocalibration</option>
-                </select>
-
-              </div>
-
-              <div class="styled-select blue semi-square">
-
-                <select id="row5" onChange="sendRow(5)">
-                  <option value="0">none</option>
-                  <option value="1">Send MIDI message:</option>
-                  <option value="2">Change slide/vibrato mode</option>
-                  <option value="3">Change instrument</option>
-                  <option value="4">Play/stop (bagless mode)</option>
-                  <option value="5">Octave shift up</option>
-                  <option value="6">Octave shift down</option>
-                  <option value="10">Semitone shift up</option>
-                  <option value="11">Semitone shift down</option>
-                  <option value="7">MIDI Panic</option>
-                  <option value="8">Change register control mode</option>
-                  <option value="9">Turn drones on/off</option>
-                  <option value="19">Begin autocalibration</option>
-                </select>
-
-              </div>
-
-              <div class="styled-select blue semi-square">
-
-                <select id="row6" onChange="sendRow(6)">
-                  <option value="0">none</option>
-                  <option value="1">Send MIDI message:</option>
-                  <option value="2">Change slide/vibrato mode</option>
-                  <option value="3">Change instrument</option>
-                  <option value="4">Play/stop (bagless mode)</option>
-                  <option value="5">Octave shift up</option>
-                  <option value="6">Octave shift down</option>
-                  <option value="10">Semitone shift up</option>
-                  <option value="11">Semitone shift down</option>
-                  <option value="7">MIDI Panic</option>
-                  <option value="8">Change register control mode</option>
-                  <option value="9">Turn drones on/off</option>
-                  <option value="19">Begin autocalibration</option>
-                </select>
-
-              </div>
-
-              <div class="styled-select blue semi-square">
-
-                <select id="row7" onChange="sendRow(7)">
-                  <option value="0">none</option>
-                  <option value="1">Send MIDI message:</option>
-                  <option value="2">Change slide/vibrato mode</option>
-                  <option value="3">Change instrument</option>
-                  <option value="4">Play/stop (bagless mode)</option>
-                  <option value="5">Octave shift up</option>
-                  <option value="6">Octave shift down</option>
-                  <option value="10">Semitone shift up</option>
-                  <option value="11">Semitone shift down</option>
-                  <option value="7">MIDI Panic</option>
-                  <option value="8">Change register control mode</option>
-                  <option value="9">Turn drones on/off</option>
-                  <option value="19">Begin autocalibration</option>
-                </select>
-
-              </div>
-
+            <div class="selectContainer" id="buttonPrefsSelectContainer">
+              <!-- To be populated -->
             </div>
 
-            <div class="messageContainer">
-
-              <div class="styled-select2 blue semi-square">
-
-                <select id="MIDIrow0" onChange="sendMIDIrow(0)">
-                  <option value="0">Note on/note off</option>
-                  <option value="1">CC</option>
-                  <option value="2">Send PC</option>
-                  <option value="3">Increase PC</option>
-                  <option value="4">Decrease PC</option>
-                </select>
-
-              </div>
-
-              <div class="styled-select2 blue semi-square">
-
-                <select id="MIDIrow1" onChange="sendMIDIrow(1)">
-                  <option value="0">Note on/note off</option>
-                  <option value="1">CC</option>
-                  <option value="2">Send PC</option>
-                  <option value="3">Increase PC</option>
-                  <option value="4">Decrease PC</option>
-                </select>
-
-              </div>
-
-              <div class="styled-select2 blue semi-square">
-
-                <select id="MIDIrow2" onChange="sendMIDIrow(2)">
-                  <option value="0">Note on/note off</option>
-                  <option value="1">CC</option>
-                  <option value="2">Send PC</option>
-                  <option value="3">Increase PC</option>
-                  <option value="4">Decrease PC</option>
-                </select>
-
-              </div>
-
-              <div class="styled-select2 blue semi-square">
-
-                <select id="MIDIrow3" onChange="sendMIDIrow(3)">
-                  <option value="0">Note on/note off</option>
-                  <option value="1">CC</option>
-                  <option value="2">Send PC</option>
-                  <option value="3">Increase PC</option>
-                  <option value="4">Decrease PC</option>
-                </select>
-
-              </div>
-
-              <div class="styled-select2 blue semi-square">
-
-                <select id="MIDIrow4" onChange="sendMIDIrow(4)">
-                  <option value="0">Note on/note off</option>
-                  <option value="1">CC</option>
-                  <option value="2">Send PC</option>
-                  <option value="3">Increase PC</option>
-                  <option value="4">Decrease PC</option>
-                </select>
-
-              </div>
-
-              <div class="styled-select2 blue semi-square">
-
-                <select id="MIDIrow5" onChange="sendMIDIrow(5)">
-                  <option value="0">Note on/note off</option>
-                  <option value="1">CC</option>
-                  <option value="2">Send PC</option>
-                  <option value="3">Increase PC</option>
-                  <option value="4">Decrease PC</option>
-                </select>
-
-              </div>
-
-              <div class="styled-select2 blue semi-square">
-
-                <select id="MIDIrow6" onChange="sendMIDIrow(6)">
-                  <option value="0">Note on/note off</option>
-                  <option value="1">CC</option>
-                  <option value="2">Send PC</option>
-                  <option value="3">Increase PC</option>
-                  <option value="4">Decrease PC</option>
-                </select>
-
-              </div>
-
-              <div class="styled-select2 blue semi-square">
-
-                <select id="MIDIrow7" onChange="sendMIDIrow(7)">
-                  <option value="0">Note on/note off</option>
-                  <option value="1">CC</option>
-                  <option value="2">Send PC</option>
-                  <option value="3">Increase PC</option>
-                  <option value="4">Decrease PC</option>
-                </select>
-
-              </div>
-
+            <div class="messageContainer" id="buttonPrefsMessageContainer">
+            <!-- To be populated -->
             </div>
 
             <div class="channelLabel noTouch">Channel<br />(1-16)</div>
@@ -2056,23 +1793,8 @@
 
             <div class="byte3Label noTouch">Byte 3<br />(0-127)</div>
 
-            <div class="channelInputContainer">
-
-              <input class="channelInput" type="text" onChange="sendChannel(0)" id="channel0" value="">
-
-              <input class="channelInput" type="text" onChange="sendChannel(1)" id="channel1" value="">
-
-              <input class="channelInput" type="text" onChange="sendChannel(2)" id="channel2" value="">
-
-              <input class="channelInput" type="text" onChange="sendChannel(3)" id="channel3" value="">
-
-              <input class="channelInput" type="text" onChange="sendChannel(4)" id="channel4" value="">
-
-              <input class="channelInput" type="text" onChange="sendChannel(5)" id="channel5" value="">
-
-              <input class="channelInput" type="text" onChange="sendChannel(6)" id="channel6" value="">
-
-              <input class="channelInput" type="text" onChange="sendChannel(7)" id="channel7" value="">
+            <div class="channelInputContainer" id="channelInputContainer">
+                 <!-- To be populated -->
 
             </div>
 
@@ -2122,7 +1844,232 @@
 
       </div>
 
-      <div class="controlbox">
+
+      <!-- Piano Keyboard-->
+      <div class="controlbox" id="performanceBox" style="height: 350px; margin-bottom: 30px;">
+        <link rel="stylesheet" href="css/piano.css">
+        <script src="js/piano.js"></script>
+
+        <h2 class="controlboxtitle noTouch" style="height: 50px; margin-bottom: 0px;">Performance Monitor
+
+          <button type="button" class="infocircle" onClick="modal(30)"><i class="fa fa-info-circle"></i></button>
+
+        </h2>
+        <p></p>
+        <table style="float: right; margin-right: 25px;">
+          <tr id="harmonizerLegendTableLabel"  style="display:none;">
+            <th colspan="2" >
+              <div class="performanceLabel" style="color: var(--header-text-color);
+              text-align: left; margin-left: 0px !important;"><b >Key Color Legend</b></div>
+
+              </th>
+          </tr>
+          <tr  id="harmonizerLegendTableCurrentDiatonic" style="display:none;">
+            <td>
+              <div class='dot currentDiatonic' style="text-align: right;"></div>
+            </td>
+            <td>
+              <div class="performanceLabel" style="text-align: left; margin-left: 5px !important;">Current Note (diatonic)</div>
+            </td>
+          </tr>
+          <tr id="harmonizerLegendTableCurrentChromatic" style="display:none;">
+            <td>
+              <div class='dot currentChromatic' style="text-align: right;"></div>
+            </td>
+            <td>
+              <div class="performanceLabel" style="text-align: left; margin-left: 5px !important;">Current Note (chromatic)</div>
+            </td>
+          </tr>
+          <tr id="harmonizerLegendTableHarmonizerDiatonic" style="display:none;">
+            <td>
+              <div class='dot harmonizerDiatonic' style="text-align: right;"></div>
+            </td>
+            <td>
+              <div class="performanceLabel" style="text-align: left; margin-left: 5px !important;">Harmonizer Note (diatonic)</div>
+            </td>
+          </tr>
+          <tr id="harmonizerLegendTableHarmonizerChromatic" style="display:none;">
+            <td>
+              <div class='dot harmonizerChromatic' style="text-align: right;"></div>
+            </td>
+            <td>
+              <div class="performanceLabel" style="text-align: left; margin-left: 5px !important;">Harmonizer Note (chromatic)</div>
+            </td>
+          </tr>
+        </table>
+
+        <table  style="float: left; margin-bottom: 20px !important;" >
+          <tr>
+            <td>
+              <div class="performanceLabel" style="text-align: right; color: var(--header-text-color);"><b >Transposer</b></div>
+            </td>
+            <td>
+              <div class="performanceLabel"><span id="transposeShift">n/a</span></div>
+            </td>
+            <td colspan="3" style="width:10%">&nbsp;</td>
+            <td>
+              <div class="performanceLabel" style="text-align: right; color: var(--header-text-color);"><b>Fixed Note</b></div>
+            </td>
+            <td>
+              <div class="performanceLabel"><span id="fixedNote">n/a</span></div>
+            </td>
+            <td colspan="3" style="width:10%">&nbsp;</td>
+            <td colspan="3"></td>
+          </tr>   
+          <tr>
+            <td colspan="12">&nbsp;</td>
+          </tr>
+          <tr>
+            <th colspan="3">
+              <div class="performanceLabel" style="color: var(--header-text-color);text-align: center;"><b>Harmonizer 1</b></div>
+            </th>
+            <th colspan="2" >&nbsp;</th>
+            <th colspan="3">
+              <div class="performanceLabel" style="color: var(--header-text-color);text-align: center;"><b>Harmonizer 2</b></div>
+            </th>
+            <th colspan="2">&nbsp;</th>
+            <th colspan="3">
+              <div class="performanceLabel" style="color: var(--header-text-color);text-align: center;"><b>Harmonizer 3</b></div>
+            </th>
+          </tr>
+          <tr>
+            <td>
+              <div class="performanceLabel" style="text-align: right;">Interval</div>
+            </td>
+            <td>
+              <div class="performanceLabel"><span id="interval0">n/a</span></div>
+            </td>
+            <td colspan="3">
+              &nbsp;
+            </td>
+            <td>
+              <div class="performanceLabel" style="text-align: right;">Interval</div>
+            </td>
+            <td>
+              <div class="performanceLabel"><span id="interval1">n/a</span></div>
+            </td>
+            <td colspan="3">
+              &nbsp;
+            </td>
+            <td>
+              <div class="performanceLabel" style="text-align: right;">Interval</div>
+            </td>
+            <td>
+              <div class="performanceLabel"><span id="interval2">n/a</span></div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="performanceLabel" style="text-align: right;">Scale</div>
+            </td>
+            <td>
+              <div class="performanceLabel"><span id="scale0">n/a</span></div>
+            </td>
+            <td colspan="3">
+              &nbsp;
+            </td>
+            <td>
+              <div class="performanceLabel" style="text-align: right;">Scale</div>
+            </td>
+            <td>
+              <div class="performanceLabel"><span id="scale1">n/a</span></div>
+            </td>
+            <td colspan="3">
+              &nbsp;
+            </td>
+            <td>
+              <div class="performanceLabel" style="text-align: right;">Scale</div>
+            </td>
+            <td>
+              <div class="performanceLabel"><span id="scale2">n/a</span></div>
+            </td>
+          </tr>
+        </table>
+
+
+        <div class="" id="keyboardContainer"></div><!-- this will hold the keyboard -->
+
+
+        <script type="text/javascript">
+
+          $( document ).ready(function() {
+              //create piano with 3 octaves, starting at C4 (lowest key)
+              //shows labels and octave shift buttons
+              var keyboardHTML = htmlForKeyboardWithOctaves(9, octaves.C1, false, false)
+              //render the keyboard in the div
+              $("#keyboardContainer").html(keyboardHTML)
+              //when keys are pressed updatePreview() is called
+              // bindKeysToFunction(updatePreview)
+
+
+          })
+      
+          //this stores all keyboard input
+          var plaineEasieCodes = []
+      
+          //this is called whenever a piano key is pressed
+          function updatePreviewWithNote(sender, paeNote) {
+              console.log("key pressed is " + paeNote)
+              plaineEasieCodes.push(paeNote)
+          }
+      </script>
+
+      <div class="fingering" id="customfingeringDotsMon">
+        <svg version="1.1" baseProfile="tiny" id="WARBL_3.0_top_holes"
+        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="792px" height="612px"
+        viewBox="0 0 792 612" xml:space="preserve">
+          <!-- Open: fill="#C3C0C0" - Closed: fill="#262626" - Ignored: fill="#555"-->
+          <circle id="fingeringDotMon8" fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="140.123" cy="425.345" r="7.56"/>
+            <path id="fingeringDotMonHalfA8" d="M 140.123 418.345
+                    A 7.56 7.56 0 0 1 140.123 434.345
+                    L 140.123 418.345
+                    Z" 
+              fill="#262626" style="display: none;"/>
+            <path  id="fingeringDotMonHalfB8"  d="M 140.123 418.345
+              A 7.56 7.56 0 0 0 140.123 433.345
+              L 140.123 418.345
+              Z" 
+          fill="#C3C0C0" style="display: none;"/>
+          <circle id="fingeringDotMon7" fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="160.123" cy="425.345" r="7.56"/>
+          <circle id="fingeringDotMon6" fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="188.104" cy="425.345" r="7.56"/>
+          <circle id="fingeringDotMon5" fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="214.207" cy="425.345" r="7.56"/>
+          <circle id="fingeringDotMon4" fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="247.269" cy="425.345" r="7.56"/>
+          <circle id="fingeringDotMon3" fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="275.739" cy="425.345" r="7.56"/>
+          <circle id="fingeringDotMon2" fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="310.605" cy="425.345" r="7.56"/>
+            <path id="fingeringDotMonHalfA2" d="M 310.605 418.345
+                    A 7.56 7.56 0 0 1 310.605 434.345
+                    L 310.605 418.345
+                    Z" 
+              fill="#262626" style="display: none;"/>
+            <path  id="fingeringDotMonHalfB2"  d="M 310.605 418.345
+              A 7.56 7.56 0 0 0 310.605 433.345
+              L 310.605 418.345
+              Z" 
+            fill="#C3C0C0" style="display: none;"/>
+
+          <circle id="fingeringDotMon1" fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="350.453" cy="425.345" r="7.56"/>
+            <path id="fingeringDotMonHalfA1" d="M 350.453 418.345
+                A 7.56 7.56 0 0 1 350.453 434.345
+                L 350.453 418.345
+                Z" 
+            fill="#262626" style="display: none;"/>
+          <path  id="fingeringDotMonHalfB1"  d="M 350.453 418.345
+            A 7.56 7.56 0 0 0 350.453 433.345
+            L 350.453 418.345
+            Z" 
+          fill="#C3C0C0" style="display: none;"/>
+        </svg>
+      </div>
+
+      <div class="fingeringInputNote" id="currentNoteLabel">-</div>
+      <button type="button" class="smallbutton noTouch openConsole" onClick="modal(18)">MIDI Console</button>
+
+    </div>
+
+    
+      <!-- End Piano Keyboard-->
+
+      <div class="controlbox" id="calibrationBox">
 
         <h2 class="controlboxtitle noTouch">Optical Sensor Calibration
 
@@ -2186,6 +2133,9 @@
 
         <button type="button" class="smallbutton noTouch autoCalibrate" id="autoCalibrate" onClick="autoCalibrate()">Auto-calibrate all sensors</button>
 
+        <button type="button" class="headerbuttons noTouch" id="configureHalfHoleDetection" onClick="configureHalfHoleDetection()">Half Hole calibration</button>
+
+
         <button type="button" class="smallbutton noTouch autoCalibrateBell" id="autoCalibrateBell" onClick="autoCalibrateBell()">Auto-calibrate bell sensor only</button>
         
         <button type="button" class="toprowbuttons button b1" id="18" onClick="sendToWARBL(102,18)"><i class="fa fa-angle-up"></i></button>
@@ -2244,6 +2194,84 @@
         
       </div>
     
+
+
+
+     <div class="controlbox"  id="halfHoleDetection" style="display: none;">
+			
+      <h2 class="controlboxtitle noTouch" id="halfHoleHeader">Half Hole Calibration
+
+        <button type="button" class="infocircle" onClick="modal(32)"><i class="fa fa-info-circle"></i></button>
+
+      </h2>
+
+      <div class="slidecontainer2" id="bufferSizeContainerHH">
+
+        <input type="range" min="0" max="127" value="30" class="ranger" id="bufferSizeHH" onChange="sendHalfHoleBuffer(value)" oninput="sendHalfHoleBuffer(value)">
+      </div>
+
+      <div class="halfHoleTransientLabelHH noTouch">Half Hole Transient</div>
+
+      <div class="bufferSizeValueHH noTouch" id="bufferSizeValueHH">-</div>
+
+
+     <div class="half-hole-select blue semi-square" id="halfHoleSelectDiv">
+
+        <select id="halfHoleSelect" onChange="sendHalfHoleSelect(value)">
+          <option value="99">-</option>
+          <option value="8" selected>Left thumb</option>
+          <option value="2">R3</option>
+          <option value="1">R4</option>    
+        </select>
+
+      </div>
+
+
+        <div class="selector">
+          <section class="double-range-slider">
+            <input class="sliderBlue" id="currentReadRangeHH"  oninput="slider_getVals();" onchange="slider_getVals();" value="200" min="0" max="500" type="range" disabled>
+
+            <input class="sliderRed" id="lowerLimitRangeHH" oninput="slider_getVals();" onchange="slider_getVals();" value="0" min="0" max="500" step="5" type="range">
+
+            <input class="sliderGreen" id="upperLimitRangeHH"  oninput="slider_getVals();" onchange="slider_getVals();" value="400" min="0" max="500" step="5" type="range">
+
+            <span class="rangeValues" id="double-range-label"></span>
+          </section>
+
+          <link rel="stylesheet" href="css/multislider.css">
+          <script src="js/multislider.js"></script>
+      </div>
+
+      
+
+
+
+
+      <div class="fingering" id="customfingeringDotsHH">
+        <svg version="1.1" baseProfile="tiny" id="WARBL_3.0_top_holes"
+        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="792px" height="650px"
+        viewBox="0 0 792 612" xml:space="preserve">
+          <!-- Open: fill="#C3C0C0" - Closed: fill="#262626" - Ignored: fill="#555"  425.345-->
+          <circle id="fingeringDotHH" fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="170.123" cy="185.345" r="7.56"/>
+            <path id="fingeringDotHalfAHH" d="M 150.123 178.345
+                    A 7.56 7.56 0 0 1 150.123 193.345
+                    L 150.123 178.345
+                    Z" 
+              fill="#262626" style="display: none;"/>
+            <path  id="fingeringDotHalfBHH"  d="M 150.123 178.345
+              A 7.56 7.56 0 0 0 150.123 193.345
+              L 150.123 178.345
+              Z" 
+          fill="#C3C0C0" style="display: none;"/>
+          
+        </svg>
+      </div>
+
+      <button type="button" class="smallbutton noTouch halfHoleDetectionOkay" onClick="halfHoleDetectionOkay()">OK</button>
+
+      </div>
+
+
       <div id="importexport" class="importexportbox">
 
         <h2 class="importexportboxtitle noTouch">Preset Import/Export
@@ -2564,7 +2592,7 @@
           </p>
           
           <p>
-			The <b>Configure custom fingering...</b> button will show a panel for designing a custom fingering chart that is only activated if you have also chosen <b>Custom</b> in the <b>Fingering pattern</b> dropdown menu.
+			The <b>Custom fingering...</b> button will show a panel for designing a custom fingering chart that is only activated if you have also chosen <b>Custom</b> in the <b>Fingering pattern</b> dropdown menu.
        		</p>
           
            <p>
@@ -2604,7 +2632,7 @@
         <div>
           
           <p>
-            These settings control the way that the register is changed by overblowing. Each variable below has a setting for a <b>bag</b> and one for the <b>breath</b> (mouthpiece). which settings are used depends on whether you currently have Bag or Breath selected in the main Note Trigger and Register Control panel.
+            These settings control the way that the register is changed by overblowing. Each variable below has a setting for a <b>bag</b> and one for the <b>breath</b> (mouthpiece). which settings are used depends on whether you currently have Bag or Breath selected in the main Note Trigger and Register Control panel (the currently selected group of settings are surrounded by a white box).
             The variables that are most likely to need adjustment are located near the top. Clicking the <b>Bag defaults</b> button will restore the default bag settings for all variables in the panel, and clicking the <b>Breath defaults</b> button will restore the default settings for breath. Units are not shown for some of these settings because they use arbitrary units.
           </p>
 
@@ -2882,7 +2910,7 @@
         
         
         
-           <div id="open-modal21" onClick="" class="modal-window">
+      <div id="open-modal21" onClick="" class="modal-window">
 
         <div id="modal-center21">
 
@@ -2905,7 +2933,7 @@
         
         
         
-           <div id="open-modal22" onClick="" class="modal-window">
+    <div id="open-modal22" onClick="" class="modal-window">
 
       <div id="modal-center22">
 
@@ -2924,17 +2952,114 @@
       </div>
 
     </div>
- 
- 
- 
+
+
+
+    <div id="open-modal30" onClick="" class="modal-window">
+
+      <div id="modal-center8">
+
+        <h2 title="Close" onClick="modalclose(30)" class="modal-close">Close</h2>
+
+        <h1>Performance Monitor</h1>
+
+        <div>
+          <p>
+            When WARBL is connected, real time activity is shown on the piano keyboard.
+          </p>
+
+          <p>Transposer interval, Fixed note pitch and parameters for each of the three harmonizer voices are shown as well, when active.</p>
+           <p>
+           The <b>MIDI Console</b> will display up to 300 MIDI messages from WARBL, which can be useful for testing your MIDI setup.
+            </p>
+           
+        </div>
 
       </div>
 
+    </div>
+
+    <div id="open-modal31" onClick="" class="modal-window">
+
+      <div id="modal-center8">
+
+        <h2 title="Close" onClick="modalclose(31)" class="modal-close">Close</h2>
+
+        <h1>Custom Fingering Configuration</h1>
+
+        <div>
+          <p>
+            You can add up to 30 new custom fingerings with the associated midi note.
+          </p>
+          <p>Each custom fingering is associated to the current general Fingering Pattern.</p>
+
+          <p> To add a new custom fingering:</p>
+          <ol>
+            <li>Enter a fingering pattern on the WARBL;</li>
+            <li>
+              Blow once to freeze it;
+            </li>
+            <li>
+              Modify the corresponding note and press "Modify".
+            </li>
+          </ol>
+          <p> If a custom note is already defined for the current fingering pattern, it gets overwritten with the new note.</p>
+          
+          
+          <p>To reset a fingering pattern to its default value, select and freeze it as above and then press "Reset".</p>          
+          <p>You can delete all custom fingering patterns, just for the current scheme or in general, by pressing the corresponding button "Delete".</p>          
+           
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div id="open-modal32" onClick="" class="modal-window">
+
+      <div id="modal-center8">
+
+        <h2 title="Close" onClick="modalclose(32)" class="modal-close">Close</h2>
+
+        <h1>Half Hole Detection Calibration</h1>
+
+        <div>
+          <p>
+            For each of the activated fingers, you can select the precise interval that is read as half-hole position.
+          </p>
+          <p>The "Half Hole Transient" slider selects the duration of the half-hole detection phase: the lower it is, the more glitches you will hear. If its value is too high, a small delay will become audible when changing left thumb position. </p>
+          <p>
+            To calibrate the half hole detection interval:
+            </p>
+          <p>
+            <ol>
+              <li>Select the finger whose hole you want to calibrate;</li>
+              <li>Switch between open, closed and half-open position of the selected finger;</li>
+              <li>See where the vertical black line falls and adjust the upper and lower limits so that, while in the half-hole position, the vertical black line falls comfortably in the green section;</li>
+              <li>Once satisfied, press OK.</li>
+            </ol>
+          </p>
+          <p> Please consider that:</p>
+          <p>
+            <ul>
+              <li>Calibration is saved only once you press the "Save Calibration" button, in the main Calibration section;</li>
+              <li>The position of the vertical black line is updated only when a fingering change is detected: move your fingers to update its position;</li>
+              <li>A good interval for the half-hole position is at a difference of about 100 between the lower and the upper limit;</li>
+              <li>A good transient value is about 30;</li>
+              <li>The calibration is saved for all instruments/fingering schemes.</li>
+
+            </ul>
+          </p>
+        </div>
+
+      </div>
+
+    </div>
     </body>
 
-    <script src="js/jquery-3.3.1.min.js"></script>
+
     
-    <script src="js/nouislider.js"></script>
 
     <script>
 
@@ -2981,13 +3106,12 @@
 
     </script>
 
-    <script src='js/WebAudioFontPlayer.js'></script>
+    <script src='../../js/WebAudioFontPlayer.js'></script>
     
-    <script src='js/0650_SBLive_sf2.js'></script>
+    <script src='../../js/0650_SBLive_sf2.js'></script>
     
-    <!-- <script src="js/midi.min.js"></script> -->
     <script src="js/midi.js"></script>
 
-    <script src="js/d3.min.js"></script>
+    <script src="../../js/d3.min.js"></script>
 
   </html>

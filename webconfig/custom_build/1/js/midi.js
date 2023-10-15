@@ -3,7 +3,150 @@
 //
 
 //debugger;
+//Defines in common with defines.h of Arduino prj
+var MIDI_CONF_CHANNEL = 7; //Midi channel
 
+var MIDI_SLOT_02 = 102; //base CC
+var MIDI_SAVE_CALIB = 19; //Data
+var MIDI_CALIB_SLOW_OS = 20; //Data
+// var MIDI_SEND_FINGER_PATTERN_OS = 30; //Offset
+// var MIDI_SEND_MODE_SELECTOR_OS = 33; //Offset
+var MIDI_CURRENT_INSTR_OS = 60; //Offset
+var MIDI_PB_MODE_OS = 63; //Offset
+var MIDI_BREATH_MODE_OS = 68; //Offset
+var MIDI_DEFAULT_INSTR_OS = 73; //Offset
+var MIDI_SEND_BUTTON_PREF_OS = 76; //Offset
+var MIDI_SEND_MOMENTARY_OS = 76; //Offset
+var MIDI_SEND_CUSTOM_FINGERING	= 84; //Activates the trasmission of a custom fingering scheme
+var MIDI_SEND_CUSTOM_FINGERING_NOTE	= 85;	//Note corresponding to current fingerPAttern
+var MIDI_SEND_CUSTOM_FINGERING_CURRENT	= 86;	// Number of custom fignering for current schema
+var MIDI_SEND_CUSTOM_FINGERING_TOTAL	= 87;	//Total number of custom fingerings
+var MIDI_DELETE_CUSTOM_FINGERING_CURRENT = 88; //Delete all custom fignerings for current selector
+var MIDI_DELETE_CUSTOM_FINGERING  = 89; //Delete all custom fingerings
+
+var MIDI_TURN_OFF_COMM =90; //Offset
+var MIDI_BUTTON_PREF_ACTION_OS = 91; //Offset
+var MIDI_BUTTON_PREF_MIDI_CMD_OS = 110; //Offset
+var MIDI_MOMENTARY_OFF_OS = 115; //Offset
+var MIDI_MOMENTARY_ON_OS = 116; //Offset
+var MIDI_BUTTON_AUTO_CALIB_OS = 117; //Offset
+var MIDI_BELL_SENSOR_OS = 118; //Offset
+var MIDI_DUMP_SETTINGS_CURRENT = 121; //Offset
+var MIDI_DUMP_EEPROM = 122; //Offset
+var MIDI_SAVE_SETTING_CURRENT = 123; //Offset
+var MIDI_SAVE_SETTING_ALL = 124; //Offset
+var MIDI_RESTORE_FACTORY_SETTING = 125; //Offset
+var MIDI_SEND_SETTINGS = 126; //Offset
+var MIDI_AUTO_CALIB = 127; //Offset
+
+
+var MIDI_SLOT_03 = 103; //base CC
+
+var MIDI_SLOT_04 = 104; //base CC
+var MIDI_SEND_EXPRESSION_VARS_1_OS = 13; //Offset
+var MIDI_SEND_EXPRESSION_DEPTH = 14;
+var MIDI_SEND_LSB_LEARN_DRONE_PRESS_OS = 32; //Offset
+var MIDI_SEND_MSB_LEARN_DRONE_PRESS_OS = 33; //Offset
+var MIDI_SEND_LSB_LEARN_PRESS_OS = 34; //Offset
+var MIDI_SEND_MSB_LEARN_PRESS_OS = 35; //Offset
+var MIDI_SEND_SWITCH_VARS_OS = 40; //Offset
+var MIDI_SEND_EXPRESSION_VARS_2_OS = 49; //Offset
+var MIDI_SEND_BEND_RANGE_OS = 61; //Offset
+var MIDI_SEND_MIDI_CHAN_OS = 62; //Offset
+
+var MIDI_SEND_TRANSPOSE_SHIFT =                   100; //Offset 0=-12 ... 24=+12
+var MIDI_SEND_HARMONIZER_FIXED_NOTE  =            101; //Offset +2
+var MIDI_SEND_HARMONIZER_INTERVAL  =              102; //Offset +2  0=-12 ... 24=+12
+var MIDI_SEND_HARMONIZER_TONIC =                  105; //Offset +2 0=C ... 11=B
+var MIDI_SEND_HARMONIZER_SCALE =                  108; //Offset +2 
+var MIDI_SEND_HARMONIZER_BASE_NOTE =              111; //Offset +2  0=C ... 11=B
+var MIDI_SEND_HARMONIZER_BASE_NOTE_DIATONIC =     114; //Offset +2 0/1
+var MIDI_SEND_HARMONIZER_CURRENT_NOTE =           117; //Offset +2  0=C ... 11=B
+var MIDI_SEND_HARMONIZER_CURRENT_NOTE_DIATONIC =  120; //Offset +2 0/1
+
+var MIDI_SEND_HALFHOLE_BUFFER = 				  123; //size of the buffer
+var MIDI_SEND_HALFHOLE_CURRENT =                  124 //current hole
+var MIDI_SEND_HALFHOLE_SAVE_CURRENT =             125 //saves calibration and buffer size
+// var MIDI_SEND_HALFHOLE_MIN =                      126 //lowerLimit
+// var MIDI_SEND_HALFHOLE_MAX =                      127 //upperLimit
+
+var MIDI_SLOT_05 = 105; //base CC
+
+var MIDI_SLOT_06 = 106; //base CC
+var MIDI_EN_VIBRATO_HOLES_OS = 20; //Offset
+var MIDI_CALIB_OPTION_OS = 39; //Offset
+var MIDI_USE_LEARN_PRESS_OFF = 39; //Offset
+var MIDI_USE_LEARN_PRESS_ON = 40; //Offset
+var MIDI_SEND_LEARN_PRESS = 41; //Offset
+var MIDI_AUTO_CALIB_BELL = 42; //Offset
+var MIDI_SEND_LEARN_PRESS_DRONE = 43; //Offset
+var MIDI_SAVE_CALIB_AS_FACTORY = 45; //Offset
+
+// var MIDI_SEND_DEBUG_LSB_OS = 48; //Offset
+// var MIDI_SEND_DEBUG_MSB_OS = 49; //Offset
+// var MIDI_DEBUG_2BYTE_MSG_OS = 51; //Offset
+
+var MIDI_SLOT_07 = 107; //base CC
+var MIDI_SLOT_08 = 108; //base CC
+
+var MIDI_SLOT_09 = 109; //base CC
+
+var MIDI_SW_VERSION = 110; //CC
+var MIDI_SW_BUILD_VERSION = 111; //CC
+
+var MIDI_SLOT_12 = 112; //base CC - keySelect (base transpose) - Not used anymore
+
+var MIDI_SLOT_13 = 113; //intValue selector
+
+	var MIDI_SEND_HOLE_COVERED = 10 // Current holeCovered Value	
+	var MIDI_SEND_KEY_SELECT = 12 // keySelect / noteShiftSelector
+
+	
+	var MIDI_SEND_MODE_SELECTOR = 30; //30-32 int value for fingering scheme index
+
+	// var MIDI_SEND_HALFHOLE_CALIBRATION = 90; //calibration value for selected hole
+	var MIDI_SEND_HALFHOLE_MIN =    	 91; //lowerLimit
+	var MIDI_SEND_HALFHOLE_MAX =    	 92; //upperLimit
+
+	var MIDI_SEND_TONE_COVERED_0 = 100 // Calibration for hole 0
+	var MIDI_SEND_TONE_COVERED_1 = 101 // Calibration for hole 1
+	var MIDI_SEND_TONE_COVERED_2 = 102 // Calibration for hole 2
+	var MIDI_SEND_TONE_COVERED_3 = 103 // Calibration for hole 3
+	var MIDI_SEND_TONE_COVERED_4 = 104 // Calibration for hole 4
+	var MIDI_SEND_TONE_COVERED_5 = 105 // Calibration for hole 5
+	var MIDI_SEND_TONE_COVERED_6 = 106 // Calibration for hole 6
+	var MIDI_SEND_TONE_COVERED_7 = 107 // Calibration for hole 7
+	var MIDI_SEND_TONE_COVERED_8 = 108 // Calibration for hole 8
+
+	var MIDI_SEND_TONE_READ_0 = 110 // Sensor read value for hole 0
+	var MIDI_SEND_TONE_READ_1 = 111 // Sensor read value for hole 1
+	var MIDI_SEND_TONE_READ_2 = 112 // Sensor read value for hole 2
+	var MIDI_SEND_TONE_READ_3 = 113 // Sensor read value for hole 3
+	var MIDI_SEND_TONE_READ_4 = 114 // Sensor read value for hole 4
+	var MIDI_SEND_TONE_READ_5 = 115 // Sensor read value for hole 5
+	var MIDI_SEND_TONE_READ_6 = 116 // Sensor read value for hole 6
+	var MIDI_SEND_TONE_READ_7 = 117 // Sensor read value for hole 7
+	var MIDI_SEND_TONE_READ_8 = 118 // Sensor read value for hole 8
+
+var MIDI_SLOT_14 = 114; //intValue H byte
+var MIDI_SLOT_15 = 115; //intValue L byte
+
+var MIDI_SLOT_16 = 116; //base CC FREE
+var MIDI_SLOT_17 = 117; //base CC vibratoDepth
+var MIDI_SLOT_18 = 118; //base CC FREE
+var MIDI_SLOT_19 = 119; //base CC FREE
+
+/*
+Harmonizer  vars
+*/
+
+var currentNote = -1;
+var fixedNote = -1;
+var harmonizerCurrentNotes = [-1, -1, -1];
+var harmonizerIntervals = [12, 12, 12];
+var harmonizerScale = [0, 0, 0];
+
+/******/
 
 var mapSelection; //keeps track of which pressure output we're mapping (CC, vel, aftertouch, poly)
 var curve = [0,0,0,0]; //which curve is selected for CC, vel, aftertouch, poly
@@ -15,15 +158,36 @@ var consoleEntries = 0; //number of lines in MIDI console
 var customFingeringFills = [[null,null,null,null,null,null,null,null,null,null,null],[0,74,73,72,71,69,67,66,64,62,61],[0,74,72,72,70,68,67,65,64,62,61],[0,74,74,72,72,69,68,67,65,62,60]];
 var communicationMode = false; //if we're communicating with WARBL
 
+//20231005 GLB New Custom Fingering
+var customFingeringLearningON = true;
+var customFingeringMidiNote = -1;
+var defaultMidiNote = -1;
+var overrideMidiNote = -1;
+var currentCustomFingeringNumber = 0;
+var totalCustomFingeringNumber = 0;
+
+var customFingeringReceivingCustomMidiNote = false;
+var customFingeringReceivingCurrentNumber = false;
+var customFingeringReceivingTotalNumber = false;
+
+var holeCovered = 0;
+var halfHoles = 0;
+var maxCustomFingering = 30;
+let customFingering = new Array(); //Stores the custom fingerings sent by WARBL
+var customFingeringReceivingStatus = false; // false = normal communication
+							 	 // true = receiving custom Fingering Info
+								 // It's toggled by cc 102/68
+//END GLB
 var midiNotes = [];
 
-var currentVersion = 21
+var currentVersion = 23
 
 var midiAccess = null; // the MIDIAccess object.
 
 var WARBLout = null; // WARBL output port
 
 var gExportProxy = null; // Export received message proxy
+var exportingPhase = false; //exporting phase active
 
 // For pressure graphing
 var gPressureGraphEnabled = false; // When true, proxy pressure messages to graphing code
@@ -33,7 +197,11 @@ var gNPressureReadings = 100;
 var gMaxPressure = 25;
 var gPressureReadings = [];
 
+//20231014 GLB Settings Management
+var settingsDirty = false; //to prompt for save
+
 var on,off;
+
 
 var deviceName;
 
@@ -49,15 +217,19 @@ var jumpFactorWrite; //to indicate which pressure variably is going to be sent o
 
 var fingeringWrite; //indicates the instrument for which a fingering pattern is being sent.
 
-var version = "Unknown";
+var intValueWrite; //to indicate which int Value is going to be sent or received
+var intValueWriteH; //high byte of int Value being sent or received
 
-var instrument = 0; //currently selected instrument tab
+var version = "Unknown";
+var build_version = 0;
+
+var currentPreset = 0; //currently selected instrument tab
 
 var ping = 0;
 
 var lsb = 0; //used for reassembling pressure bytes from WARBL
 
-var defaultInstr = 0; //default instrument
+var defaultPreset = 0; //default instrument
 
 var modals = new Array();
 
@@ -71,7 +243,7 @@ for (var w = 1; w <= 23; w++) {
 if (platform == "app") {
 	document.getElementById("myTopnav").style.display = "none";
 	document.getElementById("topLogo").style.display = "none";
-	document.getElementById("importexport").style.display = "none";
+	//document.getElementById("importexport").style.display = "none";
 }
 
 // When the user clicks anywhere outside of the modal, close it
@@ -94,6 +266,9 @@ window.addEventListener('load', function() {
 
 	// Clear the WARBL output port
 	WARBLout = null;
+
+	
+	populateSelects(); //populates various selects
 
 	updateCells(); // set selects and radio buttons to initial values and enabled/disabled states
 	
@@ -124,6 +299,28 @@ window.addEventListener('load', function() {
 
 });
 
+/*
+20231003 GLB
+Utility functions
+*/
+var NOTE_NAMES = [ 'C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B' ]
+function getNoteName(note, octave = true) {
+	
+	if (isNaN(note) || note > 127) return null
+	if (note <= 0) {
+		return "Silent position";
+	}
+	var name = NOTE_NAMES[note % 12]
+	if (octave) {
+		var oct = Math.floor(note / 12) - 1
+		return name + oct
+	}
+	return name;
+  }
+
+  function dec2bin(dec) {
+	return (dec >>> 0).toString(2);
+  }
 //
 // Common function to show the "WARBL not detected" message
 //
@@ -142,9 +339,17 @@ function showWARBLNotDetected(){
 		}
 	}
 
+
+
 	
 	// Disable the import preset button
 	$('#importPreset').attr('disabled','disabled');
+	document.getElementById("topcontrolbox").style.height = "10px";
+	document.getElementById("middleControlBox").style.display = "none";
+	document.getElementById("performanceBox").style.display = "none";
+	document.getElementById("calibrationBox").style.display = "none";
+	document.getElementById("importexport").style.display = "none";
+
 
 }
 
@@ -166,7 +371,7 @@ function showWARBLUnknown(){
 
 function connect() {
 	
-	if (communicationMode && version > 2.0) {sendToAll(102, 99); //tell WARBL to exit communications mode if the "connect" button currently reads "Disconnect"
+	if (communicationMode && version > 2.0) {sendToAll(MIDI_SLOT_02, MIDI_TURN_OFF_COMM); //tell WARBL to exit communications mode if the "connect" button currently reads "Disconnect"
 		communicationMode = false;
 		showWARBLNotDetected();
 		showWARBLUnknown();
@@ -278,7 +483,13 @@ function onMIDIInit(midi) {
 		
 		if (!communicationMode || version < 2.1 || version == "Unknown"){
 
-		sendToAll(102, 126); //tell WARBL to enter communications mode
+			sendToAll(MIDI_SLOT_02, MIDI_SEND_SETTINGS); //tell WARBL to enter communications mode
+			
+			document.getElementById("topcontrolbox").style.height = "1785px";
+			document.getElementById("middleControlBox").style.display = "block";
+			document.getElementById("performanceBox").style.display = "block";
+			document.getElementById("calibrationBox").style.display = "block";
+			document.getElementById("importexport").style.display = "block";
 		
 		} 
 		
@@ -331,12 +542,12 @@ function setPing() {
 //
 function buildMessage(byte2, byte3){
 
-	if (!(byte2 == 102 && byte3 == 127) && !(byte2 == 106 && byte3 == 42)) {
+	if (!(byte2 == MIDI_SLOT_02 && byte3 == MIDI_AUTO_CALIB) && !(byte2 == MIDI_SLOT_06 && byte3 == MIDI_AUTO_CALIB_BELL)) {
 		blink(1);
 	} //blink once if we aren't doing autocalibration, which requires the LED to be on longer.
 
-	if (byte2 == 102) {
-		if (byte3 == 19) { //send message to save sensor calibration
+	if (byte2 == MIDI_SLOT_02) {
+		if (byte3 == MIDI_SAVE_CALIB) { //send message to save sensor calibration
 			blink(3);
 			for (var i = 1; i < 10; i++) {
 				document.getElementById("v" + (i)).innerHTML = "0";
@@ -346,12 +557,12 @@ function buildMessage(byte2, byte3){
 			}
 		}
 
-		if (isEven(byte3) && byte3 < 19) { //send sensor calibration values
+		if (isEven(byte3) && byte3 < MIDI_SAVE_CALIB) { //send sensor calibration values
 			sensorValue[byte3 - 2]++;
 			document.getElementById("v" + (byte3 >> 1)).innerHTML = sensorValue[byte3 - 2];
 		}
 
-		if (isOdd(byte3) && byte3 < 19) {
+		if (isOdd(byte3) && byte3 < MIDI_SAVE_CALIB) {
 			sensorValue[byte3 - 1]--;
 			document.getElementById("v" + ((byte3 + 1) >> 1)).innerHTML = sensorValue[byte3 - 1];
 			checkMax((byte3 + 1) >> 1);
@@ -385,36 +596,56 @@ function sendToAll(byte2, byte3) {
 
 }
 
+//20231006 GLB
+//send value as PitchBend message to WARBL
+// function sendPBToWARBL(value) {
+// 	if(communicationMode) {
+
+// 		var msg = [0xE6,  value & 0x7F, value >> 7]; //prepare message
+
+// 		if (platform = "app") {
+// 			var iter = midiAccess.outputs.values();
+// 			for (var o = iter.next(); !o.done; o = iter.next()) {
+// 				o.value.send(msg, window.performance.now()); //send message
+// 			}
+// 		} else {
+// 			// Make sure we have a WARBL output port
+// 			if (!WARBLout){
+
+// 				console.error("sendToWARBL: No MIDI port selected!")
+			
+// 				return;
+
+// 			}		
+// 			// Send to only WARBL MIDI output port
+// 			WARBLout.send(msg, window.performance.now()); //send CC message
+// 		}
+// 	}
+// }
+
 // Send a command to only the WARBL output port
 function sendToWARBL(byte2, byte3) {
 	if(communicationMode){
-	if (platform = "app") {
-		var cc = buildMessage(byte2,byte3);
-		var iter = midiAccess.outputs.values();
-		for (var o = iter.next(); !o.done; o = iter.next()) {
-		o.value.send(cc, window.performance.now()); //send CC message
-		
-	}}
-	
-	else {
-
-	//console.log("sendToWARBL");
-
-	// Make sure we have a WARBL output port
-		if (!WARBLout){
-
-			console.error("sendToWARBL: No MIDI port selected!")
-		
-			return;
-
+		if (platform = "app") {
+			var cc = buildMessage(byte2,byte3);
+			var iter = midiAccess.outputs.values();
+			for (var o = iter.next(); !o.done; o = iter.next()) {
+				o.value.send(cc, window.performance.now()); //send CC message
+			}
+		} else {
+			// Make sure we have a WARBL output port
+			if (!WARBLout){
+				console.error("sendToWARBL: No MIDI port selected!")
+				return;
+			}
+			var cc = buildMessage(byte2,byte3);
+			// Send to only WARBL MIDI output port
+			WARBLout.send(cc, window.performance.now()); //send CC message
 		}
 
-		var cc = buildMessage(byte2,byte3);
-
-		// Send to only WARBL MIDI output port
-		WARBLout.send(cc, window.performance.now()); //send CC message
+		settingsDirty = true;
+		// console.log("sendToWARBL",byte2,byte3);
 	}
-}
 }
 
 
@@ -432,6 +663,11 @@ function WARBL_Receive(event) {
 
 	// If we're exporting a preset, send the data to the exporter instead
 	if (gExportProxy){
+		if ( ((data0 & 0xf0) == 0xB0)  //CC
+			&& (data1 == MIDI_SLOT_02) 
+			&& (data2 == MIDI_DUMP_SETTINGS_CURRENT)) { //exiting settings sending
+				exportingPhase = false;
+		}
 		gExportProxy(data0,data1,data2);
 		return;
 	}
@@ -442,9 +678,10 @@ function WARBL_Receive(event) {
 
 	// If we haven't established the WARBL output port and we get a received message on channel 7
 	// find the port by name by walking the output ports and matching the input port name
-	if ((!WARBLout) && ((data0 & 0x0F) == 6)){
+	if ((!WARBLout) && ((data0 & 0x0F) == MIDI_CONF_CHANNEL-1)){
 		//alert(data0 & 0x0F);
 		
+
 	if (platform == "web"){
 
 		//alert(input.value.name);
@@ -518,6 +755,17 @@ function WARBL_Receive(event) {
 
 	if ((data0 & 0xf0) == 144) {
 		e = "On";
+		//20231005 GLB- New Custom Fingering - Toggles learnign mode
+		customFingeringLearningON = !customFingeringLearningON;
+		if (customFingeringLearningON) { //Resets the holes
+			for (i = 1; i<9; i++) {
+				document.getElementById("fingeringDot" + i).style.fill = "#a3a0a0";
+			}
+		}
+		document.getElementById("customFingeringReset").disabled = customFingeringLearningON;
+		document.getElementById("customFingeringModify").disabled = customFingeringLearningON;
+
+		
 	} //update the MIDI console
 	if ((data0 & 0xf0) == 128) {
 		e = "Off";
@@ -540,7 +788,7 @@ function WARBL_Receive(event) {
 	
 	
 	
-	if (!(e == "CC" && ((parseFloat(data0 & 0x0f) == 6)))) { //as long as it's not a CC on channel 7, show in the MIDI console.
+	if (!(e == "CC" && ((parseFloat(data0 & 0x0f) == MIDI_CONF_CHANNEL-1)))) { //as long as it's not a CC on channel 7, show in the MIDI console.
 		consoleEntries++;
 			if(consoleEntries < 301){
 				document.getElementById("console").innerHTML += (e + " " + ((data0 & 0x0f) + 1) + " " + data1 + " " + f);
@@ -558,87 +806,95 @@ function WARBL_Receive(event) {
 			if (data2 != 0) { // if velocity != 0, this is a note-on message
 				noteOn(data1);
 				logKeys;
+				pressPianoKey(data1);
 				return;
 			}
 			// if velocity == 0, fall thru: it's a note-off.
 		case 0x80:
 			noteOff(data1);
 			logKeys;
+			releasePianoKey(data1);
 			return;
 
+		case 0xE0: //Incoming PitchBend from Warbl - A fingering Pattern
+			if (parseFloat(data0 & 0x0f) == MIDI_CONF_CHANNEL -1) { //if it's channel 7 it's from WARBL 
+			
+			}
+
+			return;
 		case 0xB0: //incoming CC from WARBL
 
-			if (parseFloat(data0 & 0x0f) == 6) { //if it's channel 7 it's from WARBL 
-
-
+			if (parseFloat(data0 & 0x0f) == MIDI_CONF_CHANNEL -1) { //if it's channel 7 it's from WARBL 
 
 				// Enable the import preset button
 				$('#importPreset').removeAttr('disabled')
 
-				//setPing(); //start checking to make sure WARBL is still connected
+				if (data1 == MIDI_SLOT_09) { //current fingered note info from WARBL
+					if (customFingeringReceivingStatus) {
+						customFingeringMidiNote = data2;
+					} else {
+						if (customFingeringReceivingCurrentNumber) {
+							currentCustomFingeringNumber = data2;
+							customFingeringReceivingCurrentNumber = false;
+							document.getElementById("customFingeringCustomNumber").innerHTML = currentCustomFingeringNumber;
 
-				if (data1 == 115) { //hole covered info from WARBL
+						} else if (customFingeringReceivingTotalNumber) {
+							totalCustomFingeringNumber = data2;
+							customFingeringReceivingTotalNumber = false;
+							document.getElementById("customFingeringTotalNumber").innerHTML = totalCustomFingeringNumber;
 
-					var byteA = data2;
-					for (var m = 0; m < 7; m++) {
-						if (bit_test(byteA, m) == 1) {
-							document.getElementById("dot" + m).style.backgroundColor = "blue";
-							if (m == 0) {
-								document.getElementById("dot0").style.opacity = "0.8";
-							}
-						} else {
-							document.getElementById("dot" + m).style.backgroundColor = "#333";
-							if (m == 0) {
-								document.getElementById("dot0").style.opacity = "0";
+						}
+						if (customFingeringLearningON)  {
+							if (customFingeringReceivingCustomMidiNote) {
+								overrideMidiNote = data2;
+								customFingeringReceivingCustomMidiNote = false;
+							} else {
+								defaultMidiNote = data2;
+								if (overrideMidiNote < 0x7f && defaultMidiNote != overrideMidiNote) {
+									document.getElementById("customFingeringInput").value = overrideMidiNote;
+								}  else  {
+									document.getElementById("customFingeringInput").value = defaultMidiNote;
+								}
+								
+								customFingeringInput();
 							}
 						}
 					}
-				}
 
-				if (data1 == 114) { //hole covered info from WARBL
-					for (var n = 0; n < 2; n++) {
-						var byteB = data2;
-						if (bit_test(byteB, n) == 1) {
-							document.getElementById("dot" + (7 + n)).style.backgroundColor = "blue";
-						} else {
-							if (n == 1) {
-								document.getElementById("dot" + (7 + n)).style.backgroundColor = "#181818";
-							}
-							if (n == 0) {
-								document.getElementById("dot" + (7 + n)).style.backgroundColor = "#333";
+				} else if (data1 == MIDI_SLOT_02) { //parse based on received CC
+					if (data2 >= MIDI_CALIB_SLOW_OS && data2 < MIDI_CALIB_SLOW_OS + 10) {
+						document.getElementById("v" + (data2 - MIDI_SAVE_CALIB)).innerHTML = "MAX"; //set sensor value field to max if message is received from WARBL
+						checkMax((data2 - MIDI_SAVE_CALIB));
+					}
+
+					//Moved to int value
+					// for (var i = 0; i < 3; i++) { // update the three selected fingering patterns if prompted by the tool.
+					// 	if (data2 == MIDI_SEND_FINGER_PATTERN_OS + i) {
+					// 		fingeringWrite = i;
+					// 	}
+
+					// 	if (data2 >= MIDI_SEND_MODE_SELECTOR_OS && data2 < MIDI_CURRENT_INSTR_OS) {
+					// 		if (fingeringWrite == i) {
+					// 			document.getElementById("fingeringSelect" + i).value = data2 - MIDI_SEND_MODE_SELECTOR_OS;
+					// 		}
+					// 		updateCells();
+					// 	} //update any dependant fields	
+					// }
+
+
+
+					if (data2 >= MIDI_CURRENT_INSTR_OS && data2 <= MIDI_CURRENT_INSTR_OS + 2) {
+						for (var i = 0; i< 3; i++) {
+							if (i == data2-MIDI_CURRENT_INSTR_OS) {
+								currentPreset = i;
+								document.getElementById("fingering" + i).checked = true;
+								document.getElementById("instrument" + i).style.display = "block";
+								document.getElementById("key" + i).style.display = "block";
+							} else {
+								document.getElementById("instrument" + i).style.display = "none";
+								document.getElementById("key" + i).style.display = "none";
 							}
 						}
-					}
-				} else if (data1 == 102) { //parse based on received CC
-					if (data2 > 19 && data2 < 30) {
-						document.getElementById("v" + (data2 - 19)).innerHTML = "MAX"; //set sensor value field to max if message is received from WARBL
-						checkMax((data2 - 19));
-					}
-
-					for (var i = 0; i < 3; i++) { // update the three selected fingering patterns if prompted by the tool.
-						if (data2 == 30 + i) {
-							fingeringWrite = i;
-						}
-
-						if (data2 > 32 && data2 < 60) {
-							if (fingeringWrite == i) {
-								document.getElementById("fingeringSelect" + i).value = data2 - 33;
-							}
-							updateCells();
-						} //update any dependant fields	
-					}
-
-
-
-					if (data2 == 60) {
-						document.getElementById("fingering0").checked = true;
-						instrument = 0;
-						document.getElementById("instrument0").style.display = "block";
-						document.getElementById("instrument1").style.display = "none";
-						document.getElementById("instrument2").style.display = "none";
-						document.getElementById("key0").style.display = "block";
-						document.getElementById("key1").style.display = "none";
-						document.getElementById("key2").style.display = "none";
 						handleDefault();
 						advancedOkay(); //turn off the advanced tab	
 						pressureOkay();	
@@ -647,100 +903,96 @@ function WARBL_Receive(event) {
 						okayOverride();
 						advancedOkayPB();
 						customFingeringOkay();
+						halfHoleDetectionOkay();
 					}
-					if (data2 == 61) {
-						document.getElementById("fingering1").checked = true;
-						instrument = 1;
-						document.getElementById("instrument0").style.display = "none";
-						document.getElementById("instrument1").style.display = "block";
-						document.getElementById("instrument2").style.display = "none";
-						document.getElementById("key0").style.display = "none";
-						document.getElementById("key1").style.display = "block";
-						document.getElementById("key2").style.display = "none";
-						advancedOkay(); //turn off the advanced tab	
-						pressureOkay();	
-						updateCells();
-						advancedOkayPB();
-						okayCCmap();
-						okayOverride();
-						handleDefault();
-						customFingeringOkay();
-					}
-					if (data2 == 62) {
-						document.getElementById("fingering2").checked = true;
-						instrument = 2;
-						document.getElementById("instrument0").style.display = "none";
-						document.getElementById("instrument1").style.display = "none";
-						document.getElementById("instrument2").style.display = "block";
-						document.getElementById("key0").style.display = "none";
-						document.getElementById("key1").style.display = "none";
-						document.getElementById("key2").style.display = "block";
-						advancedOkay(); //turn off the advanced tab	
-						pressureOkay();	
-						updateCells();
-						advancedOkayPB();
-						okayCCmap();
-						okayOverride();
-						handleDefault();
-						customFingeringOkay();
-					}
+					
 
-
-					if (data2 == 85) { //receive and handle default instrument settings
-						defaultInstr = 0;
+					if (data2 == MIDI_DEFAULT_INSTR_OS) { //receive and handle default instrument settings
+						defaultPreset = 0;
 						handleDefault();
 					}
-					if (data2 == 86) {
-						defaultInstr = 1;
+					if (data2 == MIDI_DEFAULT_INSTR_OS +1) {
+						defaultPreset = 1;
 						handleDefault();
 					}
-					if (data2 == 87) {
-						defaultInstr = 2;
+					if (data2 == MIDI_DEFAULT_INSTR_OS +2) {
+						defaultPreset = 2;
 						handleDefault();
 					}
 
-					if (data2 == 70) {
+					if (data2 == MIDI_PB_MODE_OS) {
 						document.getElementById("pitchbendradio0").checked = true;
 						updateCustom();
 						updateCustom();
 					}
-					if (data2 == 71) {
+					if (data2 == MIDI_PB_MODE_OS+1) {
 						document.getElementById("pitchbendradio1").checked = true;
 						updateCustom();
 						updateCustom();
 					}
-					if (data2 == 72) {
+					if (data2 == MIDI_PB_MODE_OS+2) {
 						document.getElementById("pitchbendradio2").checked = true;
 						updateCustom();
 						updateCustom();
 					}
-					if (data2 == 73) {
+					if (data2 == MIDI_PB_MODE_OS+3) {
 						document.getElementById("pitchbendradio3").checked = true;
 						updateCustom();
 						updateCustom();
 					}
 
-					if (data2 == 80) {
+					//20231006 GLB new custom fingering flags
+					if (data2 == MIDI_SEND_CUSTOM_FINGERING) {
+						customFingeringReceivingStatus = !customFingeringReceivingStatus;
+
+						//Clears the array before filling it up
+						if (customFingeringReceivingStatus) {
+							customFingering = [];
+						} else {
+							//updates the interface
+							// customFingering.forEach(logCustomFingering);
+
+							// function logCustomFingering(item) {
+							// 	console.log(item.midi_note, dec2bin(item.holeCovered));
+							// }
+						}
+					}
+
+					if (data2 == MIDI_SEND_CUSTOM_FINGERING_NOTE) {
+						customFingeringReceivingCustomMidiNote = true;
+					}
+
+					if (data2 == MIDI_SEND_CUSTOM_FINGERING_CURRENT) {
+						customFingeringReceivingCurrentNumber = true;
+					}
+
+					if (data2 == MIDI_SEND_CUSTOM_FINGERING_TOTAL) {
+						customFingeringReceivingTotalNumber = true;
+					}
+
+					//End glb
+
+					if (data2 == MIDI_BREATH_MODE_OS) {
 						document.getElementById("sensorradio0").checked = true;
 					}
-					if (data2 == 81) {
+					if (data2 == MIDI_BREATH_MODE_OS+1) {
 						document.getElementById("sensorradio1").checked = true;
 					}
-					if (data2 == 82) {
+					if (data2 == MIDI_BREATH_MODE_OS+2) {
 						document.getElementById("sensorradio2").checked = true;
 					}
-					if (data2 == 83) {
+					if (data2 == MIDI_BREATH_MODE_OS+3) {
 						document.getElementById("sensorradio3").checked = true;
 					}
 
-					if (data2 == 121) {
+					if (data2 == MIDI_BELL_SENSOR_OS+1) {
 						document.getElementById("bellSensor").style.opacity = 1;
 						document.getElementById("1").disabled = false;
 						document.getElementById("2").disabled = false;
 						document.getElementById("v1").classList.add("sensorValueEnabled");
 
 					}
-					if (data2 == 120) {
+					if (data2 == MIDI_BELL_SENSOR_OS) {
 						document.getElementById("bellSensor").style.opacity = 0.1;
 						document.getElementById("1").disabled = true;
 						document.getElementById("2").disabled = true;
@@ -748,7 +1000,7 @@ function WARBL_Receive(event) {
 					}
 
 					for (var i = 0; i < 8; i++) { //update button configuration	   
-						if (data2 == 90 + i) {
+						if (data2 == MIDI_SEND_BUTTON_PREF_OS + i) {
 							buttonRowWrite = i;
 						}
 					}
@@ -756,15 +1008,31 @@ function WARBL_Receive(event) {
 					for (var j = 0; j < 8; j++) { //update button configuration	
 						if (buttonRowWrite == j) {
 
-							if (data2 == 119) { //special case for initiating autocalibration
-								document.getElementById("row" + (buttonRowWrite)).value = 19;
-							}
+							// if (data2 == MIDI_BUTTON_AUTO_CALIB_OS) { //special case for initiating autocalibration
+							// 	document.getElementById("row" + (buttonRowWrite)).value = 19;
+							// }
 
-							for (var k = 0; k < 12; k++) {
-								if (data2 == (100 + k)) {
-									document.getElementById("row" + (buttonRowWrite)).value = k;
+							for (var k = 0; k < 13; k++) {
+								if (data2 == (MIDI_BUTTON_PREF_ACTION_OS + k)) {
+									//20230927 GLB
+									if (k == 5) {
+										document.getElementById("row" + (buttonRowWrite)).value = 30;
+									} 
+									// else if (k == 6) {
+									// 	document.getElementById("row" + (buttonRowWrite)).value = 32;
+									// } else if (k == 10) {
+									// 	document.getElementById("row" + (buttonRowWrite)).value = 33;
+									// } else if (k == 11) {
+									// 	document.getElementById("row" + (buttonRowWrite)).value = 34;
+									// } else if (k == 12) {
+									// 	document.getElementById("row" + (buttonRowWrite)).value = 35;
+									// } 
+									else{
+										document.getElementById("row" + (buttonRowWrite)).value = k;
+									}
+									//END GLB
 								}
-								if (k < 5 && data2 == 112 + k) {
+								if (k < 5 && data2 == MIDI_BUTTON_PREF_MIDI_CMD_OS + k) {
 									document.getElementById("MIDIrow" + (buttonRowWrite)).value = k;
 									updateCells();
 								}
@@ -775,29 +1043,30 @@ function WARBL_Receive(event) {
 
 					for (var l = 0; l < 3; l++) { //update momentary switches
 						if (buttonRowWrite == l) {
-							if (data2 == 117) {
+							if (data2 == MIDI_MOMENTARY_OFF_OS) {
 								document.getElementById("checkbox" + l).checked = false;
 							}
-							if (data2 == 118) {
+							if (data2 == MIDI_MOMENTARY_ON_OS) {
 								document.getElementById("checkbox" + l).checked = true;
 							}
 
 						}
 					}
 
-				} else if (data1 == 103) {
+				} else if (data1 == MIDI_SLOT_03) {
 					document.getElementById("senseDistance").value = 0 - data2;
+					
 				} //set sensedistance  
-				else if (data1 == 117) {
+				else if (data1 == MIDI_SLOT_17) {
 					document.getElementById("depth").value = data2 + 1;
 					var output = document.getElementById("demo14");
 					depth.dispatchEvent(new Event('input'));
 					output.innerHTML = data2 + 1;
 				} //set vibrato depth  
-				else if (data1 == 104) {
+				else if (data1 == MIDI_SLOT_04) {
 					jumpFactorWrite = data2;
 				} // so we know which pressure setting is going to be received.
-				else if (data1 == 105 && jumpFactorWrite < 13) {	
+				else if (data1 == MIDI_SLOT_05 && jumpFactorWrite < 13) {	
 					document.getElementById("jumpFactor" + jumpFactorWrite).value = data2;
 					if (jumpFactorWrite == 10) {
 						document.getElementById("jumpFactor10b").value = data2; //special case for hysteresis			
@@ -812,7 +1081,7 @@ function WARBL_Receive(event) {
 					}
 				}
 
-				if (data1 == 105) {
+				if (data1 == MIDI_SLOT_05) {
 
 					if (jumpFactorWrite == 13) {
 						document.getElementById("checkbox6").checked = data2;
@@ -1009,21 +1278,300 @@ function WARBL_Receive(event) {
 					else if (jumpFactorWrite > 86 && jumpFactorWrite < 98) { //custom fingering chart inputs
 						document.getElementById("fingeringInput" + (jumpFactorWrite - 86)).value = data2;								
 					}
-					
-				}
- 	
-				else if (data1 == 110) { //receiving firmware version from WARBL
+
+					//Harmonizer Params
+					//Tranposer
+					else if (jumpFactorWrite == MIDI_SEND_TRANSPOSE_SHIFT) {
+						document.getElementById("transposeShift").innerHTML = 
+							(data2 == 0xff || data2 == 12) ? "-" : data2 -12;
+					}
+					//Fixed Note
+					else if (jumpFactorWrite == MIDI_SEND_HARMONIZER_FIXED_NOTE) {
+						fixedNote = data2;
+						document.getElementById("fixedNote").innerHTML = (data2 == 0x7F) ? "-" : getNoteName(data2);
+					}
+					//Interval
+					else if (jumpFactorWrite >= MIDI_SEND_HARMONIZER_INTERVAL && jumpFactorWrite < MIDI_SEND_HARMONIZER_TONIC) {
+						var voice = jumpFactorWrite - MIDI_SEND_HARMONIZER_INTERVAL;
+
+						harmonizerIntervals[voice] = data2;
+
+						if ((harmonizerIntervals[0] == 0x7F || harmonizerIntervals[0] == 12) &&
+							(harmonizerIntervals[1] == 0x7F || harmonizerIntervals[1] == 12) && 
+							(harmonizerIntervals[2] == 0x7F || harmonizerIntervals[2] == 12) ) {
+							document.getElementById("interval" + voice).innerHTML = "-";	
+							document.getElementById("harmonizerLegendTableLabel").style.display = "none";
+							document.getElementById("harmonizerLegendTableCurrentDiatonic").style.display = "none";
+							document.getElementById("harmonizerLegendTableHarmonizerDiatonic").style.display = "none";
+						} else if (harmonizerIntervals[voice] != 0x7F && harmonizerIntervals[voice] != 12) {
+							var scaleSelect = document.getElementById("HARMrow0");
+							document.getElementById("harmonizerLegendTableLabel").style.display = "block";
+							document.getElementById("interval" + voice).innerHTML = scaleSelect.options[data2].text;	
+							document.getElementById("harmonizerLegendTableCurrentDiatonic").style.display = "block";
+							document.getElementById("harmonizerLegendTableHarmonizerDiatonic").style.display = "block";
+						} else {
+							document.getElementById("interval" + voice).innerHTML = "-";	
+						}
+
+							
+					}
+					//Scale
+					else if (jumpFactorWrite >= MIDI_SEND_HARMONIZER_SCALE && jumpFactorWrite < MIDI_SEND_HARMONIZER_BASE_NOTE) {
+						harmonizerScale[(jumpFactorWrite - MIDI_SEND_HARMONIZER_SCALE)] = data2;
+					}
+					//Scale tonic
+					else if (jumpFactorWrite >= MIDI_SEND_HARMONIZER_TONIC && jumpFactorWrite < MIDI_SEND_HARMONIZER_SCALE) {
+						var voice = jumpFactorWrite - MIDI_SEND_HARMONIZER_TONIC;
+
+						if ((data2 == 0x7F)) {
+							document.getElementById("scale" + voice).innerHTML = "-";
+							document.getElementById("harmonizerLegendTableCurrentChromatic").style.display = "none";
+							document.getElementById("harmonizerLegendTableHarmonizerChromatic").style.display = "none";
+							
+						} else {
+							var scaleSelect = document.getElementById("HarmScaleRow0");
+							document.getElementById("scale" + voice).innerHTML = getNoteName(data2, false) + " " + scaleSelect.options[harmonizerScale[voice]].text;	
+							document.getElementById("harmonizerLegendTableCurrentChromatic").style.display = "block";
+							document.getElementById("harmonizerLegendTableHarmonizerChromatic").style.display = "block";
+						}
+							
+					}
+					//Base note
+					else if (jumpFactorWrite >= MIDI_SEND_HARMONIZER_BASE_NOTE && jumpFactorWrite < MIDI_SEND_HARMONIZER_BASE_NOTE_DIATONIC) {
+						currentNote = data2;
+						document.getElementById("currentNoteLabel").innerHTML = data2 == 0 ? "-" : getNoteName(currentNote);
+					} 
+					//Base note is diatonic
+					else if (jumpFactorWrite >= MIDI_SEND_HARMONIZER_BASE_NOTE_DIATONIC && jumpFactorWrite < MIDI_SEND_HARMONIZER_CURRENT_NOTE) {
+						setPianoKeyColor(currentNote, data2 == 0 ?  '#e51c23' : '#60f775');
+
+					} 
+					//HArmonizer current note
+					else if (jumpFactorWrite >= MIDI_SEND_HARMONIZER_CURRENT_NOTE && jumpFactorWrite < MIDI_SEND_HARMONIZER_CURRENT_NOTE_DIATONIC) {
+						harmonizerCurrentNotes[(jumpFactorWrite - MIDI_SEND_HARMONIZER_CURRENT_NOTE)] = data2;
+					} 
+					//HArmonizer current note is diatonic
+					else if (jumpFactorWrite >= MIDI_SEND_HARMONIZER_CURRENT_NOTE_DIATONIC && jumpFactorWrite < MIDI_SEND_HARMONIZER_CURRENT_NOTE_DIATONIC +3) {
+						setPianoKeyColor(harmonizerCurrentNotes[(jumpFactorWrite - MIDI_SEND_HARMONIZER_CURRENT_NOTE_DIATONIC)] , data2 == 0 ?  '#fed330' : '#d1cafa');
+
+					} 
+
+					//HAlf Hole Detection Feedback
+					//Current Buffer size
+					else if (jumpFactorWrite == MIDI_SEND_HALFHOLE_BUFFER ) {
+						document.getElementById("bufferSizeHH").value = data2;
+						document.getElementById("bufferSizeValueHH").innerHTML = data2;
+					} 
+					//Current hole monitored
+					else if (jumpFactorWrite == MIDI_SEND_HALFHOLE_CURRENT ) {
+						document.getElementById("halfHoleSelect").value = data2;
+					} 
+				} 
+				else if (data1 == MIDI_SLOT_13) {
+  					intValueWrite = data2;
+				} // so we know which int Value is going to be received.
 				
+				else if (data1 == MIDI_SLOT_14) {
+					intValueWriteH = data2;
+				} 
+				else if (data1 == MIDI_SLOT_15) {
+					var value = parseInt((intValueWriteH << 7) | data2);
+
+					//current holeCovered
+					if (intValueWrite == MIDI_SEND_HOLE_COVERED) {
+						// var tmp_holeCovered = (( data2 << 7) | (data1 & 0x7F)); 
+						// var tmp_halfHoles = (data2 & 0b11111100) >> 2;
+						var tmp_holeCovered = value; 
+						var tmp_halfHoles = (intValueWriteH & 0b11111100) >> 2;
+
+						// console.log("PB: " + tmp_holeCovered);
+
+						if (customFingeringReceivingStatus)  { //We received all the info, add them to the array
+							if (customFingeringMidiNote >= 0) {
+								let fingering  = {
+									midi_note: customFingeringMidiNote, 
+									holeCovered: tmp_holeCovered
+								}
+								customFingering.push(fingering);
+								customFingeringMidiNote = -1;
+							}
+
+						} else   {
+			
+							//Updates Perfomance Monitor
+							//Manages Half Holes
+
+							var halfHoleCurrent = document.getElementById("halfHoleSelect").value;
+							if (halfHoleCurrent == 8) {
+								halfHoleCurrent = 0;
+							}
+							if (bit_test(tmp_halfHoles, halfHoleCurrent) == 1) { //Half hole detection
+								document.getElementById("fingeringDotHH").style.display = "none";
+								document.getElementById("fingeringDotHalfAHH").style.display = "block";
+								document.getElementById("fingeringDotHalfBHH").style.display = "block";
+							} else {
+								document.getElementById("fingeringDotHH").style.display = "block";
+								document.getElementById("fingeringDotHalfAHH").style.display = "none";
+								document.getElementById("fingeringDotHalfBHH").style.display = "none";		
+							}
+
+
+							if (bit_test(tmp_halfHoles, 0) == 1) { //Thumb hole
+								document.getElementById("fingeringDotMon8").style.display = "none";
+								document.getElementById("fingeringDotMonHalfA8").style.display = "block";
+								document.getElementById("fingeringDotMonHalfB8").style.display = "block";
+
+							} else {
+								document.getElementById("fingeringDotMon8").style.display = "block";
+								document.getElementById("fingeringDotMonHalfA8").style.display = "none";
+								document.getElementById("fingeringDotMonHalfB8").style.display = "none";
+							}
+
+							if (bit_test(tmp_halfHoles, 1) == 1) { //R4
+								document.getElementById("fingeringDotMon1").style.display = "none";
+								document.getElementById("fingeringDotMonHalfA1").style.display = "block";
+								document.getElementById("fingeringDotMonHalfB1").style.display = "block";
+
+							} else {
+								document.getElementById("fingeringDotMon1").style.display = "block";
+								document.getElementById("fingeringDotMonHalfA1").style.display = "none";
+								document.getElementById("fingeringDotMonHalfB1").style.display = "none";
+							}
+
+							if (bit_test(tmp_halfHoles, 2) == 1) { //R3
+								document.getElementById("fingeringDotMon2").style.display = "none";
+								document.getElementById("fingeringDotMonHalfA2").style.display = "block";
+								document.getElementById("fingeringDotMonHalfB2").style.display = "block";
+
+							} else {
+								document.getElementById("fingeringDotMon2").style.display = "block";
+								document.getElementById("fingeringDotMonHalfA2").style.display = "none";
+								document.getElementById("fingeringDotMonHalfB2").style.display = "none";
+							}
+
+							if (customFingeringLearningON) { //dots in custom fingering
+								holeCovered = tmp_holeCovered;
+								halfHoles = tmp_halfHoles;
+
+								//Manages Half Holes
+								if (bit_test(halfHoles, 0) == 1) { //Thumb hole
+									document.getElementById("fingeringDot8").style.display = "none";
+									document.getElementById("fingeringDotHalfA8").style.display = "block";
+									document.getElementById("fingeringDotHalfB8").style.display = "block";
+
+								} else {
+									document.getElementById("fingeringDot8").style.display = "block";
+									document.getElementById("fingeringDotHalfA8").style.display = "none";
+									document.getElementById("fingeringDotHalfB8").style.display = "none";
+								}
+
+								if (bit_test(halfHoles, 1) == 1) { //R4
+									document.getElementById("fingeringDot1").style.display = "none";
+									document.getElementById("fingeringDotHalfA1").style.display = "block";
+									document.getElementById("fingeringDotHalfB1").style.display = "block";
+
+								} else {
+									document.getElementById("fingeringDot1").style.display = "block";
+									document.getElementById("fingeringDotHalfA1").style.display = "none";
+									document.getElementById("fingeringDotHalfB1").style.display = "none";
+								}
+
+								if (bit_test(halfHoles, 2) == 1) { //R3
+									document.getElementById("fingeringDot2").style.display = "none";
+									document.getElementById("fingeringDotHalfA2").style.display = "block";
+									document.getElementById("fingeringDotHalfB2").style.display = "block";
+
+								} else {
+									document.getElementById("fingeringDot2").style.display = "block";
+									document.getElementById("fingeringDotHalfA2").style.display = "none";
+									document.getElementById("fingeringDotHalfB2").style.display = "none";
+								}
+							}
+							//Manages the rest of the holes
+							for (var m = 0; m < 9; m++) {
+								if (bit_test(tmp_holeCovered, m) == 1) {
+									document.getElementById("dot" + m).style.backgroundColor = "blue";
+
+									if (m == document.getElementById("halfHoleSelect").value) {
+										document.getElementById("fingeringDotHH").style.fill = "#262626";
+									}
+
+									if (m > 0 ) {
+										document.getElementById("fingeringDotMon" + m).style.fill = "#262626";
+									}
+									if (m > 0 && customFingeringLearningON) {
+										document.getElementById("fingeringDot" + m).style.fill = "#262626";
+									}
+									if (m == 0) {
+										document.getElementById("dot0").style.opacity = "0.8";
+									}
+								} else {
+									document.getElementById("dot" + m).style.backgroundColor = "#333";
+									if (m == document.getElementById("halfHoleSelect").value) {
+										document.getElementById("fingeringDotHH").style.fill = "#C3C0C0";
+									}
+									if (m > 0 ) {
+										document.getElementById("fingeringDotMon" + m).style.fill = "#C3C0C0";
+									}
+									if (m > 0 && customFingeringLearningON) {
+										document.getElementById("fingeringDot" + m).style.fill = "#C3C0C0";
+									}
+									if (m == 0) {
+										document.getElementById("dot0").style.opacity = "0";
+									}
+								}
+							}
+						}
+					} else 
+					
+					//Current keySelect / noteShiftSelector
+					if (intValueWrite == MIDI_SEND_KEY_SELECT) {
+						document.getElementById("keySelect" + currentPreset).value = value;
+					}
+					
+					//Current fingering schema
+					if (intValueWrite >= MIDI_SEND_MODE_SELECTOR && intValueWrite <= MIDI_SEND_MODE_SELECTOR+2) {
+						var presetSelected = intValueWrite - MIDI_SEND_MODE_SELECTOR;
+						document.getElementById("fingeringSelect" + presetSelected).value = value;
+						updateCells();
+					}
+
+					//current read value for hole sensors
+					if (intValueWrite >= MIDI_SEND_TONE_READ_0 && intValueWrite <= MIDI_SEND_TONE_READ_8) {
+						// current half hole calibration selected hole
+						if ( (intValueWrite - MIDI_SEND_TONE_READ_0) == document.getElementById("halfHoleSelect").value) {
+							document.getElementById("currentReadRangeHH").value = value;
+						}
+					} else
+									
+					//current lowerLimit for hole sensors
+					if (intValueWrite == MIDI_SEND_HALFHOLE_MIN) {
+							document.getElementById("lowerLimitRangeHH").value = value;
+							fillSliderAuto();
+
+
+					} else
+					//current upperLimit for hole sensors
+					if (intValueWrite == MIDI_SEND_HALFHOLE_MAX) {
+						document.getElementById("upperLimitRangeHH").value = value;
+						fillSliderAuto();
+
+					} 
+				} 
+
+				else if (data1 == MIDI_SW_VERSION) { //receiving firmware version from WARBL
+
 					//20231010 GLB Detects a custom build
 					if (version != "Unknown" && data2 > 0 && data2 < 10 && data2 != version) { //Only the eventual second message from WARBL
 						switch (data2) {
 							case 1: //Barbaro
-								window.location.href = "custom_build/1/configure.html";
-								break;
+								return;
 							default:
+								window.location.href = "../../configure.html";
 							break;
 						}
 					}
+
 					version = data2;
 					
 					if (version == currentVersion) { //display the appropriate messages
@@ -1044,21 +1592,88 @@ function WARBL_Receive(event) {
 					
 					version = version / 10;
 					var n = version.toFixed(1)
-					document.getElementById("version").innerHTML = n;
+					document.getElementById("version").innerHTML = n ;
 					document.getElementById("version").style.color = "#f7c839";
 					
 					
-				//show that the WARBL is connected when we receive the firmware version.
-				document.getElementById("status").innerHTML = "WARBL Connected.";
-				document.getElementById("status").style.color = "#f7c839";
-				communicationMode = true;
-				if(version > 2.0){
-				document.getElementById("connect").innerHTML = "Disconnect";
-				}
+					//show that the WARBL is connected when we receive the firmware version.
+					document.getElementById("status").innerHTML = "WARBL Connected.";
+					document.getElementById("status").style.color = "#f7c839";
+					communicationMode = true;
+
+					if(version > 2.0){
+						document.getElementById("connect").innerHTML = "Disconnect";
+					}
 					
 					
 					//Lots of UI changes based on the current firmware version of the connected WARBL
-					
+					if (version > 2.1){ //add new items that should only be visible with newer software versions
+				
+						//add medieval pipes and bansuri fingering for custom version
+						for (i = 0; i < document.getElementById("fingeringSelect0").length; ++i){
+							if (document.getElementById("fingeringSelect0").options[i].value == "23"){
+								 var a = 1;    
+							}
+						}
+		
+						  if (a != 1){
+							var x = document.getElementById("fingeringSelect0"); 		
+							  var option = document.createElement("option");
+							  option.text = "Medieval bagpipes";
+							  option.value = 22;
+							  x.add(option);
+				
+							var y = document.getElementById("fingeringSelect1");
+							var option = document.createElement("option");
+							  option.text = "Medieval bagpipes";
+							  option.value = 22;
+							y.add(option);
+				
+							var z = document.getElementById("fingeringSelect2");
+							var option = document.createElement("option");
+							  option.text = "Medieval bagpipes";
+							  option.value = 22;
+							z.add(option);
+							
+							var x = document.getElementById("fingeringSelect0"); 		
+							  var option = document.createElement("option");
+							  option.text = "Barbaro's EWI";
+							  option.value = 23;
+							  x.add(option);
+				
+							var y = document.getElementById("fingeringSelect1");
+							var option = document.createElement("option");
+							  option.text = "Barbaro's EWI";
+							  option.value = 23;
+							y.add(option);
+				
+							var z = document.getElementById("fingeringSelect2");
+							var option = document.createElement("option");
+							  option.text = "Barbaro's EWI";
+							  option.value = 23;
+							z.add(option);
+							
+							var x = document.getElementById("fingeringSelect0"); 		
+							  var option = document.createElement("option");
+							  option.text = "Bansuri";
+							  option.value = 9;
+							  x.add(option);
+				
+							var y = document.getElementById("fingeringSelect1");
+							var option = document.createElement("option");
+							  option.text = "Bansuri";
+							  option.value = 9;
+							y.add(option);
+				
+							var z = document.getElementById("fingeringSelect2");
+							var option = document.createElement("option");
+							  option.text = "Bansuri";
+							  option.value = 9;
+							z.add(option);
+		
+							}
+						}
+
 						if (version < 2.1) {
 						document.getElementById("jumpfactor10Container").style.visibility = "visible";
 						document.getElementById("jumpfactor4Container").style.visibility = "visible";
@@ -1193,15 +1808,26 @@ function WARBL_Receive(event) {
 				
 					
 
-				} else if (data1 == 111) {
-					document.getElementById("keySelect0").value = data2;
-				} else if (data1 == 112) {
-					document.getElementById("keySelect1").value = data2;
-				} else if (data1 == 113) {
-					document.getElementById("keySelect2").value = data2;
-				} else if (data1 == 116) {
-					lsb = data2;
-				} else if (data1 == 118) {
+				} if (data1 == MIDI_SW_BUILD_VERSION) { //receiving build firmware version from WARBL
+					build_version = data2;
+
+					switch (build_version) {
+						case 0: //Original
+
+						break;
+						case 1: //Barbaro
+							document.getElementById("version").innerHTML += "/BARBARO" ;
+							
+						break;
+					}
+
+					if (build_version != 1 || version < 2.3) {
+						console.log("build_version", version, build_version);
+						alert("This configuration tool is for special Barbaro WARBL Firmware only.\nPlease use the official configuration tool;");
+						connect();
+					} 
+
+				} else if (data1 == MIDI_SLOT_17+1) {
 					var x = parseInt((data2 << 7) | lsb); //receive pressure between 100 and 900
 					x = (x - 100) * 24 / 900; //convert to inches of water.  105 is the approximate minimum sensor value.
 					p = Math.min(Math.max(p, 0), 24); //constrain
@@ -1222,32 +1848,52 @@ function WARBL_Receive(event) {
 
 				for (var i = 0; i < 8; i++) {
 					if (buttonRowWrite == i) {
-						if (data1 == 106 && data2 < 16) {
-							document.getElementById("channel" + (buttonRowWrite)).value = data2;
+						//20230927 GLB
+						var a = document.getElementById("row" + i).value;
+
+						if (a == 30 || a == 31 || a == 10 || a == 11 || a == 12) { //Transpose/Harmonize
+							if (data1 == MIDI_SLOT_07) {
+								document.getElementById("HARMrow" + i).value = data2;
+							} 
+							if (data1 == MIDI_SLOT_08) {
+								document.getElementById("HarmScaleRow" + i).value = data2;
+							} 
+							
+							if (a == 30 && data1 == MIDI_SLOT_06) { //Channel / Progressivo or not
+								if (data2 != 1) {
+									document.getElementById("row" + (buttonRowWrite)).value = 30;
+								}
+							}
+						
+						} else {
+							if (data1 == MIDI_SLOT_06 && data2 < 16) {
+								document.getElementById("channel" + (buttonRowWrite)).value = data2;
+							}
+							if (data1 == MIDI_SLOT_07) {
+								document.getElementById("byte2_" + (buttonRowWrite)).value = data2;
+							}
+							if (data1 == MIDI_SLOT_08) {
+								document.getElementById("byte3_" + (buttonRowWrite)).value = data2;
+							}
 						}
-						if (data1 == 107) {
-							document.getElementById("byte2_" + (buttonRowWrite)).value = data2;
-						}
-						if (data1 == 108) {
-							document.getElementById("byte3_" + (buttonRowWrite)).value = data2;
-						}
+						//END GLB
 					}
 				}
 
-				if (data1 == 106 && data2 > 15) {
+				if (data1 == MIDI_SLOT_06 && data2 > 15) {
 
-					if (data2 > 19 && data2 < 29) {
+					if (data2 >= MIDI_EN_VIBRATO_HOLES_OS && data2 < 29) {
 						document.getElementById("vibratoCheckbox" + (data2 - 20)).checked = false;
 					}
 
-					if (data2 > 29 && data2 < 39) {
+					if (data2 > 29 && data2 < MIDI_CALIB_OPTION_OS) {
 						document.getElementById("vibratoCheckbox" + (data2 - 30)).checked = true;
 					}
 
-					if (data2 == 39) {
+					if (data2 == MIDI_CALIB_OPTION_OS) {
 						document.getElementById("calibrateradio0").checked = true;
 					}
-					if (data2 == 40) {
+					if (data2 == MIDI_USE_LEARN_PRESS_ON) {
 						document.getElementById("calibrateradio1").checked = true;
 					}
 
@@ -1295,6 +1941,16 @@ function WARBL_Receive(event) {
 
 function bit_test(num, bit) {
 	return ((num >> bit) % 2 != 0)
+}
+
+//Sends an int value
+function sendIntToWARBL(index, value) {
+	if (index == MIDI_SEND_KEY_SELECT) {
+		console.log("sendIntToWARBL", value);
+	}
+	sendToWARBL(MIDI_SLOT_13, index);
+	sendToWARBL(MIDI_SLOT_14, value >> 7);
+	sendToWARBL(MIDI_SLOT_15, value & 0x7F);
 }
 
 
@@ -1348,13 +2004,36 @@ function sendFingeringSelect(row, selection) {
 	} //default key of D for many patterns
 	document.getElementById("keySelect" + row).value = key; //set key menu
 
+	console.log("sendFingeringSelect",row, selection, key);
 	//send the fingering pattern
-	sendToWARBL(102, 30 + row);
-	sendToWARBL(102, 33 + selection);
+	sendIntToWARBL(MIDI_SEND_MODE_SELECTOR + row, selection);
+	// sendToWARBL(MIDI_SLOT_02, MIDI_SEND_FINGER_PATTERN_OS + row);
+	// sendToWARBL(MIDI_SLOT_02, MIDI_SEND_MODE_SELECTOR_OS + selection);
 
 	sendKey(row, key);
 }
 
+function customFingeringInput() {
+
+	var x = document.getElementById("customFingeringInput").value;
+
+	if (x < 0 || x > 127 || isNaN(x)) {
+		alert("Value must be 0-127.");
+		document.getElementById("customFingeringInput").value = null;
+		// document.getElementById("customFingeringInputNote" ).innerHTML = "";
+
+	}		
+	else {
+		// document.getElementById("customFingeringInputNote" ).innerHTML = getNoteName(x);
+	}
+
+	
+	document.getElementById("customFingeringInputNoteLabel" ).innerHTML = getNoteName(x);
+	document.getElementById("defaultMidiNote" ).innerHTML = defaultMidiNote + " (" + getNoteName(defaultMidiNote) + ")";
+	document.getElementById("overrideMidiNote" ).innerHTML = overrideMidiNote < 0x7f ? overrideMidiNote + " (" + getNoteName(overrideMidiNote) + ")" : "-";
+
+
+}
 
 function fingeringInput(input, selection) { 	//send the custom fingering input entry
 
@@ -1366,17 +2045,17 @@ function fingeringInput(input, selection) { 	//send the custom fingering input e
 		else{
 	blink(1);
 	document.getElementById("customFingeringFill").value = "12";
-	sendToWARBL(104, 86 + input);
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_04, 86 + input);
+	sendToWARBL(MIDI_SLOT_05, selection);
 		}
 }
 
 
 function defaultInstrument() { //tell WARBL to set the current instrument as the default
 
-	defaultInstr = instrument;
+	defaultPreset = currentPreset;
 	handleDefault();
-	sendToWARBL(102, 85);
+	sendToWARBL(MIDI_SLOT_02, MIDI_DEFAULT_INSTR_OS);
 
 }
 
@@ -1384,36 +2063,36 @@ function handleDefault() { //display correct default instrument and "set default
 
 	if (version > 1.6 || version == "Unknown") {
 
-		if (defaultInstr != 0) {
-			document.getElementById("instrument1Label").innerHTML = "Instrument 1:";
+		if (defaultPreset != 0) {
+			document.getElementById("instrument1Label").innerHTML = "Preset 1:";
 		}
-		if (defaultInstr != 1) {
-			document.getElementById("instrument2Label").innerHTML = "Instrument 2:";
+		if (defaultPreset != 1) {
+			document.getElementById("instrument2Label").innerHTML = "Preset 2:";
 		}
-		if (defaultInstr != 2) {
-			document.getElementById("instrument3Label").innerHTML = "Instrument 3:";
-		}
-
-		if (defaultInstr == 0) {
-			document.getElementById("instrument1Label").innerHTML = "Instrument 1 (default):";
-		}
-		if (defaultInstr == 1) {
-			document.getElementById("instrument2Label").innerHTML = "Instrument 2 (default):";
-		}
-		if (defaultInstr == 2) {
-			document.getElementById("instrument3Label").innerHTML = "Instrument 3 (default):";
+		if (defaultPreset != 2) {
+			document.getElementById("instrument3Label").innerHTML = "Preset 3:";
 		}
 
-		if (defaultInstr != instrument) {
+		if (defaultPreset == 0) {
+			document.getElementById("instrument1Label").innerHTML = "Preset 1 (default):";
+		}
+		if (defaultPreset == 1) {
+			document.getElementById("instrument2Label").innerHTML = "Preset 2 (default):";
+		}
+		if (defaultPreset == 2) {
+			document.getElementById("instrument3Label").innerHTML = "Preset 3 (default):";
+		}
+
+		if (defaultPreset != currentPreset) {
 			document.getElementById("defaultInstrument").style.visibility = "visible";
 
-			if (instrument == 0) {
+			if (currentPreset == 0) {
 				document.getElementById("defaultInstrument").style.left = "130px";
 			}
-			if (instrument == 1) {
+			if (currentPreset == 1) {
 				document.getElementById("defaultInstrument").style.left = "430px";
 			}
-			if (instrument == 2) {
+			if (currentPreset == 2) {
 				document.getElementById("defaultInstrument").style.left = "730px";
 			}
 		} else {
@@ -1425,20 +2104,34 @@ function handleDefault() { //display correct default instrument and "set default
 
 function sendKey(row, selection) {
 	selection = parseFloat(selection);
-	row = parseFloat(row);
+	// row = parseFloat(row);
 	updateCells();
 	blink(1);
-	sendToWARBL(111 + row, selection);
+	// sendToWARBL(MIDI_SLOT_12 + row, selection);
+	sendIntToWARBL(MIDI_SEND_KEY_SELECT, selection);
+	// sendToWARBL(MIDI_SLOT_12, selection);
 }
 
-function sendFingeringRadio(tab) { //change instruments, showing the correct tab for each instrument.
 
-	instrument = tab;
+function sendFingeringRadio(radioBox) { //change instruments, showing the correct tab for each instrument.
+
+	if (settingsDirty) {
+		if (!confirm("Your settings for the current preset have changed but were not saved.\nAll your changes will be lost!\nDo you want to switch Preset anyway?")) {
+			radioBox.checked = false;
+			document.getElementById("fingering"+currentPreset).checked = true;
+			return;
+		}
+	}
+
+	settingsDirty = false;
+	var tab = radioBox.value;
+	currentPreset = tab;
 	updateCustom();
 	advancedOkay(); //turn off the advanced tab
 	pressureOkay();	
 	handleDefault(); //display correct default instrument and "set default" buttons	
 	customFingeringOkay();
+	halfHoleDetectionOkay();
 	if (tab == 0) {
 		document.getElementById("instrument0").style.display = "block";
 		document.getElementById("instrument1").style.display = "none";
@@ -1447,7 +2140,11 @@ function sendFingeringRadio(tab) { //change instruments, showing the correct tab
 		document.getElementById("key0").style.display = "block";
 		document.getElementById("key1").style.display = "none";
 		document.getElementById("key2").style.display = "none";
-		sendToWARBL(102, 60);
+
+		var prevDirty = settingsDirty; //This sends a message, but doesn't change settings
+		sendToWARBL(MIDI_SLOT_02, MIDI_CURRENT_INSTR_OS);
+		settingsDirty = prevDirty; //restore previous state
+		
 	} else if (tab == 1) {
 		document.getElementById("instrument0").style.display = "none";
 		document.getElementById("instrument1").style.display = "block";
@@ -1457,7 +2154,11 @@ function sendFingeringRadio(tab) { //change instruments, showing the correct tab
 		document.getElementById("key1").style.display = "block";
 		document.getElementById("key2").style.display = "none";
 		blink(2);
-		sendToWARBL(102, 61);
+
+		var prevDirty = settingsDirty; //This sends a message, but doesn't change settings
+		sendToWARBL(MIDI_SLOT_02, MIDI_CURRENT_INSTR_OS+1);
+		settingsDirty = prevDirty; //restore previous state
+
 	} else if (tab == 2) {
 		document.getElementById("instrument0").style.display = "none";
 		document.getElementById("instrument1").style.display = "none";
@@ -1467,7 +2168,9 @@ function sendFingeringRadio(tab) { //change instruments, showing the correct tab
 		document.getElementById("key1").style.display = "none";
 		document.getElementById("key2").style.display = "block";
 		blink(3);
-		sendToWARBL(102, 62);
+		var prevDirty = settingsDirty; //This sends a message, but doesn't change settings
+		sendToWARBL(MIDI_SLOT_02, MIDI_CURRENT_INSTR_OS+2);
+		settingsDirty = prevDirty; //restore previous state
 	}
 	updateCells();
 	updateCustom();
@@ -1485,27 +2188,55 @@ function updateSelected() {
 	}
 }
 
-						
+
+//HalfHole Detection Settings
+
+function sendHalfHoleBuffer(selection) {
+	document.getElementById("bufferSizeValueHH").innerHTML = selection;	
+	blink(1);
+	selection = parseFloat(selection);
+	sendToWARBL(MIDI_SLOT_04, MIDI_SEND_HALFHOLE_BUFFER);
+	sendToWARBL(MIDI_SLOT_05, selection);
+}
+function sendHalfHoleSelect(selection) {
+	blink(1);
+	selection = parseFloat(selection);
+	sendToWARBL(MIDI_SLOT_04, MIDI_SEND_HALFHOLE_CURRENT);
+	sendToWARBL(MIDI_SLOT_05, selection);
+}
+
+function sendHalfHoleLowerLimit (selection) {
+	blink(1);
+	selection = parseFloat(selection);
+	sendIntToWARBL(MIDI_SEND_HALFHOLE_MIN, selection);
+}
+
+function sendHalfHoleUpperLimit (selection) {
+	blink(1);
+	selection = parseFloat(selection);
+	sendIntToWARBL(MIDI_SEND_HALFHOLE_MAX, selection);
+}
 
 function sendSenseDistance(selection) {
 	blink(1);
 	selection = parseFloat(selection);
 	x = 0 - parseFloat(selection);
-	sendToWARBL(103, x);
+
+	sendToWARBL(MIDI_SLOT_03, x);
 }
 
 
 function sendDepth(selection) {
 	blink(1);
 	selection = parseFloat(selection);
-	sendToWARBL(117, selection);
+	sendToWARBL(MIDI_SLOT_17, selection);
 }
 
 function sendExpressionDepth(selection) {
 	blink(1);
 	selection = parseFloat(selection);
-	sendToWARBL(104, 14);
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_04, 14);
+	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
 function sendCurveRadio(selection) {
@@ -1513,12 +2244,12 @@ function sendCurveRadio(selection) {
 	selection = parseFloat(selection);
 	curve[mapSelection] = selection;
 	if(mapSelection == 0){
-	sendToWARBL(104, 16);
+	sendToWARBL(MIDI_SLOT_04, 16);
 	}
 	else{
-		sendToWARBL(104, 81 + mapSelection);
+		sendToWARBL(MIDI_SLOT_04, 81 + mapSelection);
 	}
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
 function sendPressureChannel(selection) {
@@ -1528,16 +2259,16 @@ function sendPressureChannel(selection) {
 		alert("Value must be 1-16.");
 		document.getElementById("pressureChannel").value = null;
 	} else {
-		sendToWARBL(104, 17);
-		sendToWARBL(105, x);
+		sendToWARBL(MIDI_SLOT_04, 17);
+		sendToWARBL(MIDI_SLOT_05, x);
 	}
 }
 
 function sendPressureCC(selection) {
 	blink(1);
 	selection = parseFloat(selection);
-	sendToWARBL(104, 18);
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_04, 18);
+	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
 function sendBendRange(selection) {
@@ -1547,8 +2278,8 @@ function sendBendRange(selection) {
 		alert("Value must be 1-96.");
 		document.getElementById("midiBendRange").value = null;
 	} else {
-		sendToWARBL(104, 61);
-		sendToWARBL(105, x);
+		sendToWARBL(MIDI_SLOT_04, 61);
+		sendToWARBL(MIDI_SLOT_05, x);
 	}
 }
 
@@ -1559,8 +2290,8 @@ function sendNoteChannel(selection) {
 		alert("Value must be 1-16.");
 		document.getElementById("noteChannel").value = null;
 	} else {
-		sendToWARBL(104, 62);
-		sendToWARBL(105, x);
+		sendToWARBL(MIDI_SLOT_04, 62);
+		sendToWARBL(MIDI_SLOT_05, x);
 	}
 }
 
@@ -1571,18 +2302,18 @@ slider.noUiSlider.on('change', function(values) {
 	if(mapSelection == 0){
 	inputSliderMin[0] = parseInt(values[0]);
 	inputSliderMax[0] = parseInt(values[1]);	
-	sendToWARBL(104, 19);
-	sendToWARBL(105, parseInt(values[0]));
-	sendToWARBL(104, 20);
-	sendToWARBL(105, parseInt(values[1]));
+	sendToWARBL(MIDI_SLOT_04, 19);
+	sendToWARBL(MIDI_SLOT_05, parseInt(values[0]));
+	sendToWARBL(MIDI_SLOT_04, 20);
+	sendToWARBL(MIDI_SLOT_05, parseInt(values[1]));
 	}
 	else {
 	inputSliderMin[mapSelection] = parseInt(values[0]);
 	inputSliderMax[mapSelection] = parseInt(values[1]);
-	sendToWARBL(104, 70 + ((mapSelection-1)*4));
-	sendToWARBL(105, parseInt(values[0]));
-	sendToWARBL(104, 71 + ((mapSelection-1)*4));
-	sendToWARBL(105, parseInt(values[1]));		
+	sendToWARBL(MIDI_SLOT_04, 70 + ((mapSelection-1)*4));
+	sendToWARBL(MIDI_SLOT_05, parseInt(values[0]));
+	sendToWARBL(MIDI_SLOT_04, 71 + ((mapSelection-1)*4));
+	sendToWARBL(MIDI_SLOT_05, parseInt(values[1]));		
 	}
 });
 
@@ -1592,28 +2323,28 @@ slider2.noUiSlider.on('change', function(values) {
 	if(mapSelection == 0){
 	outputSliderMin[0] = parseInt(values[0]);
 	outputSliderMax[0] = parseInt(values[1]);
-	sendToWARBL(104, 21);
-	sendToWARBL(105, parseInt(values[0]));
-	sendToWARBL(104, 22);
-	sendToWARBL(105, parseInt(values[1]));
+	sendToWARBL(MIDI_SLOT_04, 21);
+	sendToWARBL(MIDI_SLOT_05, parseInt(values[0]));
+	sendToWARBL(MIDI_SLOT_04, 22);
+	sendToWARBL(MIDI_SLOT_05, parseInt(values[1]));
 	}
 	else {
 	outputSliderMin[mapSelection] = parseInt(values[0]);
 	outputSliderMax[mapSelection] = parseInt(values[1]);
-	sendToWARBL(104, 72 + ((mapSelection-1)*4));
-	sendToWARBL(105, parseInt(values[0]));
-	sendToWARBL(104, 73 + ((mapSelection-1)*4));
-	sendToWARBL(105, parseInt(values[1]));		
+	sendToWARBL(MIDI_SLOT_04, 72 + ((mapSelection-1)*4));
+	sendToWARBL(MIDI_SLOT_05, parseInt(values[0]));
+	sendToWARBL(MIDI_SLOT_04, 73 + ((mapSelection-1)*4));
+	sendToWARBL(MIDI_SLOT_05, parseInt(values[1]));		
 	}
 });
 
 //expression override slider
 slider3.noUiSlider.on('change', function(values) {
 	blink(1);
-	sendToWARBL(104, 85);
-	sendToWARBL(105, parseInt(values[0]));
-	sendToWARBL(104, 86);
-	sendToWARBL(105, parseInt(values[1]));
+	sendToWARBL(MIDI_SLOT_04, 85);
+	sendToWARBL(MIDI_SLOT_05, parseInt(values[0]));
+	sendToWARBL(MIDI_SLOT_04, 86);
+	sendToWARBL(MIDI_SLOT_05, parseInt(values[1]));
 });
 
 
@@ -1659,8 +2390,8 @@ slider3.noUiSlider.on('update', function (values, handle) {
 function sendDronesOnCommand(selection) {
 	blink(1);
 	selection = parseFloat(selection);
-	sendToWARBL(104, 23);
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_04, 23);
+	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
 function sendDronesOnChannel(selection) {
@@ -1670,8 +2401,8 @@ function sendDronesOnChannel(selection) {
 		document.getElementById("dronesOnChannel").value = null;
 	} else {
 		blink(1);
-		sendToWARBL(104, 24);
-		sendToWARBL(105, x);
+		sendToWARBL(MIDI_SLOT_04, 24);
+		sendToWARBL(MIDI_SLOT_05, x);
 	}
 }
 
@@ -1682,8 +2413,8 @@ function sendDronesOnByte2(selection) {
 		document.getElementById("dronesOnByte2").value = null;
 	} else {
 		blink(1);
-		sendToWARBL(104, 25);
-		sendToWARBL(105, x);
+		sendToWARBL(MIDI_SLOT_04, 25);
+		sendToWARBL(MIDI_SLOT_05, x);
 	}
 }
 
@@ -1694,16 +2425,16 @@ function sendDronesOnByte3(selection) {
 		document.getElementById("dronesOnByte3").value = null;
 	} else {
 		blink(1);
-		sendToWARBL(104, 26);
-		sendToWARBL(105, x);
+		sendToWARBL(MIDI_SLOT_04, 26);
+		sendToWARBL(MIDI_SLOT_05, x);
 	}
 }
 
 function sendDronesOffCommand(selection) {
 	blink(1);
 	var y = parseFloat(selection);
-	sendToWARBL(104, 27);
-	sendToWARBL(105, y);
+	sendToWARBL(MIDI_SLOT_04, 27);
+	sendToWARBL(MIDI_SLOT_05, y);
 }
 
 function sendDronesOffChannel(selection) {
@@ -1713,8 +2444,8 @@ function sendDronesOffChannel(selection) {
 		document.getElementById("dronesOffChannel").value = null;
 	} else {
 		blink(1);
-		sendToWARBL(104, 28);
-		sendToWARBL(105, x);
+		sendToWARBL(MIDI_SLOT_04, 28);
+		sendToWARBL(MIDI_SLOT_05, x);
 	}
 }
 
@@ -1725,8 +2456,8 @@ function sendDronesOffByte2(selection) {
 		document.getElementById("dronesOffByte2").value = null;
 	} else {
 		blink(1);
-		sendToWARBL(104, 29);
-		sendToWARBL(105, x);
+		sendToWARBL(MIDI_SLOT_04, 29);
+		sendToWARBL(MIDI_SLOT_05, x);
 	}
 }
 
@@ -1737,23 +2468,23 @@ function sendDronesOffByte3(selection) {
 		document.getElementById("dronesOffByte3").value = null;
 	} else {
 		blink(1);
-		sendToWARBL(104, 30);
-		sendToWARBL(105, x);
+		sendToWARBL(MIDI_SLOT_04, 30);
+		sendToWARBL(MIDI_SLOT_05, x);
 	}
 }
 
 function sendDronesRadio(selection) {
 	blink(1);
 	selection = parseFloat(selection);
-	sendToWARBL(104, 31);
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_04, 31);
+	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
 function learnDrones() {
 	blink(1);
 	document.getElementById("dronesPressureInput").style.backgroundColor = "#32CD32";
 	setTimeout(blinkDrones, 500);
-	sendToWARBL(106, 43);
+	sendToWARBL(MIDI_SLOT_06, MIDI_SEND_LEARN_PRESS_DRONE);
 
 }
 
@@ -1776,10 +2507,10 @@ function sendDronesPressure(selection) {
 		blink(1);
 		document.getElementById("dronesPressureInput").style.backgroundColor = "#32CD32";
 		setTimeout(blinkDrones, 500);
-		sendToWARBL(104, 32);
-		sendToWARBL(105, x & 0x7F);
-		sendToWARBL(104, 33);
-		sendToWARBL(105, x >> 7);
+		sendToWARBL(MIDI_SLOT_04, 32);
+		sendToWARBL(MIDI_SLOT_05, x & 0x7F);
+		sendToWARBL(MIDI_SLOT_04, 33);
+		sendToWARBL(MIDI_SLOT_05, x >> 7);
 	}
 }
 
@@ -1793,10 +2524,10 @@ function sendOctavePressure(selection) {
 		blink(1);
 		document.getElementById("octavePressureInput").style.backgroundColor = "#32CD32";
 		setTimeout(blinkOctave, 500);
-		sendToWARBL(104, 34);
-		sendToWARBL(105, x & 0x7F);
-		sendToWARBL(104, 35);
-		sendToWARBL(105, x >> 7);
+		sendToWARBL(MIDI_SLOT_04, 34);
+		sendToWARBL(MIDI_SLOT_05, x & 0x7F);
+		sendToWARBL(MIDI_SLOT_04, 35);
+		sendToWARBL(MIDI_SLOT_05, x >> 7);
 	}
 
 }
@@ -1805,13 +2536,13 @@ function learn() {
 	blink(1);
 	document.getElementById("octavePressureInput").style.backgroundColor = "#32CD32";
 	setTimeout(blinkOctave, 500);
-	sendToWARBL(106, 41);
+	sendToWARBL(MIDI_SLOT_06, MIDI_SEND_LEARN_PRESS);
 }
 
 function sendCalibrateRadio(selection) {
 	selection = parseFloat(selection);
 	blink(1);
-	sendToWARBL(106, 39 + selection);
+	sendToWARBL(MIDI_SLOT_06, MIDI_CALIB_OPTION_OS + selection);
 }
 
 function sendPitchbendRadio(selection) {
@@ -1821,18 +2552,18 @@ function sendPitchbendRadio(selection) {
 	if (selection > 0) {
 		blink(selection + 1);
 	}
-	sendToWARBL(102, 70 + selection);
+	sendToWARBL(MIDI_SLOT_02, MIDI_PB_MODE_OS + selection);
 }
 
 function sendVibratoHoles(holeNumber, selection) {
 	selection = +selection; //convert true/false to 1/0
-	sendToWARBL(106, (30 - (selection * 10)) + holeNumber);
+	sendToWARBL(MIDI_SLOT_06, (30 - (selection * 10)) + holeNumber);
 }
 
 function updateCustom() { //keep correct settings enabled/disabled with respect to the custom vibrato switch and send pressure as CC switches.
 
 
-	var a = document.getElementById("fingeringSelect" + instrument).value;
+	var a = document.getElementById("fingeringSelect" + currentPreset).value;
 
 	if (document.getElementById("pitchbendradio2").checked == false && (((a == 0 || a == 1 || a == 4 || a == 10) && ((document.getElementById("pitchbendradio1").checked == true && version < 1.6) || (version == "Unknown" || version > 1.5))) || (version == "Unknown" || version > 1.5) && (a == 3 || a == 2))) {
 		document.getElementById("checkbox5").disabled = false;
@@ -1841,8 +2572,8 @@ function updateCustom() { //keep correct settings enabled/disabled with respect 
 		//document.getElementById("checkbox5").checked = false;
 		document.getElementById("checkbox5").disabled = true;
 		document.getElementById("switch5").style.cursor = "default";
-		//sendToWARBL(104,44); //if custom is disabled, tell WARBL to turn it off
-		//sendToWARBL(105, 0);
+		//sendToWARBL(MIDI_SLOT_04,44); //if custom is disabled, tell WARBL to turn it off
+		//sendToWARBL(MIDI_SLOT_05, 0);
 		//blink(1);
 	}
 	if (document.getElementById("checkbox5").checked == true && document.getElementById("checkbox5").disabled == false) {
@@ -1880,7 +2611,7 @@ function sendBreathmodeRadio(selection) {
 	else {
 		document.getElementById("checkbox16").disabled = false;
 	}
-	sendToWARBL(102, 80 + selection);
+	sendToWARBL(MIDI_SLOT_02, MIDI_BREATH_MODE_OS + selection);
 
 }
 
@@ -1928,8 +2659,10 @@ function advancedOkayPB() {
 }
 
 function configureCustomFingering() {
+	customFingeringLearningON = true;
 	document.getElementById("topControls").style.display = "none";
-	document.getElementById("customControls").style.display = "block";
+	document.getElementById("customFingering").style.display = "block";
+	// document.getElementById("customControls").style.display = "block";
 	document.getElementById("box1").style.top = "740px";
 	document.getElementById("box2").style.top = "740px";
 	document.getElementById("box4").style.top = "740px";
@@ -1942,10 +2675,15 @@ function configureCustomFingering() {
 	document.getElementById("buttonBox").style.top = "1690px";
 	document.getElementById("topcontrolbox").style.height = "2085px";
 
+	document.getElementById("customFingeringReset").disabled = customFingeringLearningON;
+	document.getElementById("customFingeringModify").disabled = customFingeringLearningON;
+
 }
 
 function customFingeringOkay() {
-	document.getElementById("customControls").style.display = "none";
+	customFingeringLearningON = false;
+	document.getElementById("customFingering").style.display = "none";
+	// document.getElementById("customControls").style.display = "none";
 	document.getElementById("topControls").style.display = "block";
 	document.getElementById("box1").style.top = "440px";
 	document.getElementById("box2").style.top = "440px";
@@ -1961,6 +2699,27 @@ function customFingeringOkay() {
 	document.getElementById("customFingeringFill").value = "12";
 }
 
+function configureHalfHoleDetection() {
+	sendHalfHoleSelect(document.getElementById("halfHoleSelect").value); //enables it
+
+	document.getElementById("calibrationBox").style.display = "none";
+	document.getElementById("halfHoleDetection").style.display = "block";
+
+	// document.getElementById("topcontrolbox").style.height = "2085px";
+}
+
+function halfHoleDetectionOkay() {
+	var prevDirty = settingsDirty; //This sends a message, but doesn't change settings
+	sendHalfHoleSelect("99"); //disables it
+	settingsDirty = prevDirty; //restore previous state
+
+	document.getElementById("halfHoleDetection").style.display = "none";
+	// document.getElementById("customControls").style.display = "none";
+	document.getElementById("calibrationBox").style.display = "block";
+	// document.getElementById("topcontrolbox").style.height = "1785px";
+
+	// sendToWARBL(MIDI_SLOT_02, MIDI_SEND_HALFHOLE_SAVE_CURRENT); //Saves calibration, buffer and senseDistance
+}
 
 function mapCC() {
 	mapSelection = 0;
@@ -2140,19 +2899,43 @@ function advancedBagDefaults() {
 function sendJumpFactor(factor, selection) {
 	selection = parseFloat(selection);
 	blink(1);
-	sendToWARBL(104, factor);
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_04, factor);
+	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
 
 function sendRow(rowNum) {
 	blink(1);
 	updateCells();
-	sendToWARBL(102, 90 + rowNum);
-	var y = (100) + parseFloat(document.getElementById("row" + rowNum).value);
-	sendToWARBL(102, y);
+	sendToWARBL(MIDI_SLOT_02, MIDI_SEND_BUTTON_PREF_OS + rowNum);
+
+	//20290927 GLB
+	document.getElementById("HARMrow" + rowNum).value = 12;
+	var a = document.getElementById("row" + rowNum).value;
+	var b = a;
+	if (a == 30) { //Transpose
+		b = 5;
+	} 
+	//END GLB
+
+	var y = (MIDI_BUTTON_PREF_ACTION_OS) + parseFloat(b);
+	sendToWARBL(MIDI_SLOT_02, y);
 	sendMIDIrow(rowNum);
-	sendChannel(rowNum);
+
+	//20230928 GLB
+	if (a == 30) { //Transpose
+		document.getElementById("channel" + (rowNum)).value = 0;
+		sendChannel(rowNum);
+		document.getElementById("channel" + (rowNum)).value = null;
+	} else if (a == 5) { // Progressive Transpose
+		document.getElementById("channel" + (rowNum)).value = 1;
+		sendChannel(rowNum);
+		document.getElementById("channel" + (rowNum)).value = null;
+	} else {
+		sendChannel(rowNum);
+	}
+	//END GLB
+
 	sendByte2(rowNum);
 	sendByte3(rowNum);
 	if (rowNum < 3) {
@@ -2160,12 +2943,64 @@ function sendRow(rowNum) {
 	}
 }
 
+//20230927 GLB
+//Action 30 - Transpose - Channel = 0 - Byte2 = interval //WARBL Action 5
+//Action 31 - Progressive Transpose - Channel = 1 - Byte 2  = interval //WARBL Action 5
+//Action 6 - Set Fixed Note  //WARBL Action 6
+//Action 10 - Harmonizer voice 1 - Byte 2  = interval - Byte 3  = scale //WARBL Action 10
+//Action 11 - Harmonizer voice 2 - Byte 2  = interval - Byte 3  = scale //WARBL Action 11
+//Action 12 - Harmonizer voice 3 - Byte 2  = interval - Byte 3  = scale //WARBL Action 11
+
+function sendHARMrow(HARMrowNum) {
+	document.getElementById("byte2_" + (HARMrowNum)).value = parseFloat(document.getElementById("HARMrow" + HARMrowNum).value);
+	sendByte2(HARMrowNum);
+	document.getElementById("byte2_" + (HARMrowNum)).value = null;
+
+	document.getElementById("byte3_" + (HARMrowNum)).value = parseFloat(document.getElementById("HarmScaleRow" + HARMrowNum).value);
+	sendByte3(HARMrowNum);
+	document.getElementById("byte3_" + (HARMrowNum)).value = null;
+}
+
+//New custom fingering
+function onCustomFingeringDeleteAllCurrent() {
+
+	if (confirm("Are you sure you want to delete all custom fingerings for the current fingering scheme?")) {
+		sendToWARBL(MIDI_SLOT_02, MIDI_DELETE_CUSTOM_FINGERING_CURRENT); 
+	}
+}
+function onCustomFingeringDeleteAll() {
+	if (confirm("Are you sure you want to delete all custom fingerings?")) {
+		sendToWARBL(MIDI_SLOT_02, MIDI_DELETE_CUSTOM_FINGERING); 
+	}
+}
+function onCustomFingeringReset() {
+	document.getElementById("customFingeringInput").value = defaultMidiNote;
+	sendCustomFingering();
+}
+function sendCustomFingering() {
+	var midiNote = document.getElementById("customFingeringInput").value
+
+	sendToWARBL(MIDI_SLOT_02, MIDI_SEND_CUSTOM_FINGERING); //Enters custon fingering communication mode
+	sendToWARBL(MIDI_SLOT_09,midiNote);
+	sendIntToWARBL(MIDI_SEND_HOLE_COVERED, holeCovered);
+	// sendPBToWARBL(holeCovered);
+	sendToWARBL(MIDI_SLOT_02, MIDI_SEND_CUSTOM_FINGERING); //Exits custon fingering communication mode
+	customFingeringLearningON = true;
+	document.getElementById("customFingeringReset").disabled = customFingeringLearningON;
+	document.getElementById("customFingeringModify").disabled = customFingeringLearningON;
+
+	document.getElementById("defaultMidiNote").innerHTML = "-";
+	document.getElementById("overrideMidiNote").innerHTML = "-";
+	document.getElementById("customFingeringInput").value = "";
+}
+//END GLB
+
 function sendMIDIrow(MIDIrowNum) {
 	blink(1);
 	updateCells();
-	sendToWARBL(102, 90 + MIDIrowNum);
-	var y = (112) + parseFloat(document.getElementById("MIDIrow" + MIDIrowNum).value);
-	sendToWARBL(102, y);
+	sendToWARBL(MIDI_SLOT_02, MIDI_SEND_BUTTON_PREF_OS + MIDIrowNum);
+	var y = (MIDI_BUTTON_PREF_MIDI_CMD_OS) + parseFloat(document.getElementById("MIDIrow" + MIDIrowNum).value);
+	sendToWARBL(MIDI_SLOT_02, y);
 	sendChannel(MIDIrowNum);
 	sendByte2(MIDIrowNum);
 	sendByte3(MIDIrowNum);
@@ -2178,36 +3013,36 @@ function sendChannel(rowNum) {
 	blink(1);
 	MIDIvalueChange();
 	var y = parseFloat(document.getElementById("channel" + (rowNum)).value);
-	sendToWARBL(102, 90 + rowNum);
-	sendToWARBL(106, y);
+	sendToWARBL(MIDI_SLOT_02, MIDI_SEND_BUTTON_PREF_OS + rowNum);
+	sendToWARBL(MIDI_SLOT_06, y);
 }
 
 function sendByte2(rowNum) {
 	blink(1);
 	MIDIvalueChange();
-	sendToWARBL(102, 90 + rowNum);
+	sendToWARBL(MIDI_SLOT_02, MIDI_SEND_BUTTON_PREF_OS + rowNum);
 	var y = parseFloat(document.getElementById("byte2_" + (rowNum)).value);
-	sendToWARBL(107, y);
+	sendToWARBL(MIDI_SLOT_07, y);
 }
 
 function sendByte3(rowNum) {
 	blink(1);
 	MIDIvalueChange();
-	sendToWARBL(102, 90 + rowNum);
+	sendToWARBL(MIDI_SLOT_02, MIDI_SEND_BUTTON_PREF_OS + rowNum);
 	var y = parseFloat(document.getElementById("byte3_" + (rowNum)).value);
-	sendToWARBL(108, y);
+	sendToWARBL(MIDI_SLOT_08, y);
 }
 
 function sendMomentary(rowNum) { //send momentary
 	blink(1);
 	updateCells();
 	var y = document.getElementById("checkbox" + rowNum).checked
-	sendToWARBL(102, 90 + rowNum);
+	sendToWARBL(MIDI_SLOT_02, MIDI_SEND_BUTTON_PREF_OS + rowNum);
 	if (y == false) {
-		sendToWARBL(102, 117);
+		sendToWARBL(MIDI_SLOT_02, MIDI_MOMENTARY_OFF_OS);
 	}
 	if (y == true) {
-		sendToWARBL(102, 118);
+		sendToWARBL(MIDI_SLOT_02, MIDI_MOMENTARY_ON_OS);
 	}
 }
 
@@ -2216,38 +3051,38 @@ function sendMomentary(rowNum) { //send momentary
 function sendVented(selection) {
 	selection = +selection; //convert true/false to 1/0
 	blink(1);
-	sendToWARBL(104, 40);
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_04, MIDI_SEND_SWITCH_VARS_OS);
+	sendToWARBL(MIDI_SLOT_05, selection);
 	updateSelected();
 }
 
 function sendBagless(selection) {
 	selection = +selection; //convert true/false to 1/0
 	blink(1);
-	sendToWARBL(104, 41);
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_04, MIDI_SEND_SWITCH_VARS_OS+1);
+	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
 function sendSecret(selection) {
 	selection = +selection; //convert true/false to 1/0
 	blink(1);
-	sendToWARBL(104, 42);
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_04, MIDI_SEND_SWITCH_VARS_OS+2);
+	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
 function sendInvert(selection) {
 	selection = +selection; //convert true/false to 1/0
 	blink(1);
-	sendToWARBL(104, 43);
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_04, MIDI_SEND_SWITCH_VARS_OS+3);
+	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
 function sendCustom(selection) {
 	selection = +selection; //convert true/false to 1/0
 	blink(1);
 	updateCustom();
-	sendToWARBL(104, 44);
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_04, MIDI_SEND_SWITCH_VARS_OS+4);
+	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
 
@@ -2257,23 +3092,23 @@ function sendExpression(selection) {
 	//if (selection == 1) {
 		//document.getElementById("overrideExpression").disabled = false;
 	//} else (document.getElementById("overrideExpression").disabled = true);
-	sendToWARBL(104, 13);
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_04, MIDI_SEND_EXPRESSION_VARS_1_OS);
+	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
 function sendRawPressure(selection) {
 	selection = +selection; //convert true/false to 1/0
 	updateCustom();
 	blink(1);
-	sendToWARBL(104, 15);
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_04, 15);
+	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
 function sendVelocity(selection) {
 	selection = +selection; //convert true/false to 1/0
 	blink(1);
-	sendToWARBL(104, 45);
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_04, 45);
+	sendToWARBL(MIDI_SLOT_05, selection);
 	updateCells();
 }
 
@@ -2281,59 +3116,59 @@ function sendAftertouch(selection, polyselection) {
 	selection = +selection; //convert true/false to 1/0
     var val = selection | ((+polyselection) << 1);
 	blink(1);
-	sendToWARBL(104, 46);
-	sendToWARBL(105, val);
+	sendToWARBL(MIDI_SLOT_04, 46);
+	sendToWARBL(MIDI_SLOT_05, val);
 }
 
 function sendForceVelocity(selection) {
 	selection = +selection; 
 	blink(1);
-	sendToWARBL(104, 47);
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_04, 47);
+	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
 function sendHack1(selection) {
 	selection = +selection; 
 	blink(1);
-	sendToWARBL(104, 48);
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_04, 48);
+	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
 function sendHack2(selection) {
 	selection = +selection; 
 	blink(1);
-	sendToWARBL(104, 49);
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_04, 49);
+	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
 function sendOverride(selection) {
 	selection = +selection; 
 	blink(1);
-	sendToWARBL(104, 50);
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_04, 50);
+	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
 function sendBoth(selection) {
 	selection = +selection; 
 	blink(1);
-	sendToWARBL(104, 51);
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_04, 51);
+	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
 function sendR4flatten(selection) {
 	selection = +selection; 
 	blink(1);
 	updateCustom();
-	sendToWARBL(104, 52);
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_04, 52);
+	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
 /* //curently unused--can be used for an additional switch.
 function sendInvertR4(selection) {
 	selection = +selection;
 	blink(1);
-	sendToWARBL(104, 53);
-	sendToWARBL(105, selection);
+	sendToWARBL(MIDI_SLOT_04, 53);
+	sendToWARBL(MIDI_SLOT_05, selection);
 }
 */
 
@@ -2345,37 +3180,40 @@ function sendInvertR4(selection) {
 function saveAsDefaults() {
 	modalclose(2);
 	blink(3);
-	sendToWARBL(102, 123);
+	sendToWARBL(MIDI_SLOT_02, MIDI_SAVE_SETTING_CURRENT);
+	settingsDirty = false;
 }
 
 function saveAsDefaultsForAll() {
 	modalclose(3);
 	blink(3);
-	sendToWARBL(102, 124);
+	sendToWARBL(MIDI_SLOT_02, MIDI_SAVE_SETTING_ALL);
+	settingsDirty = false;
 }
 
 function restoreAll() {
 	modalclose(4);
 	blink(3);
-	sendToWARBL(102, 125);
+	sendToWARBL(MIDI_SLOT_02, MIDI_RESTORE_FACTORY_SETTING);
 	communicationMode = 0;
 	if (version > 1.9) { //WARBL will restart, so try to reconnect to it.
 		setTimeout(connect, 3000);
 	}
+	settingsDirty = false;
 }
 
 function autoCalibrateBell() {
 	if(communicationMode){
 	LEDon();}
 	setTimeout(LEDoff, 5000);
-	sendToWARBL(106, 42);
+	sendToWARBL(MIDI_SLOT_06, MIDI_AUTO_CALIB_BELL);
 }
 
 function autoCalibrate() {
 	if(communicationMode){
 	LEDon();}
 	setTimeout(LEDoff, 10000);
-	sendToWARBL(102, 127);
+	sendToWARBL(MIDI_SLOT_02, MIDI_AUTO_CALIB);
 }
 
 function frequencyFromNoteNumber(note) {
@@ -2599,6 +3437,237 @@ consoleEntries = 0;
 }
 
 
+//Populates Various Selects
+
+//Populate functions
+function populateSelects() {
+
+	//Actions **** MAX 18 ****
+    var actionsArray = [
+        ["0","none"],
+        ["1","Send MIDI message:"],
+        ["2","Change slide/vibrato mode"],
+        ["3","Change instrument"],
+        ["4","Play/stop (bagless mode)"],
+        ["5","Progressive Transposer:"],
+        ["30","Transposer on/off:"],
+        ["6","Set Fixed Note (on/off)"],
+        ["7","MIDI Panic"],
+        ["8","Change register control mode"],
+        ["9","Turn drones on/off"],
+        ["10","Harmonizer on/off (voice 1):"],
+        ["11","Harmonizer on/off (voice 2):"],
+        ["12","Harmonizer on/off (voice 3)"],
+        ["13","Begin autocalibration"]
+    ];
+
+	//MIDI Messages
+	var messagesArray = [
+		["0","Note on/note off"],
+		["1","CC"],
+		["2","Send PC"],
+		["3","Increase PC"],
+		["4","Decrease PC"]
+	]
+	var transposeArray = [
+		["0","-12 st (P8)"],
+		["1","-11 st (M7)"],
+		["2","-10 st (m7)"],
+		["3","-9 st (M6)"],
+		["4","-8 st (m6)"],
+		["5","-7 st (P5)"],
+		["6","-6 st (#4)"],
+		["7","-5 st (P4)"],
+		["8","-4 st (M3)"],
+		["9","-3 st (m3)"],
+		["10","-2 st (M2)"],
+		["11","-1 st (m2)"],
+		["12","0 st (P1)"],
+		["13","+1 st (m2)"],
+		["14","+2 st (M2)"],
+		["15","+3 st (m3)"],
+		["16","+4 st (M3)"],
+		["17","+5 st (P4)"],
+		["18","+6 st (#4)"],
+		["19","+7 st (P5)"],
+		["20","+8 st (m6)"],
+		["21","+9 st (M6)"],
+		["22","+10 st (m7)"],
+		["23","+11 st (M7)"],
+		["24","+12 st (P8)"]
+	];
+
+	var scalesArray = [
+		["0","Major Scale"],
+		["1","Melodic Minor Scale"],
+		["2","Harmonic Minor Scale"],
+		["3","Dimished Scale 1"],
+		["4","Dimished Scale 2"],
+		["5","Augmented Scale 1"],
+		["7","Augmented Scale 2"],
+		["7","Whole Tone Scale"],
+		["8","Major Bebop Scale"],
+		["9","Dominant Bebop Scale"],
+		["10","Major Pentatonic Scale"],
+		["11","Minor Pentatonic Scale"],
+		["12","Blues Scale"]
+	];
+
+	//Button Prefs
+	var actionsSelectDiv = document.getElementById("buttonPrefsSelectContainer");
+	var messagesSelectDiv = document.getElementById("buttonPrefsMessageContainer");
+	var channelSelectDiv = document.getElementById("channelInputContainer");
+
+	    //Actions Select
+    for (var i = 0; i<8;i++) {
+        //Creates Actions Div
+        var actionsDivEl = document.createElement("div");
+        actionsDivEl.classList.add('styled-select', 'blue', 'semi-square');
+		actionsSelectDiv.appendChild(actionsDivEl);
+
+		//Creates Messages Div
+		var messagesDivEl = document.createElement("div");
+        messagesDivEl.classList.add('styled-select2', 'blue', 'semi-square');
+		messagesSelectDiv.appendChild(messagesDivEl);
+
+        //Creates actions Select
+        var actionsSelectEl =  document.createElement("select");
+        actionsSelectEl.setAttribute('id', 'row' + i);
+        actionsSelectEl.setAttribute('onChange', 'sendRow(' + i + ')');
+        actionsDivEl.appendChild(actionsSelectEl);
+
+		//Creates messages Select
+		var messagesSelectEl =  document.createElement("select");
+		messagesSelectEl.setAttribute('id', 'MIDIrow' + i);
+		messagesSelectEl.setAttribute('onChange', 'sendMIDIrow(' + i + ')');
+		messagesDivEl.appendChild(messagesSelectEl);
+
+		//Creates transpose Select
+		var transposeSelectEl =  document.createElement("select");
+		transposeSelectEl.setAttribute('id', 'HARMrow' + i);
+		transposeSelectEl.setAttribute('onChange', 'sendHARMrow(' + i + ')');
+		messagesDivEl.appendChild(transposeSelectEl);
+
+
+
+		//Creates Channel Input
+		var inputChannelEl = document.createElement("input");
+		inputChannelEl.classList.add('channelInput');
+		inputChannelEl.setAttribute('type', 'text');
+		inputChannelEl.setAttribute('id', 'channel' + i);
+		inputChannelEl.setAttribute('onChange', 'sendChannel(' + i + ')');
+		inputChannelEl.setAttribute('value', '');
+		channelSelectDiv.appendChild(inputChannelEl);
+
+		//Creates Scale Div
+		var scaleDivEl = document.createElement("div");
+		scaleDivEl.classList.add('styled-select2', 'blue', 'semi-square');
+		scaleDivEl.setAttribute('id', 'HarmScaleDiv' + i);
+		channelSelectDiv.appendChild(scaleDivEl);
+
+		//Creates scale Select
+		var scaleSelectEl =  document.createElement("select");
+		scaleSelectEl.setAttribute('id', 'HarmScaleRow' + i);
+		scaleSelectEl.setAttribute('onChange', 'sendHARMrow(' + i + ')');
+		scaleDivEl.appendChild(scaleSelectEl);
+
+		//Adds action options
+        for(var j = 0; j< actionsArray.length; j++) {
+            var opt = actionsArray[j];
+            var optionEl = document.createElement("option");
+            optionEl.textContent = opt[1];
+            optionEl.value = opt[0];
+            actionsSelectEl.appendChild(optionEl);
+        }
+
+		//Adds message options
+		for(var j = 0; j< messagesArray.length; j++) {
+			var opt = messagesArray[j];
+			var optionEl = document.createElement("option");
+			optionEl.textContent = opt[1];
+			optionEl.value = opt[0];
+			messagesSelectEl.appendChild(optionEl);
+		}
+
+		//Adds tranpose options
+		for(var j = 0; j< transposeArray.length; j++) {
+			var opt = transposeArray[j];
+			var optionEl = document.createElement("option");
+			optionEl.textContent = opt[1];
+			optionEl.value = opt[0];
+			transposeSelectEl.appendChild(optionEl);
+		}
+
+		//Adds scale options
+		for(var j = 0; j< scalesArray.length; j++) {
+			var opt = scalesArray[j];
+			var optionEl = document.createElement("option");
+			optionEl.textContent = opt[1];
+			optionEl.value = opt[0];
+			scaleSelectEl.appendChild(optionEl);
+		}
+    }
+
+
+	//keySelect
+	var keySelectArray = [
+		["113","C3"],
+		["114","C#"],
+		["115","D"],
+		["116","Eb"],
+		["117","E"],
+		["118","F"],
+		["119","F#"],
+		["120","G"],
+		["121","G#"],
+		["122","A"],
+		["123","Bb"],
+		["124","B"],
+		["125","C4"],
+		["126","C#"],
+		["0","D"],
+		["1","Eb"],
+		["2","E"],
+		["3","F"],
+		["4","F#"],
+		["5","G"],
+		["6","G#"],
+		["7","A"],
+		["8","Bb"],
+		["9","B"],
+		["10","C5"],
+		["11","C#"],
+		["12","D"]
+	];
+	var keySelectDiv = document.getElementById("keySelectContainer");
+    for (var i = 0; i<3;i++) {
+		//Creates keySelect Div
+		var keySelectDivEl = document.createElement("div");
+        keySelectDivEl.classList.add('styled-key-select', 'blue', 'semi-square');
+		keySelectDivEl.setAttribute('id', 'key' + i);
+		keySelectDiv.appendChild(keySelectDivEl);
+
+		//Creates keySelect
+		var keySelectEl =  document.createElement("select");
+		keySelectEl.setAttribute('id', 'keySelect' + i);
+		keySelectEl.setAttribute('onChange', 'sendKey(' + i + ',value)');
+		keySelectDivEl.appendChild(keySelectEl);
+
+		//Adds key options
+		for(var j = 0; j< keySelectArray.length; j++) {
+			var opt = keySelectArray[j];
+			var optionEl = document.createElement("option");
+			optionEl.textContent = opt[1];
+			optionEl.value = opt[0];
+			if (keySelectEl == 0) {
+				optionEl.setAttribute('selected', 'selected');
+			}
+			keySelectEl.appendChild(optionEl);
+		}
+
+	}
+
+}
 
 //sets up initial values for selects/fields/radios and constantly keeps the proper options enabled/disabled
 function updateCells() {
@@ -2652,12 +3721,54 @@ function updateCells() {
 		var t = document.getElementById("row" + i).disabled;
 
 		if ((x != 1 || t == true)) {
+			//20230927 GLB
 			document.getElementById("MIDIrow" + i).disabled = true;
+			document.getElementById("HARMrow" + i).disabled = t;
+
+			if (x == 30 || x == 5) { //Transposer
+				document.getElementById("MIDIrow" + i).style.display = 'none';
+				document.getElementById("channel" + i).style.display = 'none';
+
+				document.getElementById("HARMrow" + i).style.display = 'block';
+				document.getElementById("HarmScaleDiv" + i).style.display = 'none';				
+
+			} else if (x == 10 || x == 11 || x == 12) { // Harmonizer
+				document.getElementById("MIDIrow" + i).style.display = 'none';
+				document.getElementById("channel" + i).style.display = 'none';
+				document.getElementById("byte2_" + i).style.zIndex = 0;
+
+				document.getElementById("HARMrow" + i).style.display = 'block';
+				document.getElementById("HarmScaleDiv" + i).style.display = 'block';
+				document.getElementById("HarmScaleDiv" + i).style.zIndex = 100;
+				
+
+			}  else {
+				document.getElementById("MIDIrow" + i).style.display = 'block';
+				document.getElementById("channel" + i).style.display = 'block';
+				document.getElementById("byte2_" + i).style.zIndex = 100;
+
+				document.getElementById("HARMrow" + i).style.display = 'none';
+				document.getElementById("HarmScaleDiv" + i).style.display = 'none';
+
+			}
+			//END GLB
+
 			document.getElementById("channel" + i).disabled = true;
 			document.getElementById("byte2_" + i).disabled = true;
 			document.getElementById("byte3_" + i).disabled = true;
 		} else {
 			document.getElementById("MIDIrow" + i).disabled = false;
+			
+			//20230927 GLB
+			document.getElementById("MIDIrow" + i).style.display = 'block';
+			document.getElementById("channel" + i).style.display = 'block';
+			document.getElementById("byte2_" + i).style.display = 'block';
+
+			document.getElementById("HARMrow" + i).style.display = 'none';
+			document.getElementById("HarmScaleDiv" + i).style.display = 'none';
+
+			//END GLB
+
 			document.getElementById("channel" + i).disabled = false;
 			document.getElementById("byte2_" + i).disabled = false;
 			document.getElementById("byte3_" + i).disabled = false;
@@ -2674,17 +3785,19 @@ function updateCells() {
 
 		var z = document.getElementById("row" + i).value;
 
-		if ((y == 0 && i < 3 && x == 1) || ((version > 1.4 || version == "Unknown") && i < 3 && (z == 5 || z == 6 || z == 10 || z == 11))) {
+		//20230927 GLB
+		if ((y == 0 && i < 3 && x == 1) || ((version > 1.4 || version == "Unknown") && i < 3 && (z == 30 || z == 5 || z == 10 || z == 11 || z == 12))) {
 			document.getElementById("checkbox" + i).disabled = false;
 			document.getElementById("switch" + i).style.cursor = "pointer";
 		}
 
-		if (((y != 0 && i < 3) || (i < 3 && (x == 0 || x > 1))) && !((version > 1.4 || version == "Unknown") && i < 3 && (z == 5 || z == 6 || z == 10 || z == 11))) {
+		if (((y != 0 && i < 3) || (i < 3 && (x == 0 || x > 1))) && !((version > 1.4 || version == "Unknown") && i < 3 && (z == 30 || z == 5 || z == 10 || z == 11 || z == 12))) {
 			document.getElementById("checkbox" + i).disabled = true;
 			document.getElementById("switch" + i).style.cursor = "default";
 			document.getElementById("checkbox" + i).checked = false;
 		}
 
+		//END GLB
 		var q = document.getElementById("checkbox0").checked;
 		if (q == true) {
 			document.getElementById("row5").disabled = true;
@@ -2730,6 +3843,83 @@ function updateCells() {
 	document.getElementById("fingeringLabel3").innerHTML = z;
 
 }
+
+//20230927 GLB
+function MIDIvalueChange() {
+	for (var i = 0; i < 8; i++) {
+
+		var a = document.getElementById("row" + i).value;
+
+		if (a == 30 || a == 5 || a == 10 || a == 11 || a == 12) { //Transposer/Harmonizer
+			var x = document.getElementById("HARMrow" + i).value;
+
+			if (x < 0 || x > 24 || isNaN(x)) {
+				alert("Value must be 0-24.");
+				document.getElementById("HARMrow" + i).value = 12;
+			}
+
+		} else {
+
+			//Channel
+			var x = document.getElementById("channel" + i).value;
+			if (((x < 0 || x > 16 || isNaN(x)) && !document.getElementById("channel" + i).disabled)) {
+				alert("Value must be 1-16.");
+				document.getElementById("channel" + i).value = null;
+			}
+
+			//Byte2
+			var y = document.getElementById("channel" + i).value;
+			x = document.getElementById("byte2_" + i).value;
+			if (x < 0 || x > 127 || isNaN(x)) {
+				alert("Value must be 0-127.");
+				document.getElementById("byte2_" + i).value = null;
+			}
+			if (y == 7 && x > 101 && x < 120) {
+				alert("This CC range on channel 7 is reserved for the Configuration Tool.");
+				document.getElementById("byte2_" + i).value = null;
+
+			}
+
+			//Byte3
+			x = document.getElementById("byte3_" + i).value;
+			if (x < 0 || x > 127 || isNaN(x)) {
+				alert("Value must be 0-127.");
+				document.getElementById("byte3_" + i).value = null;
+			}
+		}
+	}
+}
+function MIDIvalueChange_old() {
+	for (var i = 0; i < 8; i++) {
+		var x = document.getElementById("channel" + i).value;
+		if (((x < 0 || x > 16 || isNaN(x)) && !document.getElementById("channel" + i).disabled)) {
+			alert("Value must be 1-16.");
+			document.getElementById("channel" + i).value = null;
+		}
+	}
+	for (var j = 0; j < 8; j++) {
+		var y = document.getElementById("channel" + j).value;
+		var x = document.getElementById("byte2_" + j).value;
+		if (x < 0 || x > 127 || isNaN(x)) {
+			alert("Value must be 0-127.");
+			document.getElementById("byte2_" + j).value = null;
+		}
+		if (y == 7 && x > 101 && x < 120) {
+			alert("This CC range on channel 7 is reserved for the Configuration Tool.");
+			document.getElementById("byte2_" + j).value = null;
+
+		}
+	}
+
+	for (var k = 0; k < 8; k++) {
+		var x = document.getElementById("byte3_" + k).value;
+		if (x < 0 || x > 127 || isNaN(x)) {
+			alert("Value must be 0-127.");
+			document.getElementById("byte3_" + k).value = null;
+		}
+	}
+
+}	
 
 function MIDIvalueChange() {
 	for (var i = 0; i < 8; i++) {
@@ -2858,7 +4048,7 @@ function importPreset(context){
 
 	    		var theImportObject = JSON.parse(reader.result);
 
-	    	}catch(e){
+	    	} catch(e){
 
 				document.getElementById("modal14-title").innerHTML="Error: File is not a WARBL Preset";
 				return;
@@ -2888,6 +4078,13 @@ function importPreset(context){
 
 			}
 
+			if (!theImportObject.custom_build){
+
+				document.getElementById("modal14-title").innerHTML="Error: WARBL Preset Version "+theImportObject.version+" not supported by this version of the configuration tool";
+				return;
+
+			}
+
 	    	if (theImportObject.version > maxSupportedPresetVersion){
 
 				document.getElementById("modal14-title").innerHTML="Error: WARBL Preset Version "+theImportObject.version+" not supported by this version of the configuration tool";
@@ -2895,8 +4092,18 @@ function importPreset(context){
 
 			}
 
-			//debugger;
+			if (theImportObject.custom_build != 1){ //BARBARO Build
 
+				document.getElementById("modal14-title").innerHTML="Error: WARBL Preset Version "+theImportObject.version+" not supported by this version of the configuration tool";
+				return;
+
+			}
+			//debugger;
+			if (!confirm("These settings will be loaded into the currently selected preset.\nYou will have to save it them manually, if you wish so.")) {
+				modalclose(14);
+				$('#importPreset').val('');
+				return;
+			}
 	    	// Send the data to the WARBL
 	    	var nMessages = theImportObject.messages.length;
 
@@ -2904,23 +4111,23 @@ function importPreset(context){
 	    	var byte0, byte1, byte2;
 
 	    	// Send the firmware version
-    		byte0 = theImportObject.messages[0][0];
-    		byte1 = theImportObject.messages[0][1];
-    		byte2 = theImportObject.messages[0][2];
-	    	sendToWARBL(byte1, byte2);
+    		// byte0 = theImportObject.messages[0][0];
+    		// byte1 = theImportObject.messages[0][1];
+    		// byte2 = theImportObject.messages[0][2];
+	    	// sendToWARBL(byte1, byte2);
 	    	
     		// Synchronous sleep to allow command processing
-    		await sleep(delay);
+    		// await sleep(delay);
 
 			//
 	    	// Determine the current instrument that was set at export
 	    	//
-	  		var exportedInstrument =  theImportObject.messages[10][2] - 60;
+	  		// var exportedInstrument =  theImportObject.messages[10][2] - 60;
 
 	  		//
 	  		// Determine the current target instrument tab
 	  		//
-	  		var targetInstrument = 30 + instrument;
+	  		// var targetInstrument = 30 + currentPreset;
 
 	  		// console.log("exportedInstrument = "+exportedInstrument);
 	  		// console.log("targetInstrument = "+(targetInstrument-30));
@@ -2928,105 +4135,105 @@ function importPreset(context){
 	  		//
 	  		// Determine the current target key shift
 	  		//
-	  		var targetKey = 111 + instrument;
+	  		// var targetKey = 111 + currentPreset;
 
 	    	// send the fingering and key shift for the current tab only
-			switch (exportedInstrument){
+			// switch (exportedInstrument){
 
-				case 0:
+			// 	case 0:
 
-		    		byte0 = theImportObject.messages[1][0];
-		    		byte1 = theImportObject.messages[1][2];
-		    		byte2 = targetInstrument;
+		    // 		byte0 = theImportObject.messages[1][0];
+		    // 		byte1 = theImportObject.messages[1][2];
+		    // 		byte2 = targetInstrument;
 
-			    	sendToWARBL(byte1, byte2);
+			//     	sendToWARBL(byte1, byte2);
 
-		    		// Synchronous sleep to allow command processing
-		    		await sleep(delay);
+		    // 		// Synchronous sleep to allow command processing
+		    // 		await sleep(delay);
 		    		
-		    		byte0 = theImportObject.messages[2][0];
-		    		byte1 = theImportObject.messages[2][1];
-		    		byte2 = theImportObject.messages[2][2];
+		    // 		byte0 = theImportObject.messages[2][0];
+		    // 		byte1 = theImportObject.messages[2][1];
+		    // 		byte2 = theImportObject.messages[2][2];
 			    	
-			    	sendToWARBL(byte1, byte2);
+			//     	sendToWARBL(byte1, byte2);
 
-		    		// Synchronous sleep to allow command processing
-		    		await sleep(delay);
+		    // 		// Synchronous sleep to allow command processing
+		    // 		await sleep(delay);
 		    		
-		    		byte0 = theImportObject.messages[3][0];
-		    		byte1 = targetKey;		
-		    		byte2 = theImportObject.messages[3][2];
+		    // 		byte0 = theImportObject.messages[3][0];
+		    // 		byte1 = targetKey;		
+		    // 		byte2 = theImportObject.messages[3][2];
 			    	
-			    	sendToWARBL(byte1, byte2);
+			//     	sendToWARBL(byte1, byte2);
 
-		    		// Synchronous sleep to allow command processing
-		    		await sleep(delay);
+		    // 		// Synchronous sleep to allow command processing
+		    // 		await sleep(delay);
 					
-					break;
+			// 		break;
 
-				case 1:
+			// 	case 1:
 
-		    		byte0 = theImportObject.messages[4][0];
-		    		byte1 = theImportObject.messages[4][1];
-		    		byte2 = targetInstrument;
+		    // 		byte0 = theImportObject.messages[4][0];
+		    // 		byte1 = theImportObject.messages[4][1];
+		    // 		byte2 = targetInstrument;
 
-			    	sendToWARBL(byte1, byte2);
+			//     	sendToWARBL(byte1, byte2);
 
-		    		// Synchronous sleep to allow command processing
-		    		await sleep(delay);
+		    // 		// Synchronous sleep to allow command processing
+		    // 		await sleep(delay);
 		    		
-		    		byte0 = theImportObject.messages[5][0];
-		    		byte1 = theImportObject.messages[5][1];
-		    		byte2 = theImportObject.messages[5][2];
+		    // 		byte0 = theImportObject.messages[5][0];
+		    // 		byte1 = theImportObject.messages[5][1];
+		    // 		byte2 = theImportObject.messages[5][2];
 			    	
-			    	sendToWARBL(byte1, byte2);
+			//     	sendToWARBL(byte1, byte2);
 
-		    		// Synchronous sleep to allow command processing
-		    		await sleep(delay);
+		    // 		// Synchronous sleep to allow command processing
+		    // 		await sleep(delay);
 		    		
-		    		byte0 = theImportObject.messages[6][0];
-		    		byte1 = targetKey;		
-		    		byte2 = theImportObject.messages[6][2];
+		    // 		byte0 = theImportObject.messages[6][0];
+		    // 		byte1 = targetKey;		
+		    // 		byte2 = theImportObject.messages[6][2];
 			    	
-			    	sendToWARBL(byte1, byte2);
+			//     	sendToWARBL(byte1, byte2);
 
-		    		// Synchronous sleep to allow command processing
-		    		await sleep(delay);
+		    // 		// Synchronous sleep to allow command processing
+		    // 		await sleep(delay);
 
-					break;
+			// 		break;
 
-				case 2:
+			// 	case 2:
 
-		    		byte0 = theImportObject.messages[7][0];
-		    		byte1 = theImportObject.messages[7][1];
-		    		byte2 = targetInstrument;
+		    // 		byte0 = theImportObject.messages[7][0];
+		    // 		byte1 = theImportObject.messages[7][1];
+		    // 		byte2 = targetInstrument;
 
-			    	sendToWARBL(byte1, byte2);
+			//     	sendToWARBL(byte1, byte2);
 
-		    		// Synchronous sleep to allow command processing
-		    		await sleep(delay);
+		    // 		// Synchronous sleep to allow command processing
+		    // 		await sleep(delay);
 		    		
-		    		byte0 = theImportObject.messages[8][0];
-		    		byte1 = theImportObject.messages[8][1];
-		    		byte2 = theImportObject.messages[8][2];
+		    // 		byte0 = theImportObject.messages[8][0];
+		    // 		byte1 = theImportObject.messages[8][1];
+		    // 		byte2 = theImportObject.messages[8][2];
 			    	
-			    	sendToWARBL(byte1, byte2);
+			//     	sendToWARBL(byte1, byte2);
 
-		    		// Synchronous sleep to allow command processing
-		    		await sleep(delay);
+		    // 		// Synchronous sleep to allow command processing
+		    // 		await sleep(delay);
 		    		
-		    		byte0 = theImportObject.messages[9][0];
-		    		byte1 = targetKey;		
-		    		byte2 = theImportObject.messages[9][2];
+		    // 		byte0 = theImportObject.messages[9][0];
+		    // 		byte1 = targetKey;		
+		    // 		byte2 = theImportObject.messages[9][2];
 			    	
-			    	sendToWARBL(byte1, byte2);
+			//     	sendToWARBL(byte1, byte2);
 
-		    		// Synchronous sleep to allow command processing
-		    		await sleep(delay);
+		    // 		// Synchronous sleep to allow command processing
+		    // 		await sleep(delay);
 
-					break;
+			// 		break;
 
-			}
+			// }
 	    	
 			// Skip command 10 - Selected instrument at save time
 
@@ -3034,7 +4241,7 @@ function importPreset(context){
 
 	    	// Send the rest of the data
 
-	    	for (i=12;i<nMessages;++i){
+	    	for (i=0;i<nMessages;++i){
 
 	    		byte0 = theImportObject.messages[i][0];
 	    		byte1 = theImportObject.messages[i][1];
@@ -3054,7 +4261,7 @@ function importPreset(context){
 
 	    		//console.log("refreshing UI");
 
-				sendToWARBL(102, 126);
+				sendToWARBL(MIDI_SLOT_02, MIDI_SEND_SETTINGS);
 
 				// Show the import complete modal
 				document.getElementById("modal14-title").innerHTML="Preset Import Complete!";
@@ -3075,7 +4282,11 @@ function importPreset(context){
 
     	reader.readAsText(context.files[0]);
 
-    } 
+    } else {
+		console.log("Invalid File");
+		document.getElementById("modal14-title").innerHTML="Error: File is not a WARBL Preset";
+		return;
+	}
 
 }
 
@@ -3101,10 +4312,12 @@ function exportPreset(){
 
 	var nMessages = 0;
 
+
 	// Initialize the export structure
 	var theExportObject = {
 		signature:"WARBL",  // Used to sanity check imports
-		version:1,			// In case we need to version the export structure
+		version:"1",			// In case we need to version the export structure
+		custom_build:"1",			// In case we need to version the export structure
 		messages:[]			// Preset messages
 	};
 
@@ -3138,18 +4351,11 @@ function exportPreset(){
 	//
 	function exportMessageHandler(byte0,byte1,byte2){
 
-		//console.log("Message #"+nMessages+":"+byte0+" "+byte1+" "+byte2);
-
-		// Add the message to the message array
-		theExportObject.messages.push([byte0,byte1,byte2]);
-
-		nMessages++;
-
-		if (nMessages == 135){
+		if (!exportingPhase) {
 			
 			//debugger;
 
-			//console.log("exportMessageHandler: All messages received");
+			console.log("exportMessageHandler: All messages received (" + nMessages + ")");
 
 			// Stringify the messsages array
 			var theExportObjectJSON = JSON.stringify(theExportObject);
@@ -3160,15 +4366,30 @@ function exportPreset(){
 			// Do the preset file export
 			downloadPreset(theExportObjectJSON,"WARBL_Preset.warbl","text/plain");
 
+			return;
+
 		}
+
+		//console.log("Message #"+nMessages+":"+byte0+" "+byte1+" "+byte2);
+
+		// Add the message to the message array
+		theExportObject.messages.push([byte0,byte1,byte2]);
+
+		nMessages++;
+
+
 	}
+
 
 	// Setup the global export message proxy
 	gExportProxy = exportMessageHandler;
 
-	// Tell WARBL to enter communications mode
+	exportingPhase = true;
+	nMessages = 0;
+
+	// Tell WARBL to dump settings for current Preset
 	// Received bytes will be forwarded to the export message handler instead
-	sendToWARBL(102, 126); 
+	sendToWARBL(MIDI_SLOT_02, MIDI_DUMP_SETTINGS_CURRENT); 
 
 }
 
@@ -3320,3 +4541,4 @@ function stopPressureGraph(){
 
 	return;
 }
+
