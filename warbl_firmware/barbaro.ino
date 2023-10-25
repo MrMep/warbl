@@ -36,11 +36,6 @@
     TODOs:
     - Add "ignore hole" to custom fingering management.
 
-    - DONE Create a default configuration for all three presets.
-    - DONE - Make half hole detection more robust.
-    - NOT A GOOD IDEA - Make one big struct to contain all the parameters settings, with a single mechanism to communicate with the config tool
-    - NOT A GOOD IDEA - Make one big struct containing all run-time parameters.
-
 */
 #include "defines.h"
 #include "types.h"
@@ -67,14 +62,6 @@ const uint16_t harmonizer_scales [S_SCALE_NUMBER] = {
 };
 
 
-//Initializes settings parameters
-// void settings_init(byte preset) {
-
-//     // settings.bytes[SET_BYTE_PB_MODE] = kPitchBendSlideVibrato;  
-//     // senseDistance = 10;  
-//     // settings.bytes[SET_BYTE_VIBRATO_DEPTH] = 1024;  
-
-// } 
 //Initializes runtime parameters
 void rt_init() {
     //General
@@ -133,31 +120,25 @@ void saveHalfHoleCalibration() {
 void loadHalfHoleCalibration() {
 
     for (byte i = 0; i < TONEHOLE_SENSOR_NUMBER; i++) {
+
+        //null calibration == 0xFFFF == Disabled
         //Read upper limit
-        // byte high = EEPROM.read(EEPROM_HALF_HOLE_CALIBRATION + i*4);
-        // byte low = EEPROM.read(EEPROM_HALF_HOLE_CALIBRATION + i*4 + 1);
-        // fingering.halfHole.lower_limit[i] = word(high, low);
-
         fingering.halfHole.lower_limit[i] = readIntFromEEPROM(EEPROM_HALF_HOLE_CALIBRATION + i*4);
-        if (fingering.halfHole.lower_limit[i] == 0xFFFF) { //null calibration
-            fingering.halfHole.lower_limit[i] =  senseDistance/2; //Default value
-        }
-
-        // high = EEPROM.read(EEPROM_HALF_HOLE_CALIBRATION + i*4 +2);
-        // low = EEPROM.read(EEPROM_HALF_HOLE_CALIBRATION + i*4 + 3);
-        // fingering.halfHole.upper_limit[i] = word(high, low);
+        // if (fingering.halfHole.lower_limit[i] == 0xFFFF) { //null calibration
+        //     fingering.halfHole.lower_limit[i] = fingering.halfHole.upper_limit[i] + HALF_HOLE_LOWER_OFFSET;
+        //     // fingering.halfHole.lower_limit[i] =  senseDistance/2; //Default value
+        // }
 
         fingering.halfHole.upper_limit[i] = readIntFromEEPROM(EEPROM_HALF_HOLE_CALIBRATION + i*4 +2);
-        if (fingering.halfHole.upper_limit[i] == 0xFFFF) { //null calibration
-            fingering.halfHole.upper_limit[i] = toneholeCovered[i] - senseDistance/2; //Default value
-        }
+        // if (fingering.halfHole.upper_limit[i] == 0xFFFF) { //null calibration
+        //     fingering.halfHole.upper_limit[i] = toneholeCovered[i] - HOLE_OPEN_OFFSET + HALF_HOLE_UPPER_OFFSET;
+        //     // fingering.halfHole.upper_limit[i] = toneholeCovered[i] - senseDistance/2; //Default value
+        // }
     }
 }
 
 void saveHalfHoleLowerLimit(byte hole) {
     if (hole < TONEHOLE_SENSOR_NUMBER) {
-        // EEPROM.update(EEPROM_HALF_HOLE_CALIBRATION + hole*4 , highByte(fingering.halfHole.lower_limit[hole]));
-        // EEPROM.update(EEPROM_HALF_HOLE_CALIBRATION + hole*4 + 1, lowByte(fingering.halfHole.lower_limit[hole]));
         writeIntToEEPROM(EEPROM_HALF_HOLE_CALIBRATION + hole*4, fingering.halfHole.lower_limit[hole]);
 
     }
@@ -165,11 +146,17 @@ void saveHalfHoleLowerLimit(byte hole) {
 
 void saveHalfHoleUpperLimit(byte hole) {
     if (hole < TONEHOLE_SENSOR_NUMBER) {
-        // EEPROM.update(EEPROM_HALF_HOLE_CALIBRATION + hole*4 +2, highByte(fingering.halfHole.upper_limit[hole]));
-        // EEPROM.update(EEPROM_HALF_HOLE_CALIBRATION + hole*4 +3, lowByte(fingering.halfHole.upper_limit[hole]));
         writeIntToEEPROM(EEPROM_HALF_HOLE_CALIBRATION + hole*4 + 2, fingering.halfHole.upper_limit[hole]);
 
     }
+}
+
+
+void calibrateHalfHoleDetection() {
+        for (byte i = 0; i < TONEHOLE_SENSOR_NUMBER; i++) {
+            fingering.halfHole.upper_limit[i] = toneholeCovered[i] - HOLE_OPEN_OFFSET + HALF_HOLE_UPPER_OFFSET;
+            fingering.halfHole.lower_limit[i] = fingering.halfHole.upper_limit[i] + HALF_HOLE_LOWER_OFFSET;
+        }
 }
 
 void sendHoleCovered(uint16_t holes) {
@@ -180,9 +167,6 @@ void sendHoleCovered(uint16_t holes) {
 void sendHalfHoleParams( int hole) {
 
     if (communicationMode && hole < TONEHOLE_SENSOR_NUMBER ) { //we send debug info to the config tool
-
-        //Sends current senseDistance
-        // sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_03, senseDistance);  //send sense distance
 
         //Sends current Hole
         sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_04, MIDI_SEND_HALFHOLE_CURRENT);
@@ -195,65 +179,23 @@ void sendHalfHoleParams( int hole) {
         //Sends current Hole upperLimit
         sendIntValue(MIDI_SEND_HALFHOLE_MAX, fingering.halfHole.upper_limit[hole] );
 
-        //Sends current Hole calibration 
-        // sendIntValue(MIDI_SEND_TONE_COVERED_0 + hole, toneholeCovered[hole]);
-
         //Sends current Hole Read 
         sendIntValue(MIDI_SEND_TONE_READ_0 + hole, toneholeLastRead[hole]);
+
+        //Sends current hole Calibration baseline
+        sendIntValue(MIDI_SEND_TONE_BASELINE_0 + hole, toneholeBaseline[hole]);
+
+        //Sends current hole Calibration
+        sendIntValue(MIDI_SEND_TONE_COVERED_0 + hole, toneholeCovered[hole]);
+
+
+        
     }
 }
 
-// //Returns the calculated lower limit for select hole
-// int getHalfHoleLowerLimit(int hole) {
-//      int result = 0;
-
-//     if (hole > TONEHOLE_SENSOR_NUMBER) {
-//         return result;
-//     }
-
-//     switch (hole) {
-//             case R3_HOLE:
-//             case R4_HOLE:
-//                 result = senseDistance/2;
-//                 break;
-//             case THUMB_HOLE:
-//                 result = senseDistance*2 ;
-//                 break;
-
-//             default:
-//                 break;
-//         }
-//     return result;
-// }
-
-// //Return the calculated upper limit for select hole
-// int getHalfHoleUpperLimit(int hole) {
-//      int result = 0;
-//     if (hole > TONEHOLE_SENSOR_NUMBER) {
-//         return result;
-//     }
-
-//     switch (hole) {
-//             case R3_HOLE:
-//             case R4_HOLE:
-//                 // result = senseDistance*2;
-//                 result = toneholeCovered[hole] - senseDistance/2;
-//                 break;
-//             case THUMB_HOLE:
-//                 result = toneholeCovered[hole] - senseDistance/2 +20;
-//                 break;
-
-//             default:
-//                 break;
-//         }
-//     return result;
-// }
 //returns if the selected hole is half covered
 bool isHalfHole(int hole) {
-
-    // if (hole > TONEHOLE_SENSOR_NUMBER) {
-    //     return false;
-    // }
+    if (fingering.halfHole.upper_limit[hole] >=  0x3FFF ) return false; //disabled
 
     return toneholeRead[hole] > fingering.halfHole.lower_limit[hole] && toneholeRead[hole] <  fingering.halfHole.upper_limit[hole];
 }
@@ -381,17 +323,6 @@ void sendMIDIPanic() {
 //END GLB
 
 //Harmonizer / Tranpose / Fixed note generic functions
-//Utils function to count the number of steps in a scale
-// uint8_t countSteps(uint16_t scale)
-// {
-//     return __builtin_popcount(scale);
-//     uint8_t count = 0;
-//     while (scale) {
-//         count += scale & 1;
-//         scale >>= 1;
-//     }
-//     return count;
-// }
 
 //Sends the whole current configuration
 void sendHarmonizerConfiguration() {
@@ -433,20 +364,6 @@ uint8_t getStep(byte voice, byte note)
 
     return __builtin_popcount(harmonizer.harmonizers[voice].scale >> (11 - (note - harmonizer.harmonizers[voice].tonic) % 12));
 
-    //Calculates the chromatic interval from the tonic
-    // uint8_t interval = (note - harmonizer.harmonizers[voice].tonic) % 12;
-
-    // uint8_t step = 0;
-
-    // for(uint8_t i=11; i>=0; i--) {
-    //     if (bitRead(harmonizer.harmonizers[voice].scale, i)) {
-    //         step++;
-    //     }
-    //     if (11-i == interval) {
-    //         break;
-    //     }
-    // }
-    // return step;
 }
 
 //Returns the number of semitones from the tonic for the step
@@ -520,20 +437,20 @@ void setHarmonizerTonic(byte voice, byte value) {
     }
 }
 
-//Checks is note is the current fixed note
-bool isFixedNote(byte note) {
-    return harmonizer.fixedNote == note;
-}
-
-//Checks is note is one of the current voices
-bool isHarmonizerCurrentNote(byte note) {
+//20231021
+//is note currently used by the harmonizer?
+bool isNoteOkToClose(byte note) {
+    if (harmonizer.fixedNote == note) {
+        return false;
+    }
     for (byte i = 0; i < HARMONIZER_VOICES; i++) {
         if (harmonizer.harmonizers[i].currentNote == note) {
-            return true;
+            return false;
         }
     }
-    return false;
+    return true;
 }
+
 
 //Checks is note is one the current of other voices
 bool isHarmonizerOtherCurrentNote(byte voice, byte note) {
@@ -744,9 +661,6 @@ void loadCustomFingering() {
             if (tmp_fingeringSelector == fingeringSelector) { //It applies to current fingering schema
                 fingering.custom_fingering[currentCounter].midi_note = midi_note;
                 fingering.custom_fingering[currentCounter].fingeringSelector = tmp_fingeringSelector;
-                // byte high = EEPROM.read(EEPROM_CUSTOM_FINGERING_START + i*4 + 2);
-                // byte low = EEPROM.read(EEPROM_CUSTOM_FINGERING_START + i*4 + 3);
-                // fingering.custom_fingering[currentCounter].holeCovered =  word(high, low);
                 fingering.custom_fingering[currentCounter].holeCovered = readIntFromEEPROM(EEPROM_CUSTOM_FINGERING_START + i*4 + 2);
                 currentCounter++;
             }
@@ -759,32 +673,44 @@ void loadCustomFingering() {
     sendCustomFingering();
 }
 
-//Erases all custom Fingerings
-void resetAllCustomFingering() {
+//Genral manager for custom finger operations
+bool manageCustomFingerings(byte operation, byte midiNote, uint16_t fingerPattern) {
 
+    bool result = false;
     for (byte i = 0; i < CUSTOM_FINGERING_MAX; i++) {
-        if (EEPROM.read(EEPROM_CUSTOM_FINGERING_START + i*4) < 0xFF) { //otherwise it's already disabled/inactive
-            EEPROM.update(EEPROM_CUSTOM_FINGERING_START + i*4, 0xFF);
-        }
-    }
-    fingering.customFingeringTotalNumber = 0;
-    fingering.customFingeringCurrentNumber = 0;
-
-    loadCustomFingering();
-
-}
-
-//Erases all custom Fingerings for current fingeringSelector
-void resetCustomFingeringForCurrent() {
-
-    for (byte i = 0; i < CUSTOM_FINGERING_MAX; i++) {
-        if (EEPROM.read(EEPROM_CUSTOM_FINGERING_START + i*4) < 0xFF) { //otherwise it's already disabled/inactive
-            if (EEPROM.read(EEPROM_CUSTOM_FINGERING_START + i*4 + 1) == fingeringSelector) { //It applies to current fingering schema
+        if (EEPROM.read(EEPROM_CUSTOM_FINGERING_START + i*4) < 0xFF) { //otherwise it's disabled/inactive
+            if (operation == ResetAll) { 
                 EEPROM.update(EEPROM_CUSTOM_FINGERING_START + i*4, 0xFF);
+            } else if (EEPROM.read(EEPROM_CUSTOM_FINGERING_START + i*4 + 1) == fingeringSelector) { //It applies to current fingering schema
+                if (operation == ResetForCurrent) {
+                    EEPROM.update(EEPROM_CUSTOM_FINGERING_START + i*4, 0xFF);
+                } else if (readIntFromEEPROM(EEPROM_CUSTOM_FINGERING_START + i*4 + 2) == fingerPattern) {
+                    if (operation == Delete) {
+                        EEPROM.update(EEPROM_CUSTOM_FINGERING_START + i*4, 0xFF);
+                        result =  true;
+                    } else if (operation == Update) {
+                        EEPROM.update(EEPROM_CUSTOM_FINGERING_START + i*4, midiNote);
+                        result = true;
+                    }
+                }
             }
         }
     }
-    loadCustomFingering();
+    if (operation == ResetAll) {
+        fingering.customFingeringTotalNumber = 0;
+        fingering.customFingeringCurrentNumber = 0;
+        result =  true;
+    }
+    if (operation == ResetForCurrent) {
+        result = true;
+    }
+    if (result) {
+        loadCustomFingering();
+    }
+
+    return result;
+
+
 }
 
 int8_t getCustomFingeringNote(uint16_t fingerPattern) {
@@ -796,45 +722,6 @@ int8_t getCustomFingeringNote(uint16_t fingerPattern) {
     return 0x7f;
 }
 
-bool deleteCustomFingeringNote(uint16_t fingerPattern) {
-    for (byte i = 0; i < CUSTOM_FINGERING_MAX; i++) {
-        byte midi_note = EEPROM.read(EEPROM_CUSTOM_FINGERING_START + i*4);
-        if (midi_note < 0xFF) { //otherwise it's disabled/inactive
-            byte tmp_fingeringSelector = EEPROM.read(EEPROM_CUSTOM_FINGERING_START + i*4 + 1);
-            if (tmp_fingeringSelector == fingeringSelector) { //It applies to current fingering schema
-                // byte high = EEPROM.read(EEPROM_CUSTOM_FINGERING_START + i*4 + 2);
-                // byte low = EEPROM.read(EEPROM_CUSTOM_FINGERING_START + i*4 + 3);
-                // uint16_t tmp_holeCovered =  word(high, low);
-                uint16_t tmp_holeCovered = readIntFromEEPROM(EEPROM_CUSTOM_FINGERING_START + i*4 + 2);
-                if (tmp_holeCovered == fingerPattern) {
-                    EEPROM.update(EEPROM_CUSTOM_FINGERING_START + i*4, 0xFF);
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
-
-bool updateCustomFingeringNote(byte midiNote, uint16_t fingerPattern) {
-    for (byte i = 0; i < CUSTOM_FINGERING_MAX; i++) {
-        byte midi_note = EEPROM.read(EEPROM_CUSTOM_FINGERING_START + i*4);
-        if (midi_note < 0xFF) { //otherwise it's disabled/inactive or different
-            byte tmp_fingeringSelector = EEPROM.read(EEPROM_CUSTOM_FINGERING_START + i*4 + 1);
-            if (tmp_fingeringSelector == fingeringSelector) { //It applies to current fingering schema
-                // byte high = EEPROM.read(EEPROM_CUSTOM_FINGERING_START + i*4 + 2);
-                // byte low = EEPROM.read(EEPROM_CUSTOM_FINGERING_START + i*4 + 3);
-                // uint16_t tmp_holeCovered =  word(high, low);
-                uint16_t tmp_holeCovered = readIntFromEEPROM(EEPROM_CUSTOM_FINGERING_START + i*4 + 2);
-                if (tmp_holeCovered == fingerPattern) {
-                    EEPROM.update(EEPROM_CUSTOM_FINGERING_START + i*4, midiNote);
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
 //Save custom Fingerings
 bool saveCustomFingering(byte midiNote, uint16_t fingerPattern) {
 
@@ -843,11 +730,8 @@ bool saveCustomFingering(byte midiNote, uint16_t fingerPattern) {
     }
 
     if (midiNote == get_note(fingerPattern)) { // it's not different from default We delete it
-        if (deleteCustomFingeringNote(fingerPattern)) {
-            loadCustomFingering();
-            return true;
+        return manageCustomFingerings(customFingeringOperations::Delete, 0, fingerPattern);
 
-        }
         return false;
     }
 
@@ -856,24 +740,18 @@ bool saveCustomFingering(byte midiNote, uint16_t fingerPattern) {
             if (EEPROM.read(EEPROM_CUSTOM_FINGERING_START + i*4) == 0xFF) { //finds the first free spot
                 EEPROM.update(EEPROM_CUSTOM_FINGERING_START + i*4, midiNote);
                 EEPROM.update(EEPROM_CUSTOM_FINGERING_START + i*4 + 1, fingeringSelector);
-                
-                // EEPROM.update(EEPROM_CUSTOM_FINGERING_START + i*4 + 2, highByte(fingerPattern));
-                // EEPROM.update(EEPROM_CUSTOM_FINGERING_START + i*4 + 3, lowByte(fingerPattern));
                 writeIntToEEPROM(EEPROM_CUSTOM_FINGERING_START + i*4 + 2, fingerPattern);
                 loadCustomFingering();
                 return true;
             }
         }
     } else { //it already exists, updates it
-        if (updateCustomFingeringNote(midiNote, fingerPattern)) {
-            loadCustomFingering();
-            return true;
-        }
+        return manageCustomFingerings(customFingeringOperations::Update, midiNote, fingerPattern);
     }
     return false;
 }
 
-//Sends all custom fignerings
+//Sends all custom fingerings
 void sendCustomFingering() {
         if (communicationMode) {
             sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_02, MIDI_SEND_CUSTOM_FINGERING); //Entering custom fingering trasmission mode
@@ -888,7 +766,8 @@ void sendCustomFingering() {
             sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_09, fingering.customFingeringCurrentNumber);
 
             //Sends the total number of custom fingerings
-            sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_02, MIDI_SEND_CUSTOM_FINGERING_TOTAL); //Exiting custom fingering trasmission mode
+            sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_02, MIDI_SEND_CUSTOM_FINGERING_TOTAL);
             sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_09, fingering.customFingeringTotalNumber);
         }
 }
+

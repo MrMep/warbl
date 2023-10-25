@@ -20,7 +20,7 @@ void setDefaultConfiguration(byte preset) {
             momentary[h] = 0;
         }
 
-    byte tmp_pressureSelector[] = { 50, 20, 20, 15, 50, 75,
+        byte tmp_pressureSelector[] = { 50, 20, 20, 15, 50, 75,
                             3, 7, 20, 0, 12, 50 }; 
         for (byte q = 0; q < 12; q++) {
             pressureSelector[q] = tmp_pressureSelector[q];
@@ -112,13 +112,11 @@ void saveFactorySettings() {
     }
 
     //New custom fingering
-    resetAllCustomFingering();
+    manageCustomFingerings(customFingeringOperations::ResetAll, 0, 0);
 
     EEPROM.update(EEPROM_DEFAULT_PRESET, defaultPreset);  //save default currentPreset
 
     EEPROM.update(EEPROM_SETTINGS_SAVED, 3);  //indicates settings have been saved
-
-
 
     blinkNumber = 3;
 }

@@ -279,6 +279,7 @@ unsigned int toneholeCovered[TONEHOLE_SENSOR_NUMBER] = { 0, 0, 0, 0, 0, 0, 0, 0,
 int toneholeBaseline[TONEHOLE_SENSOR_NUMBER] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };            //baseline (uncovered) hole tonehole sensor readings
 volatile int tempToneholeRead[TONEHOLE_SENSOR_NUMBER] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };   //temporary storage for tonehole sensor readings with IR LED on, written during the timer ISR
 int toneholeRead[TONEHOLE_SENSOR_NUMBER] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };                //storage for tonehole sensor readings, transferred from the above volatile variable
+int toneholeReadForPB[TONEHOLE_SENSOR_NUMBER] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };           //storage for tonehole sensor readings compensated with baseline
 volatile int tempToneholeReadA[TONEHOLE_SENSOR_NUMBER] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };  //temporary storage for ambient light tonehole sensor readings, written during the timer ISR
 bool toneholesReady = false;                                       // Indicates when a fresh reading of the tone holes is available
 bool toneholesReadyInterupt = false;
@@ -398,12 +399,12 @@ void setup() {
     //Custom build 0 = factory, 1 = barbaro
     if (EEPROM.read(EEPROM_SW_CUSTOM_BUILD) != BUILD_VERSION) {
         EEPROM.update(EEPROM_SW_CUSTOM_BUILD, BUILD_VERSION);
-        resetAllCustomFingering(); //Zeroes the EEPROM section
+        manageCustomFingerings(customFingeringOperations::ResetAll, 0, 0);//Zeroes the EEPROM section
         resetHalfHoleCalibration(); //Zeroes the EEPROM section
     }
     
     if (EEPROM.read(EEPROM_SW_VERSION) < 23) {
-        resetAllCustomFingering(); //Zeroes the EEPROM section
+        manageCustomFingerings(customFingeringOperations::ResetAll, 0, 0);//Zeroes the EEPROM section
     }
 
     if (EEPROM.read(EEPROM_CALIBRATION_SAVED) == 3) {
@@ -453,10 +454,6 @@ void loop() {
         blink();  //blink the LED if necessary (indicating control changes, etc.)
     }
 
-    if (calibration > 0) {
-        calibrate();  //calibrate/continue calibrating if the command has been received.
-    }
-
     noInterrupts();
     for (byte i = 0; i < 9; i++) {
         toneholeRead[i] = tempToneholeRead[i];  //transfer sensor readings to a variable that won't get modified in the ISR
@@ -465,24 +462,23 @@ void loop() {
     toneholesReadyInterupt = false;
     interrupts();
 
+    if (calibration > 0) {
+        calibrate();  //calibrate/continue calibrating if the command has been received.
+    }
 
-    for (byte i = 0; i < 9; i++) {
+    get_fingers();  //find which holes are covered
+
+    for (byte i = 0; i < TONEHOLE_SENSOR_NUMBER; i++) {
         if (calibration == 0) {  //if we're not calibrating, compensate for baseline sensor offset (the stored sensor reading with the hole completely uncovered)
-            toneholeRead[i] = toneholeRead[i] - toneholeBaseline[i];
+            toneholeReadForPB[i] = toneholeRead[i] - toneholeBaseline[i];
         }
-        if (toneholeRead[i] < 0) {  //in rare cases the adjusted readings can end up being negative.
-            toneholeRead[i] = 0;
+        if (toneholeReadForPB[i] < 0) {  //in rare cases the adjusted readings can end up being negative.
+            toneholeReadForPB[i] = 0;
         }
     }
 
 
-    get_fingers();  //find which holes are covered
-
-
-
     unsigned long nowtime = millis();  //get the current time for the timers used below
-
-
 
 
     if (debounceFingerHoles()) {
@@ -512,7 +508,7 @@ void loop() {
             if (newNote != tempNewNote) {  //If a new note has been triggered
                 if (pitchBendMode != kPitchBendNone) {
                     holeLatched = holeCovered;  //remember the pattern that triggered it (it will be used later for vibrato)
-                    for (byte i = 0; i < 9; i++) {
+                    for (byte i = 0; i < TONEHOLE_SENSOR_NUMBER; i++) {
                         iPitchBend[i] = 0;  //and reset pitchbend
                         pitchBendOn[i] = 0;
                     }
@@ -573,7 +569,6 @@ void loop() {
         pitchBendTimer = nowtime;
 
         calculateAndSendPitchbend();
-
 
         counter++;
 

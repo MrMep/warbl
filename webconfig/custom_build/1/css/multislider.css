@@ -91,6 +91,14 @@
     left: -10px;
 }
 
+#currentReadLabelHH {
+  position: relative;
+  top: 70px;
+  left: -55px;
+  font-size: 14px;
+
+}
+
 section.double-range-slider {
     position: relative;
     width: 300px;

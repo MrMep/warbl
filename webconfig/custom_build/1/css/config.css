@@ -322,15 +322,48 @@ input {
 	left: 820px;
 }
 
+.halfHoleDetectionSave{
+	display: block;
+	position: relative;
+	width: 100px !important;
+	height: 40px !important;
+	top: -30px;
+	left: 750px;
+	z-index: 100;
+}
+
 .halfHoleDetectionOkay{
 	display: block;
 	position: relative;
-	width: 60px !important;
-	height: 30px !important;
-	top: -650px;
-	left: 880px;
+	width: 80px !important;
+	height: 40px !important;
+	top: -70px;
+	left: 890px;
+	z-index: 100;
 }
 
+
+
+.halfHoleAutoCalibrate{
+	display: block;
+	position: relative;
+	width: 110px !important;
+	height: 40px !important;
+	top: -50px;
+	left: 370px;
+	z-index: 100;
+}
+
+
+.halfHoleToggle{
+	display: block;
+	position: relative;
+	width: 110px !important;
+	height: 40px !important;
+	top: -90px;
+	left: 540px;
+	z-index: 100;
+}
 
 #switch17 {
 	top: 370px;
@@ -2660,8 +2693,8 @@ h2 {
 .halfHoleTransientLabelHH {
 	display: block;
 	position: relative;
-	left: 44px;
-	top: -50px;
+	left: 744px;
+	top: -30px;
 	width: 200px;
 	z-index: 99;
 	font-size: 14px;
@@ -2671,8 +2704,8 @@ h2 {
 #bufferSizeContainerHH {
 	display: block;
 	position: relative;
-	left: 60px;
-	top: 0px;
+	left: 750px;
+	top: 20px;
 	width: 160px;
 	z-index: 99;
 }
@@ -2681,8 +2714,8 @@ h2 {
 #bufferSizeValueHH{
 	display: block;
 	position: relative;
-	left: 170px;
-	top: -35px;
+	left: 870px;
+	top:-15px;
 	width: 160px;
 
 	z-index: 99;
@@ -2698,7 +2731,7 @@ h2 {
 	background: url("../../../img/downarrow.png") no-repeat 96%;
 	background-size: 20px 33px;
 	left: 60px;
-	top: 30px;
+	top: -130px;
 	height: 23px;
 	overflow: hidden;
 	width: 200px;
@@ -2719,21 +2752,12 @@ h2 {
 
 .selector {
 	position: relative;
-	left: 340px;
-	top: -10px;
+	left: 350px;
+	top: -160px;
 	width: 400px;
 }
 
 
-.senseDistanceValueHH {
-	display: block;
-	position: absolute;
-	left: 140px;
-	top: 325px;
-	width: 200px;
-	z-index: 99;
-	font-size: 14px;
-}
 
 
 

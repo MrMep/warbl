@@ -183,11 +183,11 @@ void timerDelay(void) {
 void get_fingers() {
 
     //20290926 GLB
-    if (fingeringSelector == kModeBarbaro && !debounceHalfHole(THUMB_HOLE) ) {  //Half thumb management
+    // if (fingeringSelector == kModeBarbaro && !debounceHalfHole(THUMB_HOLE) ) {  //Half thumb management
+    if (!debounceHalfHole(THUMB_HOLE) ) {  //Half thumb management
             return; //we postpone other holes detection until half thumb is determined
         }
 
-    
     //END GLB
 
 
@@ -195,7 +195,8 @@ void get_fingers() {
 
         //20290926 GLB
         //Manages semitones for R4 and R3 notes
-        if (fingeringSelector == kModeBarbaro && (i == R4_HOLE || i == R3_HOLE ) ) {
+        // if (fingeringSelector == kModeBarbaro && (i == R4_HOLE || i == R3_HOLE ) ) {
+        if ((i == R4_HOLE || i == R3_HOLE ) ) {
             toneholeLastRead[i] = toneholeRead[i];
 
             if (isHalfHole(i)) {
@@ -209,9 +210,9 @@ void get_fingers() {
         }
         //END GLB
 
-        if ((toneholeRead[i]) > (toneholeCovered[i] - 50)) {
+        if ((toneholeRead[i]) > (toneholeCovered[i] - HOLE_COVERED_OFFSET)) {
             bitWrite(holeCovered, i, 1);  //use the tonehole readings to decide which holes are covered
-        } else if ((toneholeRead[i]) <= (toneholeCovered[i] - 54)) {
+        } else if ((toneholeRead[i]) <= (toneholeCovered[i] - HOLE_OPEN_OFFSET)) {
             bitWrite(holeCovered, i, 0);  //decide which holes are uncovered -- the "hole uncovered" reading is a little less then the "hole covered" reading, to prevent oscillations.
         }
 
@@ -227,8 +228,6 @@ void send_fingers(uint8_t defaultNote, uint8_t customNote) {
 
     if (communicationMode) {  //send information about which holes are covered to the Configuration Tool if we're connected. Because it's MIDI we have to send it in two 7-bit chunks.
         sendHoleCovered(holeCovered);
-        // sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_14, holeCovered >> 7);
-        // sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_15, lowByte(holeCovered));
         //20231005 GLB - New custom fingering
         sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_02, MIDI_SEND_CUSTOM_FINGERING_NOTE);
         if (customNote >=0 && customNote < 127) {
@@ -263,6 +262,9 @@ void get_shift() {
     //20230927 GLB
     // shift = ((octaveShift * 12) + noteShift);  //adjust for key and octave shift.
     shift = (noteShift + harmonizer.transposeShift);  //adjust for key and octave shift.
+    if (toneholeHalfCovered[THUMB_HOLE]) {  //Half left thumb
+        shift += 12;
+    } 
     //END GLB
 
     if (newState == 3 && !(fingeringSelector == kModeEVI || (fingeringSelector == kModeSax && newNote < 62) || (fingeringSelector == kModeSaxBasic && newNote < 74) || (fingeringSelector == kModeRecorder && newNote < 76)) && !(newNote == 62 && (fingeringSelector == kModeUilleann || fingeringSelector == kModeUilleannStandard))) {  //if overblowing (except EVI, sax in the lower register, and low D with uilleann fingering, which can't overblow)
@@ -587,8 +589,8 @@ void handleCustomPitchBend() {
 
             if (fingeringSelector == kModeWhistle || fingeringSelector == kModeChromatic) {
                 for (byte i = 2; i < 4; i++) {
-                    if ((toneholeRead[i] > senseDistance) && (bitRead(holeCovered, i) != 1 && (i != slideHole))) {  //if the hole is contributing, bend down
-                        iPitchBend[i] = ((toneholeRead[i] - senseDistance) * vibratoScale[i]) >> 3;
+                    if ((toneholeReadForPB[i] > senseDistance) && (bitRead(holeCovered, i) != 1 && (i != slideHole))) {  //if the hole is contributing, bend down
+                        iPitchBend[i] = ((toneholeReadForPB[i] - senseDistance) * vibratoScale[i]) >> 3;
                     } else if (i != slideHole) {
                         iPitchBend[i] = 0;
                     }
@@ -608,19 +610,19 @@ void handleCustomPitchBend() {
                         iPitchBend[3] = 0;
                     } else {
                         // Otherwise, bend down proportional to distance
-                        if (toneholeRead[3] > senseDistance) {
-                            iPitchBend[3] = adjvibdepth - (((toneholeRead[3] - senseDistance) * vibratoScale[3]) >> 3);
+                        if (toneholeReadForPB[3] > senseDistance) {
+                            iPitchBend[3] = adjvibdepth - (((toneholeReadForPB[3] - senseDistance) * vibratoScale[3]) >> 3);
                         } else {
                             iPitchBend[3] = adjvibdepth;
                         }
                     }
                 } else {
 
-                    if ((toneholeRead[3] > senseDistance) && (bitRead(holeCovered, 3) != 1) && 3 != slideHole) {
-                        iPitchBend[3] = ((toneholeRead[3] - senseDistance) * vibratoScale[3]) >> 3;
+                    if ((toneholeReadForPB[3] > senseDistance) && (bitRead(holeCovered, 3) != 1) && 3 != slideHole) {
+                        iPitchBend[3] = ((toneholeReadForPB[3] - senseDistance) * vibratoScale[3]) >> 3;
                     }
 
-                    else if ((toneholeRead[3] < senseDistance) || (bitRead(holeCovered, 3) == 1)) {
+                    else if ((toneholeReadForPB[3] < senseDistance) || (bitRead(holeCovered, 3) == 1)) {
                         iPitchBend[3] = 0;  // If the finger is removed or the hole is fully covered, there's no pitchbend contributed by that hole.
                     }
                 }
@@ -640,8 +642,8 @@ void handleCustomPitchBend() {
                         fingersChanged = 0;
                     }
                     if (testNote == newNote) {  //if the hole is uncovered and covering the hole wouldn't change the current note (or the left thumb hole is uncovered, because that case isn't included in the fingering chart)
-                        if (toneholeRead[i] > senseDistance) {
-                            iPitchBend[i] = 0 - (((toneholeCovered[i] - 50 - toneholeRead[i]) * vibratoScale[i]) >> 3);  //bend up, yielding a negative pitchbend value
+                        if (toneholeReadForPB[i] > senseDistance) {
+                            iPitchBend[i] = 0 - (((toneholeCovered[i] - 50 - toneholeReadForPB[i]) * vibratoScale[i]) >> 3);  //bend up, yielding a negative pitchbend value
                         } else {
                             iPitchBend[i] = 0 - adjvibdepth;  //if the hole is totally uncovered, max the pitchbend
                         }
@@ -667,7 +669,7 @@ void handleCustomPitchBend() {
 //Andrew's version of vibrato
 void handlePitchBend() {
 
-    for (byte i = 0; i < 9; i++) {  //reset
+    for (byte i = 0; i < TONEHOLE_SENSOR_NUMBER; i++) {  //reset
         iPitchBend[i] = 0;
     }
 
@@ -677,16 +679,16 @@ void handlePitchBend() {
     }
 
 
-    for (byte i = 0; i < 9; i++) {
+    for (byte i = 0; i < TONEHOLE_SENSOR_NUMBER; i++) {
 
-        if (bitRead(holeLatched, i) == 1 && toneholeRead[i] < senseDistance) {
+        if (bitRead(holeLatched, i) == 1 && toneholeReadForPB[i] < senseDistance) {
             (bitWrite(holeLatched, i, 0));  //we "unlatch" (enable for vibrato) a hole if it was covered when the note was triggered but now the finger has been completely removed.
         }
 
         if (bitRead(vibratoHoles, i) == 1 && bitRead(holeLatched, i) == 0 && (pitchBendMode == kPitchBendVibrato || i != slideHole)) {  //if this is a vibrato hole and we're in a mode that uses vibrato, and the hole is unlatched
-            if (toneholeRead[i] > senseDistance) {
+            if (toneholeReadForPB[i] > senseDistance) {
                 if (bitRead(holeCovered, i) != 1) {
-                    iPitchBend[i] = (((toneholeRead[i] - senseDistance) * vibratoScale[i]) >> 3);  //bend downward
+                    iPitchBend[i] = (((toneholeReadForPB[i] - senseDistance) * vibratoScale[i]) >> 3);  //bend downward
                     pitchBendOn[i] = 1;
                 }
             } else {
@@ -713,9 +715,9 @@ void handlePitchBend() {
 //calculate slide pitchBend, to be added with vibrato.
 void getSlide() {
     for (byte i = 0; i < 9; i++) {
-        if (toneholeRead[i] > senseDistance && i == slideHole && stepsDown > 0) {
+        if (toneholeReadForPB[i] > senseDistance && i == slideHole && stepsDown > 0) {
             if (bitRead(holeCovered, i) != 1) {
-                iPitchBend[i] = ((toneholeRead[i] - senseDistance) * toneholeScale[i]) >> (4 - stepsDown);  //bend down toward the next lowest note in the scale, the amount of bend depending on the number of steps down.
+                iPitchBend[i] = ((toneholeReadForPB[i] - senseDistance) * toneholeScale[i]) >> (4 - stepsDown);  //bend down toward the next lowest note in the scale, the amount of bend depending on the number of steps down.
             }
         } else {
             iPitchBend[i] = 0;
@@ -814,7 +816,7 @@ void sendNote() {
         if (notewason && !switches[LEGATO]) {
             // send prior noteoff now if legato is selected.
             //20231001 GLB
-            if (!isFixedNote(notePlaying) && !isHarmonizerCurrentNote(notePlaying)) {
+            if (isNoteOkToClose(notePlaying)) {
                 sendUSBMIDI(NOTE_OFF, mainMidiChannel, notePlaying, 64);
                 if (communicationMode) {
                     sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_04, MIDI_SEND_HARMONIZER_BASE_NOTE);
@@ -853,7 +855,7 @@ void sendNote() {
             // turn off the previous note after turning on the new one (if it wasn't already done above)
             // We do it after to signal to synths that the notes are legato (not all synths will respond to this).
             //20230927 GLB
-            if (!isFixedNote(notewasplaying) && !isHarmonizerCurrentNote(notewasplaying)) {
+            if (isNoteOkToClose(notewasplaying)) {
                 sendUSBMIDI(NOTE_OFF, mainMidiChannel, notewasplaying, 64);
             }
         }
@@ -877,7 +879,7 @@ void sendNote() {
           (fingeringSelector == kModeNorthumbrian && newNote == 60) ||                           //or closed Northumbrian pipe
           (breathMode != kPressureBell && bellSensor && holeCovered == 0b111111111)) {            //or completely closed pipe
             
-            if (!isFixedNote(notePlaying) && !isHarmonizerCurrentNote(notePlaying)) {
+            if (isNoteOkToClose(notePlaying)) {
                 sendUSBMIDI(NOTE_OFF, mainMidiChannel, notePlaying, 64);                              //turn the note off if the breath pressure drops or if we're in uilleann mode, the bell sensor is covered, and all the finger holes are covered.
                 //20230927 GLB
                 harmonizerNoteOFF(); //Send the harmonizer note too
@@ -899,7 +901,6 @@ void sendNote() {
 
 
 
-
 //Calibrate the sensors and store them in EEPROM
 //mode 1 calibrates all sensors, mode 2 calibrates bell sensor only.
 void calibrate() {
@@ -910,21 +911,24 @@ void calibrate() {
         calibrationTimer = millis();
 
         if (calibration == 1) {  //calibrate all sensors if we're in calibration "mode" 1
-            for (byte i = 1; i < 9; i++) {
+            for (byte i = 1; i < TONEHOLE_SENSOR_NUMBER; i++) {
                 toneholeCovered[i] = 0;     //first set the calibration to 0 for all of the sensors so it can only be increassed by calibrating
-                toneholeBaseline[i] = 255;  //and set baseline high so it can only be reduced
+
+                //20231022 . GLB . Actually, this should be put to the sensor max malue, which should be 1024
+                //toneholeBaseline[i] = 255;  //and set baseline high so it can only be reduced
+                toneholeBaseline[i] = 1024;  //and set baseline high so it can only be reduced
             }
         }
         if (bellSensor) {
             toneholeCovered[0] = 0;  //also zero the bell sensor if it's plugged in (doesn't matter which calibration mode for this one).
-            toneholeBaseline[0] = 255;
+            toneholeBaseline[0] = 1024;
         }
         return;  //we return once to make sure we've gotten some new sensor readings.
     }
 
     if ((calibration == 1 && ((millis() - calibrationTimer) <= 10000)) || (calibration == 2 && ((millis() - calibrationTimer) <= 5000))) {  //then set the calibration to the highest reading during the next ten seconds(or five seconds if we're only calibrating the bell sensor).
         if (calibration == 1) {
-            for (byte i = 1; i < 9; i++) {
+            for (byte i = 1; i < TONEHOLE_SENSOR_NUMBER; i++) {
                 if (toneholeCovered[i] < toneholeRead[i]) {  //covered calibration
                     toneholeCovered[i] = toneholeRead[i];
                 }
@@ -944,6 +948,8 @@ void calibrate() {
     }
 
     if ((calibration == 1 && ((millis() - calibrationTimer) > 10000)) || (calibration == 2 && ((millis() - calibrationTimer) > 5000))) {
+        //20231024 GLB - auto-calibrate half-hole detection too
+        calibrateHalfHoleDetection();
         saveCalibration();
         loadPrefs();  //do this so pitchbend scaling will be recalculated.
     }
@@ -953,20 +959,16 @@ void calibrate() {
 
 
 //save sensor calibration (EEPROM bytes up to 35 are used (plus byte 37 to indicate a saved calibration)
-void saveCalibrationForHole(byte hole) {
-    if (hole<TONEHOLE_SENSOR_NUMBER) {
-        // EEPROM.update((hole + TONEHOLE_SENSOR_NUMBER) * 2, highByte(toneholeCovered[hole]));
-        // EEPROM.update(((hole + TONEHOLE_SENSOR_NUMBER) * 2) + 1, lowByte(toneholeCovered[hole]));
-        writeIntToEEPROM((hole + TONEHOLE_SENSOR_NUMBER) * 2, toneholeCovered[hole]);
-    }
-}
+// void saveCalibrationForHole(byte hole) {
+//     if (hole<TONEHOLE_SENSOR_NUMBER) {
+//         writeIntToEEPROM((hole + TONEHOLE_SENSOR_NUMBER) * 2, toneholeCovered[hole]);
+//     }
+// }
 
 //save sensor calibration (EEPROM bytes up to 35 are used (plus byte 37 to indicate a saved calibration)
 void saveCalibration() {
 
     for (byte i = EEPROM_SENSOR_CALIB_FACTORY; i < TONEHOLE_SENSOR_NUMBER; i++) {
-        // EEPROM.update((i + TONEHOLE_SENSOR_NUMBER) * 2, highByte(toneholeCovered[i]));
-        // EEPROM.update(((i + TONEHOLE_SENSOR_NUMBER) * 2) + 1, lowByte(toneholeCovered[i]));
         writeIntToEEPROM((i + TONEHOLE_SENSOR_NUMBER) * 2, toneholeCovered[i]);
 
         EEPROM.update((EEPROM_SENSOR_CALIB_BASELINE_CURRENT + i), lowByte(toneholeBaseline[i]));  //the baseline readings can be stored in a single byte because they should be close to zero.
@@ -1093,11 +1095,11 @@ void receiveMIDI() {
                                 }
 
                                 else if (rx.byte3 == MIDI_DELETE_CUSTOM_FINGERING_CURRENT) {  //deletes all custom fingering for current selector
-                                    resetCustomFingeringForCurrent();
+                                    manageCustomFingerings(customFingeringOperations::ResetForCurrent, 0, 0);
                                 }
 
                                 else if (rx.byte3 == MIDI_DELETE_CUSTOM_FINGERING) {  //deletes all custom fingering 
-                                    resetAllCustomFingering();
+                                    manageCustomFingerings(customFingeringOperations::ResetAll, 0, 0);
                                 }
                                 //END GLB
                                 else if (rx.byte3 == MIDI_AUTO_CALIB) {  //begin auto-calibration if directed.
@@ -1279,11 +1281,11 @@ void receiveMIDI() {
                                 int value = (intReceivedH << 7) | rx.byte3;
 
                                 switch (intReceiveIndex) {
-                                    case MIDI_SEND_HALFHOLE_CALIBRATION:
-                                        if (fingering.halfHole.currentHoleSettings < TONEHOLE_SENSOR_NUMBER) {
-                                            toneholeCovered[fingering.halfHole.currentHoleSettings] = value;
-                                            sendHalfHoleParams(fingering.halfHole.currentHoleSettings);
-                                        }
+                                    // case MIDI_SEND_HALFHOLE_CALIBRATION:
+                                    //     if (fingering.halfHole.currentHoleSettings < TONEHOLE_SENSOR_NUMBER) {
+                                    //         toneholeCovered[fingering.halfHole.currentHoleSettings] = value;
+                                    //         sendHalfHoleParams(fingering.halfHole.currentHoleSettings);
+                                    //     }
                                         
                                     break;
 
@@ -1397,11 +1399,10 @@ void receiveMIDI() {
                                     sendHalfHoleParams(fingering.halfHole.currentHoleSettings);
                                 }
 
-                                else if (pressureReceiveMode + 1 == MIDI_SEND_HALFHOLE_SAVE_CURRENT) {
-                                    saveCalibrationForHole(fingering.halfHole.currentHoleSettings);
-                                    EEPROM.update(EEPROM_HALF_HOLE_BUFFER_SIZE, fingering.halfHole.halfHoleBuffer);
-                                    EEPROM.update(EEPROM_SENSEDISTANCE_SELECTOR + currentPreset, senseDistance);
-                                }
+                                // else if (pressureReceiveMode + 1 == MIDI_SEND_HALFHOLE_SAVE) {
+                                //     saveHalfHoleCalibration();
+                                //     EEPROM.update(EEPROM_HALF_HOLE_BUFFER_SIZE, fingering.halfHole.halfHoleBuffer);
+                                // }
                                 
                             }
 
@@ -1584,23 +1585,6 @@ void loadFingering() {
 
     loadCustomFingering();
 
-    // if (communicationMode) {
-    //     sendIntValue (MIDI_SEND_MODE_SELECTOR, fingeringSelector);
-    //     // sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_02, MIDI_SEND_FINGER_PATTERN_OS);                //indicate that we'll be sending the fingering pattern for instrument i
-    //     // sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_02, MIDI_SEND_MODE_SELECTOR_OS + fingeringSelector);  //send
-
-
-    //     if (noteShiftSelector >= 0) {
-    //         sendIntValue(MIDI_SEND_KEY_SELECT, noteShiftSelector);
-    //         // sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_12, noteShiftSelector);
-    //     }  //send noteShift, with a transformation for sending negative values over MIDI.
-    //     else {
-    //         sendIntValue(MIDI_SEND_KEY_SELECT, noteShiftSelector + 127);
-    //         // sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_12, noteShiftSelector + 127);
-    //     }
-
-    //     sendCustomFingering();
-    // }
 }
 
 
@@ -1618,9 +1602,6 @@ void loadSettings() {
     }
 
     //20231013 Bytes swapped - High First
-    // vibratoHolesSelector = word(EEPROM.read(EEPROM_VIBRATOHOLE_SELECTOR + 1 + (currentPreset * 2)), EEPROM.read(EEPROM_VIBRATOHOLE_SELECTOR + (currentPreset * 2)));
-    // vibratoDepthSelector = word(EEPROM.read(EEPROM_VIBRATODEPTH_SELECTOR + 1 + + (currentPreset * 2)), EEPROM.read(EEPROM_VIBRATODEPTH_SELECTOR + (currentPreset * 2)));
-
     vibratoHolesSelector = readIntFromEEPROM(EEPROM_VIBRATOHOLE_SELECTOR + (currentPreset * 2));
     vibratoDepthSelector = readIntFromEEPROM(EEPROM_VIBRATODEPTH_SELECTOR + (currentPreset * 2));
  
@@ -1884,9 +1865,9 @@ void handleButtons() {
 
         if (longPress[i] && (pressed[0] + pressed[1] + pressed[2] == 1) && !momentary[i]) {  //do action for long press, assuming no other button is pressed.
             performAction(5 + i);
-            if ( 5+1 != ACTION_TRANSPOSE && buttonPrefs[5 + i][2] != 1) { //Not a progressive transpose
+            // if ( !(5+i == ACTION_TRANSPOSE && buttonPrefs[5 + i][2] == 1)) { //Not a progressive transpose
                 longPressUsed[i] = 1;
-            }
+            // }
             longPress[i] = 0;
             longPressCounter[i] = 0;
         }
@@ -1983,6 +1964,11 @@ void performAction(byte action) {
             play = !play;  //turn sound on/off when in bagless mode
             break;
 
+        case ACTION_RESTART:
+            wdt_enable(WDTO_15MS);   //restart the device in order to trigger resaving default settings
+            while (true) {}
+        break;
+
 //20230927 GLB
         case ACTION_TRANSPOSE: //Transpose
             if (!momentary[action]) {  // transpose, unless we're in momentary mode, otherwise transpose is off
@@ -2002,7 +1988,7 @@ void performAction(byte action) {
             //Checks bounds for harmonizer.transposeShift
             if (harmonizer.transposeShift < -12*4) {
                 harmonizer.transposeShift += 12;
-            } else if (harmonizer.transposeShift > -12*4) {
+            } else if (harmonizer.transposeShift > 12*4) {
                 harmonizer.transposeShift -= 12;
             } 
             if (communicationMode) {
@@ -2192,11 +2178,6 @@ byte findleftmostunsetbit(uint16_t n) {
 // Send a debug MIDI message with a value up 16383 (14 bits)
 void debug_log(int msg) {
     sendIntValue(MIDI_SEND_DEBUG, msg);
-    // sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_06, MIDI_SEND_DEBUG_LSB_OS);          //indicate that LSB is about to be sent
-    // sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_19, msg & 0x7F);  //send LSB
-    // sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_06, MIDI_SEND_DEBUG_MSB_OS);          //indicate that MSB is about to be sent
-    // sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_19, msg >> 7);    //send MSB
-    // sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_06, MIDI_DEBUG_2BYTE_MSG_OS);          //indicates end of two-byte message
 }
 
 

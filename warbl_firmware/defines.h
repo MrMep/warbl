@@ -14,8 +14,14 @@
 #define DEBUG_HALF_HOLE           0
 #define HALF_HOLE_BUFFER_SIZE    30
 #define THUMB_HOLE                8
+#define HALF_HOLE_LOWER_OFFSET -100
+#define HALF_HOLE_UPPER_OFFSET    5
+
 #define R4_HOLE                   1
 #define R3_HOLE                   2
+
+#define HOLE_COVERED_OFFSET      50
+#define HOLE_OPEN_OFFSET         54
 
 #define HALF_HOLE_DIRECTION_LIMIT    HALF_HOLE_BUFFER_SIZE/2
 
@@ -87,6 +93,7 @@
 #define ACTION_HARMONIZER_2         11
 #define ACTION_HARMONIZER_3         12
 #define ACTION_CALIBRATE            13
+#define ACTION_RESTART              14
 
 
 // Fingering Patterns
@@ -288,10 +295,8 @@
 
     #define MIDI_SEND_HALFHOLE_BUFFER                    123
     #define MIDI_SEND_HALFHOLE_CURRENT                   124 //current hole
-    #define MIDI_SEND_HALFHOLE_SAVE_CURRENT              125 //SAves calibration and transient
-    // #define MIDI_SEND_HALFHOLE_CURRENT_READ              125 //toneholeCovered[hole]
-    // #define MIDI_SEND_HALFHOLE_MIN                       126 //lowerLimit
-    // #define MIDI_SEND_HALFHOLE_MAX                       127 //upperLimit
+    #define MIDI_SEND_HALFHOLE_SAVE                      125 //SAves calibration and transient
+
 
 #define MIDI_SLOT_05                     105 //base CC - switches values
 
@@ -329,9 +334,19 @@ From 0 to 15 button actions MIDI Channel
     #define MIDI_SEND_KEY_SELECT              12 //noteshiftSelector
     #define MIDI_SEND_MODE_SELECTOR           30 // Sends fingering scheme index for preset  Value + 0/2 -> 32
 
-    #define MIDI_SEND_HALFHOLE_CALIBRATION    90 //lowerLimit
-    #define MIDI_SEND_HALFHOLE_MIN            91 //lowerLimit
-    #define MIDI_SEND_HALFHOLE_MAX            92 //upperLimit
+    // #define MIDI_SEND_HALFHOLE_CALIBRATION    80 //lowerLimit
+    #define MIDI_SEND_HALFHOLE_MIN            80 //lowerLimit
+    #define MIDI_SEND_HALFHOLE_MAX            81 //upperLimit
+
+    #define MIDI_SEND_TONE_BASELINE_0          90 // Calibration for hole 0
+    #define MIDI_SEND_TONE_BASELINE_1          91 // Calibration for hole 1
+    #define MIDI_SEND_TONE_BASELINE_2          92 // Calibration for hole 2
+    #define MIDI_SEND_TONE_BASELINE_3          93 // Calibration for hole 3
+    #define MIDI_SEND_TONE_BASELINE_4          94 // Calibration for hole 4
+    #define MIDI_SEND_TONE_BASELINE_5          95 // Calibration for hole 5
+    #define MIDI_SEND_TONE_BASELINE_6          96 // Calibration for hole 6
+    #define MIDI_SEND_TONE_BASELINE_7          97 // Calibration for hole 7
+    #define MIDI_SEND_TONE_BASELINE_8          98 // Calibration for hole 8
 
     #define MIDI_SEND_TONE_COVERED_0         100 // Calibration for hole 0
     #define MIDI_SEND_TONE_COVERED_1         101 // Calibration for hole 1
@@ -430,5 +445,14 @@ From 0 to 15 button actions MIDI Channel
 #define EEPROM_HW_VERSION                      1012 //Base Address
 #define EEPROM_SW_CUSTOM_BUILD                 1013 //Base Address
 
+
+//Enums
+//20231005 New custom fingering management
+enum customFingeringOperations : byte {
+  Update = 0,
+  Delete = 1,
+  ResetForCurrent = 2,
+  ResetAll = 3//Erases all custom Fingerings
+};
 
 #endif //#define DEFINES_H

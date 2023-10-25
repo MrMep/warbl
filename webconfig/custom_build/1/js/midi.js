@@ -66,7 +66,7 @@ var MIDI_SEND_HARMONIZER_CURRENT_NOTE_DIATONIC =  120; //Offset +2 0/1
 
 var MIDI_SEND_HALFHOLE_BUFFER = 				  123; //size of the buffer
 var MIDI_SEND_HALFHOLE_CURRENT =                  124 //current hole
-var MIDI_SEND_HALFHOLE_SAVE_CURRENT =             125 //saves calibration and buffer size
+var MIDI_SEND_HALFHOLE_SAVE =          			  125 //saves calibration and buffer size
 // var MIDI_SEND_HALFHOLE_MIN =                      126 //lowerLimit
 // var MIDI_SEND_HALFHOLE_MAX =                      127 //upperLimit
 
@@ -105,8 +105,18 @@ var MIDI_SLOT_13 = 113; //intValue selector
 	var MIDI_SEND_MODE_SELECTOR = 30; //30-32 int value for fingering scheme index
 
 	// var MIDI_SEND_HALFHOLE_CALIBRATION = 90; //calibration value for selected hole
-	var MIDI_SEND_HALFHOLE_MIN =    	 91; //lowerLimit
-	var MIDI_SEND_HALFHOLE_MAX =    	 92; //upperLimit
+	var MIDI_SEND_HALFHOLE_MIN =    	 80; //lowerLimit
+	var MIDI_SEND_HALFHOLE_MAX =    	 81; //upperLimit
+
+	var MIDI_SEND_TONE_BASELINE_0 = 90 // Calibration for hole 0
+	var MIDI_SEND_TONE_BASELINE_1 = 91 // Calibration for hole 1
+	var MIDI_SEND_TONE_BASELINE_2 = 92 // Calibration for hole 2
+	var MIDI_SEND_TONE_BASELINE_3 = 93 // Calibration for hole 3
+	var MIDI_SEND_TONE_BASELINE_4 = 94 // Calibration for hole 4
+	var MIDI_SEND_TONE_BASELINE_5 = 95 // Calibration for hole 5
+	var MIDI_SEND_TONE_BASELINE_6 = 96 // Calibration for hole 6
+	var MIDI_SEND_TONE_BASELINE_7 = 97 // Calibration for hole 7
+	var MIDI_SEND_TONE_BASELINE_8 = 98 // Calibration for hole 8
 
 	var MIDI_SEND_TONE_COVERED_0 = 100 // Calibration for hole 0
 	var MIDI_SEND_TONE_COVERED_1 = 101 // Calibration for hole 1
@@ -183,6 +193,7 @@ var midiNotes = [];
 var currentVersion = 23
 
 var midiAccess = null; // the MIDIAccess object.
+var WARBLin = null; //WARBL input port
 
 var WARBLout = null; // WARBL output port
 
@@ -239,11 +250,20 @@ for (var w = 1; w <= 23; w++) {
 
 }
 
+if (typeof platform == "undefined") {
+	var platform = "app";
+}
+
 //hide some stuff for app version
 if (platform == "app") {
 	document.getElementById("myTopnav").style.display = "none";
 	document.getElementById("topLogo").style.display = "none";
 	//document.getElementById("importexport").style.display = "none";
+}
+
+//Flutter
+function postMessage(channel, message) {
+	window[channel] ? window[channel].postMessage(message) : console.log(message);
 }
 
 // When the user clicks anywhere outside of the modal, close it
@@ -266,6 +286,7 @@ window.addEventListener('load', function() {
 
 	// Clear the WARBL output port
 	WARBLout = null;
+	WARBLin = null;
 
 	
 	populateSelects(); //populates various selects
@@ -290,12 +311,16 @@ window.addEventListener('load', function() {
 	});
 
 	
-	if (navigator.requestMIDIAccess)
+	if (navigator.requestMIDIAccess) {
+		console.log("navigator.requestMIDIAccess", true);
 		navigator.requestMIDIAccess({
 			sysex: false
 		}).then(onMIDIInit, onMIDIReject);
-	else
+	} else {
+		console.log("navigator.requestMIDIAccess", false);
+
 		alert("Your browser does not support MIDI. Please use Chrome or Opera, or the free WARBL iOS app.")
+	}
 
 });
 
@@ -371,77 +396,83 @@ function showWARBLUnknown(){
 
 function connect() {
 	
-	if (communicationMode && version > 2.0) {sendToAll(MIDI_SLOT_02, MIDI_TURN_OFF_COMM); //tell WARBL to exit communications mode if the "connect" button currently reads "Disconnect"
+	if (communicationMode && version > 2.0) {
+		sendToAll(MIDI_SLOT_02, MIDI_TURN_OFF_COMM); //tell WARBL to exit communications mode if the "connect" button currently reads "Disconnect"
 		communicationMode = false;
 		showWARBLNotDetected();
 		showWARBLUnknown();
-		WARBLout = null;
+
 		document.getElementById("connect").innerHTML = "Connect to WARBL";	//make sure the connect button shows the correct text
-			if (midiAccess){
+		if (midiAccess){
+			//20231015 GLB - Close the ports to release them. Clearing the callbacks isn't enough
 
-		//console.log("connect: Have a midiAccess, clearing the receive callbacks");
+			if (WARBLin) {
+				WARBLin.onmidimessage = null;
+				WARBLin.close();
+			}
+			//console.log("connect: Have a midiAccess, clearing the receive callbacks");
 
-		// Walk the inputs and clear any receive callbacks
-		var inputs = midiAccess.inputs.values();
+			// // Walk the inputs and clear any receive callbacks
+			// var inputs = midiAccess.inputs.values();
 
-		for (var input = inputs.next(); input && !input.done; input = inputs.next()) {
+			// for (var input = inputs.next(); input && !input.done; input = inputs.next()) {
 
-			input.value.onmidimessage = null;
+			// 	//input.value.onmidimessage = null;
 
+			// }
 		}
-	}
 
-	midiAccess = null;
+		WARBLout = null;
+		WARBLin = null;
+		midiAccess = null;
 
-	// Clear the WARBL output port
-	WARBLout = null;
-
-	ping = 0;
+		ping = 0;
 	
+	} else {
+		//debugger;
+
+		//console.log("connect");
+		//alert("connect");
+		// Clear the midiAccess object callbacks
+		if (midiAccess){
+
+			//20231015 GLB - Close the ports to release them. Clearing the callbacks isn't enough
+			if (WARBLin) {
+				WARBLin.onmidimessage = null;
+				WARBLin.close();
+			}
+			//console.log("connect: Have a midiAccess, clearing the receive callbacks");
+
+			// Walk the inputs and clear any receive callbacks
+			// var inputs = midiAccess.inputs.values();
+
+			// for (var input = inputs.next(); input && !input.done; input = inputs.next()) {
+
+			// 	//input.value.onmidimessage = null;
+
+			// }
 		}
-		
-	else{
 
-	//debugger;
+		midiAccess = null;
 
-	//console.log("connect");
-	//alert("connect");
-	// Clear the midiAccess object callbacks
-	if (midiAccess){
+		// Clear the WARBL output port
+		WARBLout = null;
 
-		//console.log("connect: Have a midiAccess, clearing the receive callbacks");
+		ping = 0;
 
-		// Walk the inputs and clear any receive callbacks
-		var inputs = midiAccess.inputs.values();
+		// Setup initial detection and version messages
+		showWARBLNotDetected();
+		showWARBLUnknown();
 
-		for (var input = inputs.next(); input && !input.done; input = inputs.next()) {
-
-			input.value.onmidimessage = null;
-
+		// If availabe in the browser, request MIDI access with sysex support
+		if (navigator.requestMIDIAccess) {
+			navigator.requestMIDIAccess({
+				sysex: false
+			}).then(onMIDIInit, onMIDIReject);
+		} else {
+			alert("Your browser does not support MIDI. Please use Chrome or Opera, or the free WARBL iOS app.");
 		}
 	}
-
-	midiAccess = null;
-
-	// Clear the WARBL output port
-	WARBLout = null;
-
-	ping = 0;
-
-	// Setup initial detection and version messages
-	showWARBLNotDetected();
-	showWARBLUnknown();
-
-	// If availabe in the browser, request MIDI access with sysex support
-	if (navigator.requestMIDIAccess)
-		navigator.requestMIDIAccess({
-			sysex: false
-		}).then(onMIDIInit, onMIDIReject);
-	else{
-		alert("Your browser does not support MIDI. Please use Chrome or Opera, or the free WARBL iOS app.");
-	}
-	}
-
 }
 
 //
@@ -458,6 +489,7 @@ function onMIDIInit(midi) {
 
 	// Null the WARBL MIDI output port
 	WARBLout = null;
+	WARBLin = null;
 
 	var foundMIDIInputDevice = false;
 	
@@ -466,17 +498,17 @@ function onMIDIInit(midi) {
 
 	for (var input = inputs.next(); input && !input.done; input = inputs.next()) {
 
-		foundMIDIInputDevice = true;
-
 		deviceName = input.value.name;
 
 		//console.log("deviceName = "+deviceName);
 		//alert("deviceName = "+deviceName);
 			
 		setPing(); //start checking to make sure WARBL is still connected   
-		
-		input.value.onmidimessage = WARBL_Receive;
-
+		if (deviceName == "WARBL" || deviceName == "hemiolaWARBL") {
+			WARBLin = input.value;
+			WARBLin.onmidimessage = WARBL_Receive;
+			foundMIDIInputDevice = true;
+		}
 	}
 
 	if (foundMIDIInputDevice){
@@ -520,7 +552,8 @@ function midiOnStateChange(event) {
 
 		showWARBLNotDetected();
 		showWARBLUnknown();
-		WARBLout = null;	
+		WARBLout = null;
+		WARBLin = null;	
 		document.getElementById("connect").innerHTML = "Connect to WARBL";	//make sure the connect button shows the correct text
 
 	}
@@ -732,6 +765,9 @@ function WARBL_Receive(event) {
 			//console.error("Failed to find the WARBL output port!")
 			
 			showWARBLNotDetected();
+			if (WARBLin) {
+				WARBLin.close();
+			}
 
 		} 	
 	}
@@ -950,11 +986,11 @@ function WARBL_Receive(event) {
 							customFingering = [];
 						} else {
 							//updates the interface
-							// customFingering.forEach(logCustomFingering);
+							customFingering.forEach(logCustomFingering);
 
-							// function logCustomFingering(item) {
-							// 	console.log(item.midi_note, dec2bin(item.holeCovered));
-							// }
+							function logCustomFingering(item) {
+								console.log(item.midi_note, dec2bin(item.holeCovered));
+							}
 						}
 					}
 
@@ -1012,12 +1048,12 @@ function WARBL_Receive(event) {
 							// 	document.getElementById("row" + (buttonRowWrite)).value = 19;
 							// }
 
-							for (var k = 0; k < 13; k++) {
+							for (var k = 0; k < 18; k++) {
 								if (data2 == (MIDI_BUTTON_PREF_ACTION_OS + k)) {
 									//20230927 GLB
-									if (k == 5) {
-										document.getElementById("row" + (buttonRowWrite)).value = 30;
-									} 
+									// if (k == 5) {
+									// 	document.getElementById("row" + (buttonRowWrite)).value = 30;
+									// } 
 									// else if (k == 6) {
 									// 	document.getElementById("row" + (buttonRowWrite)).value = 32;
 									// } else if (k == 10) {
@@ -1027,9 +1063,9 @@ function WARBL_Receive(event) {
 									// } else if (k == 12) {
 									// 	document.getElementById("row" + (buttonRowWrite)).value = 35;
 									// } 
-									else{
+									// else{
 										document.getElementById("row" + (buttonRowWrite)).value = k;
-									}
+									// }
 									//END GLB
 								}
 								if (k < 5 && data2 == MIDI_BUTTON_PREF_MIDI_CMD_OS + k) {
@@ -1282,8 +1318,11 @@ function WARBL_Receive(event) {
 					//Harmonizer Params
 					//Tranposer
 					else if (jumpFactorWrite == MIDI_SEND_TRANSPOSE_SHIFT) {
-						document.getElementById("transposeShift").innerHTML = 
-							(data2 == 0xff || data2 == 12) ? "-" : data2 -12;
+						var value = data2 -12;
+						if (value > 48) {
+							value = -(127-value+1); 
+						}
+						document.getElementById("transposeShift").innerHTML = value;
 					}
 					//Fixed Note
 					else if (jumpFactorWrite == MIDI_SEND_HARMONIZER_FIXED_NOTE) {
@@ -1541,18 +1580,51 @@ function WARBL_Receive(event) {
 						// current half hole calibration selected hole
 						if ( (intValueWrite - MIDI_SEND_TONE_READ_0) == document.getElementById("halfHoleSelect").value) {
 							document.getElementById("currentReadRangeHH").value = value;
+							document.getElementById("currentReadValueHH").innerHTML =  value;
 						}
 					} else
-									
+
+					//current hole calibration baseline
+					if (intValueWrite >= MIDI_SEND_TONE_BASELINE_0 && intValueWrite <= MIDI_SEND_TONE_BASELINE_8) {
+						// current half hole calibration selected hole
+						if ( (intValueWrite - MIDI_SEND_TONE_BASELINE_0) == document.getElementById("halfHoleSelect").value) {
+								document.getElementById("currentCalibrationBaselineHH").innerHTML = value;
+							} 
+						//console.log("toneholeBaseline[" + (intValueWrite - MIDI_SEND_TONE_BASELINE_0) + "]: " +value);
+					} else		
+
+										
+					//current hole calibration
+					if (intValueWrite >= MIDI_SEND_TONE_COVERED_0 && intValueWrite <= MIDI_SEND_TONE_COVERED_8) {
+						// current half hole calibration selected hole
+						if ( (intValueWrite - MIDI_SEND_TONE_COVERED_0) == document.getElementById("halfHoleSelect").value) {
+							 
+							 document.getElementById("currentCalibrationOpenHH").innerHTML = value -54;
+							 document.getElementById("currentCalibrationClosedHH").innerHTML = value -50;
+							}
+						//console.log("toneholeCovered[" + (intValueWrite - MIDI_SEND_TONE_COVERED_0) + "]: " +value);
+
+					} else		
+
 					//current lowerLimit for hole sensors
 					if (intValueWrite == MIDI_SEND_HALFHOLE_MIN) {
-							document.getElementById("lowerLimitRangeHH").value = value;
-							fillSliderAuto();
-
-
+						document.getElementById("lowerLimitRangeHH").value = value;
+						fillSliderAuto();
 					} else
 					//current upperLimit for hole sensors
 					if (intValueWrite == MIDI_SEND_HALFHOLE_MAX) {
+						//console.log("upperLimit: "+ value);	
+						if (value >= 0x3FFF) {
+							document.getElementById("halfHoleParamsDiv").style.display = 'none';
+							document.getElementById("customfingeringDotsHH").style.display = 'none';
+							document.getElementById("halfHoleToggleButton").innerHTML = 'Switch on';
+													} else {
+							document.getElementById("halfHoleParamsDiv").style.display = 'block';
+							document.getElementById("customfingeringDotsHH").style.display = 'block';
+							document.getElementById("halfHoleToggleButton").innerHTML = 'Switch off';
+
+						}
+
 						document.getElementById("upperLimitRangeHH").value = value;
 						fillSliderAuto();
 
@@ -1851,7 +1923,7 @@ function WARBL_Receive(event) {
 						//20230927 GLB
 						var a = document.getElementById("row" + i).value;
 
-						if (a == 30 || a == 31 || a == 10 || a == 11 || a == 12) { //Transpose/Harmonize
+						if (a == 5 || a == 30 || a == 10 || a == 11 || a == 12) { //Transpose/Harmonize
 							if (data1 == MIDI_SLOT_07) {
 								document.getElementById("HARMrow" + i).value = data2;
 							} 
@@ -1859,7 +1931,7 @@ function WARBL_Receive(event) {
 								document.getElementById("HarmScaleRow" + i).value = data2;
 							} 
 							
-							if (a == 30 && data1 == MIDI_SLOT_06) { //Channel / Progressivo or not
+							if (a == 5 && data1 == MIDI_SLOT_06) { //Channel / Progressivo or not
 								if (data2 != 1) {
 									document.getElementById("row" + (buttonRowWrite)).value = 30;
 								}
@@ -1945,9 +2017,9 @@ function bit_test(num, bit) {
 
 //Sends an int value
 function sendIntToWARBL(index, value) {
-	if (index == MIDI_SEND_KEY_SELECT) {
-		console.log("sendIntToWARBL", value);
-	}
+	// if (index == MIDI_SEND_KEY_SELECT) {
+	// 	console.log("sendIntToWARBL", value);
+	// }
 	sendToWARBL(MIDI_SLOT_13, index);
 	sendToWARBL(MIDI_SLOT_14, value >> 7);
 	sendToWARBL(MIDI_SLOT_15, value & 0x7F);
@@ -2004,7 +2076,7 @@ function sendFingeringSelect(row, selection) {
 	} //default key of D for many patterns
 	document.getElementById("keySelect" + row).value = key; //set key menu
 
-	console.log("sendFingeringSelect",row, selection, key);
+	//console.log("sendFingeringSelect",row, selection, key);
 	//send the fingering pattern
 	sendIntToWARBL(MIDI_SEND_MODE_SELECTOR + row, selection);
 	// sendToWARBL(MIDI_SLOT_02, MIDI_SEND_FINGER_PATTERN_OS + row);
@@ -2214,6 +2286,7 @@ function sendHalfHoleLowerLimit (selection) {
 function sendHalfHoleUpperLimit (selection) {
 	blink(1);
 	selection = parseFloat(selection);
+	console.log(selection);
 	sendIntToWARBL(MIDI_SEND_HALFHOLE_MAX, selection);
 }
 
@@ -2708,18 +2781,48 @@ function configureHalfHoleDetection() {
 	// document.getElementById("topcontrolbox").style.height = "2085px";
 }
 
+function halfHoleAutoCalibrate() {
+	var calibValue = parseInt(document.getElementById("currentCalibrationOpenHH").innerHTML);
+
+	document.getElementById("lowerLimitRangeHH").value = calibValue -100;
+	document.getElementById("upperLimitRangeHH").value = calibValue +5;
+
+	slider_getVals();
+	sendHalfHoleSelect(document.getElementById("halfHoleSelect").value);
+
+}
+
+function halfHoleToggle() {
+	var upperLimit = parseInt(document.getElementById("upperLimitRangeHH").value);
+
+	if (upperLimit >= 500) { //disabled
+		halfHoleAutoCalibrate(); //Enables it with autocalibration
+		slider_getVals();
+
+	} else {
+		document.getElementById("upperLimitRangeHH").value = 0x3FFF;
+		sendHalfHoleUpperLimit(0x3FFF);
+	}
+	// console.log("Toggle: half hole", parseInt(document.getElementById("upperLimitRangeHH").value))
+
+	sendHalfHoleSelect(document.getElementById("halfHoleSelect").value);
+
+}
 function halfHoleDetectionOkay() {
 	var prevDirty = settingsDirty; //This sends a message, but doesn't change settings
 	sendHalfHoleSelect("99"); //disables it
 	settingsDirty = prevDirty; //restore previous state
 
 	document.getElementById("halfHoleDetection").style.display = "none";
-	// document.getElementById("customControls").style.display = "none";
 	document.getElementById("calibrationBox").style.display = "block";
-	// document.getElementById("topcontrolbox").style.height = "1785px";
-
-	// sendToWARBL(MIDI_SLOT_02, MIDI_SEND_HALFHOLE_SAVE_CURRENT); //Saves calibration, buffer and senseDistance
 }
+
+function halfHoleDetectionSave() {
+
+	sendToWARBL(MIDI_SLOT_02, MIDI_SAVE_CALIB); //Saves calibration and buffer
+	halfHoleDetectionOkay();
+}
+
 
 function mapCC() {
 	mapSelection = 0;
@@ -3458,7 +3561,8 @@ function populateSelects() {
         ["10","Harmonizer on/off (voice 1):"],
         ["11","Harmonizer on/off (voice 2):"],
         ["12","Harmonizer on/off (voice 3)"],
-        ["13","Begin autocalibration"]
+        ["13","Begin autocalibration"],
+        ["14","Restart WARBL"]
     ];
 
 	//MIDI Messages

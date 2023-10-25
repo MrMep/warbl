@@ -2215,6 +2215,9 @@
       <div class="bufferSizeValueHH noTouch" id="bufferSizeValueHH">-</div>
 
 
+      <button type="button" class="smallbutton noTouch halfHoleAutoCalibrate" onClick="halfHoleAutoCalibrate()">Auto-calibrate</button>
+      <button type="button" class="smallbutton noTouch halfHoleToggle" id="halfHoleToggleButton" onClick="halfHoleToggle()">Switch off</button>
+
      <div class="half-hole-select blue semi-square" id="halfHoleSelectDiv">
 
         <select id="halfHoleSelect" onChange="sendHalfHoleSelect(value)">
@@ -2226,25 +2229,25 @@
 
       </div>
 
+      <button type="button" class="smallbutton noTouch halfHoleDetectionSave" onClick="halfHoleDetectionSave()">Save & Exit</button>
+      <button type="button" class="smallbutton noTouch halfHoleDetectionOkay " onClick="halfHoleDetectionOkay()">Ok</button>
 
-        <div class="selector">
+        <div class="selector" id="halfHoleParamsDiv">
           <section class="double-range-slider">
             <input class="sliderBlue" id="currentReadRangeHH"  oninput="slider_getVals();" onchange="slider_getVals();" value="200" min="0" max="500" type="range" disabled>
 
-            <input class="sliderRed" id="lowerLimitRangeHH" oninput="slider_getVals();" onchange="slider_getVals();" value="0" min="0" max="500" step="5" type="range">
+            <input class="sliderRed" id="lowerLimitRangeHH" oninput="slider_getVals();" onchange="slider_getVals();" value="0" min="0" max="500" type="range">
 
-            <input class="sliderGreen" id="upperLimitRangeHH"  oninput="slider_getVals();" onchange="slider_getVals();" value="400" min="0" max="500" step="5" type="range">
+            <input class="sliderGreen" id="upperLimitRangeHH"  oninput="slider_getVals();" onchange="slider_getVals();" value="400" min="0" max="500" type="range">
 
             <span class="rangeValues" id="double-range-label"></span>
+
+            <span class="rangeValues" id="currentReadLabelHH" style="display: none;">(<span class="rangeValues" id="currentCalibrationBaselineHH"></span> - <span class="rangeValues" id="currentCalibrationOpenHH"></span>&lt; <span class="rangeValues" id="currentReadValueHH"></span> &gt;<span class="rangeValues" id="currentCalibrationClosedHH"></span>)</span>
           </section>
 
           <link rel="stylesheet" href="css/multislider.css">
           <script src="js/multislider.js"></script>
       </div>
-
-      
-
-
 
 
       <div class="fingering" id="customfingeringDotsHH">
@@ -2252,22 +2255,21 @@
         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="792px" height="650px"
         viewBox="0 0 792 612" xml:space="preserve">
           <!-- Open: fill="#C3C0C0" - Closed: fill="#262626" - Ignored: fill="#555"  425.345-->
-          <circle id="fingeringDotHH" fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="170.123" cy="185.345" r="7.56"/>
-            <path id="fingeringDotHalfAHH" d="M 150.123 178.345
-                    A 7.56 7.56 0 0 1 150.123 193.345
-                    L 150.123 178.345
+          <circle id="fingeringDotHH" fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="150.123" cy="35.345" r="7.56"/>
+            <path id="fingeringDotHalfAHH" d="M 150.123 28.345
+                    A 7.56 7.56 0 0 1 150.123 43.345
+                    L 150.123 28.345
                     Z" 
               fill="#262626" style="display: none;"/>
-            <path  id="fingeringDotHalfBHH"  d="M 150.123 178.345
-              A 7.56 7.56 0 0 0 150.123 193.345
-              L 150.123 178.345
+            <path  id="fingeringDotHalfBHH"  d="M 150.123 28.345
+              A 7.56 7.56 0 0 0 150.123 43.345
+              L 150.123 28.345
               Z" 
           fill="#C3C0C0" style="display: none;"/>
           
         </svg>
       </div>
 
-      <button type="button" class="smallbutton noTouch halfHoleDetectionOkay" onClick="halfHoleDetectionOkay()">OK</button>
 
       </div>
 
@@ -3043,10 +3045,10 @@
           <p> Please consider that:</p>
           <p>
             <ul>
-              <li>Calibration is saved only once you press the "Save Calibration" button, in the main Calibration section;</li>
+              <li>Calibration is saved only once you press the "Save & Exit" button or the "Save Calibration" button in the main Calibration section;</li>
               <li>The position of the vertical black line is updated only when a fingering change is detected: move your fingers to update its position;</li>
               <li>A good interval for the half-hole position is at a difference of about 100 between the lower and the upper limit;</li>
-              <li>A good transient value is about 30;</li>
+              <li>A good transient value is between 20 and 30;</li>
               <li>The calibration is saved for all instruments/fingering schemes.</li>
 
             </ul>

@@ -80,36 +80,28 @@ You can download [the chart here](readme_files/Barbaro_s_EWI_Fingering%20Chart.p
 
 ## Half-hole Detection
 
-Experimentally, and only for the Barbaro's EWI fingering scheme, I have activated an half-hole detection function.
+Experimentally ~~, and only for the Barbaro's EWI fingering scheme,~~ I have activated an half-hole detection function.
 
 This function is active on three holes only: thumb, R4 and R3.
 
-- Half hole on R4 and R3 will raise the corresponding pitches (C and D), by one semitone.
+- Half hole on R4 and R3 will raise the corresponding pitches (C and D), by one semitone in Barbaro's EWI fingering schema.
+- For other fingering schemas, you will have to add a custom fingering of your choice to be coupled with R3/R4 half holes.
 - Half thumb hole will raise all pitches by one octave, effectively adding a third register to the instrument.
 
 ### Half-hole Calibration
-Half-hole detection needs to be calibrated first.
+Half hole detection auto-calibrates whenever you auto-calibrate the sensors.
+
 In the "Calibration" section of the Configuration tools there is a new "Half Hole Calibration" button that shows the following section:
 
 ![Half Hole Calibration](readme_files/half_hole_calib.png)
 
 Basically, you can select the exact interval for each hole to be detected as half-open, while a real-time vertical bar shows you where the current value is.
 
+You can also de-activate the half-hole detection for the selected tone hole.
+
 There is a configurable small delay in the detection to make it more accurate. You can change its duration with the "Half Hole Transient" control.
 
-The detection also depends upon the "Finger-sensing distance" paramenter, and more heavily upon the hole calibration value.
-
-An auto-calibration feature for the half-hole detection is in the TODO list.
-
-### Half-hole Hardware modification
-Due to hardware limitations, the half thumb hole detection works way better with a small modification, as shown in the following picture:
-![Half Hole Modification](readme_files/thumb_hole.png)
-
-As seen in the picture, you have to put some transparent 3M-like tape around the thumb hole and gently shape a little concavity in the hole. This improves a lot the quality of detection.
-
-There is no need to modify the front holes (R3 and R4).
-
-A 3D printable clip-on accessory is in the TODO list.
+The detection depends upon the hole calibration value.
 
 
 

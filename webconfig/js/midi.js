@@ -67,11 +67,20 @@ for (var w = 1; w <= 23; w++) {
 
 }
 
+if (typeof platform == "undefined") {
+	var platform = "app";
+}
+
 //hide some stuff for app version
 if (platform == "app") {
 	document.getElementById("myTopnav").style.display = "none";
 	document.getElementById("topLogo").style.display = "none";
 	document.getElementById("importexport").style.display = "none";
+}
+
+//Flutter
+function postMessage(channel, message) {
+	window[channel] ? window[channel].postMessage(message) : console.log(message);
 }
 
 // When the user clicks anywhere outside of the modal, close it

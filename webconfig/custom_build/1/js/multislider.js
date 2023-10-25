@@ -1,5 +1,8 @@
 
 function fillSliderAuto() {
+
+    slide1 = parseFloat(document.getElementById("lowerLimitRangeHH").value);
+    slide2 = parseFloat( document.getElementById("upperLimitRangeHH").value );
     from = document.querySelector('#lowerLimitRangeHH');
     to =  document.querySelector('#upperLimitRangeHH');
     sliderColor = '#999999';
@@ -21,6 +24,7 @@ function fillSliderAuto() {
 
         var displayElement = document.getElementById("double-range-label");
         displayElement.innerHTML = slide1 + " - " + slide2;
+        // console.log("fillSliderAuto", slide1, slide2);
 }
 
 
@@ -34,9 +38,9 @@ function slider_getVals(){
     var slide2_now = parseFloat( document.getElementById("upperLimitRangeHH").value );
 
     if (slide1_now != slide1) {
-        if ( slide1_now > slide2-50 ){
+        if ( slide1_now > slide2_now-50 ){
             document.getElementById("lowerLimitRangeHH").value = slide1;
-            // console.log(slide1, slide2);
+            //  console.log(slide1, slide2);
             return;
         } else {
             slide1 = slide1_now;
@@ -45,10 +49,14 @@ function slider_getVals(){
     }
 
     if (slide2_now != slide2) {
-        if ( slide2_now < slide1+50 ){
+        var slide1_now = parseFloat(document.getElementById("lowerLimitRangeHH").value);
+        if ( slide2_now < slide1_now+50 ){
             document.getElementById("upperLimitRangeHH").value = slide2;
-            // console.log(slide1, slide2);
-        return;
+            //  console.log(slide1, slide2);
+            return;
+        } if ( slide2_now > 499) {
+            document.getElementById("upperLimitRangeHH").value = 499;
+            return;
         } else {
             slide2 = slide2_now;
             sendHalfHoleUpperLimit (slide2);
