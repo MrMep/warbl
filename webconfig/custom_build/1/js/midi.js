@@ -67,8 +67,8 @@ var MIDI_SEND_HARMONIZER_CURRENT_NOTE_DIATONIC =  120; //Offset +2 0/1
 var MIDI_SEND_HALFHOLE_BUFFER = 				  123; //size of the buffer
 var MIDI_SEND_HALFHOLE_CURRENT =                  124 //current hole
 var MIDI_SEND_HALFHOLE_SAVE =          			  125 //saves calibration and buffer size
-// var MIDI_SEND_HALFHOLE_MIN =                      126 //lowerLimit
-// var MIDI_SEND_HALFHOLE_MAX =                      127 //upperLimit
+// var MIDI_SEND_HALFHOLE_MIN =                      126 //lowerBound
+// var MIDI_SEND_HALFHOLE_MAX =                      127 //upperBound
 
 var MIDI_SLOT_05 = 105; //base CC
 
@@ -105,8 +105,8 @@ var MIDI_SLOT_13 = 113; //intValue selector
 	var MIDI_SEND_MODE_SELECTOR = 30; //30-32 int value for fingering scheme index
 
 	// var MIDI_SEND_HALFHOLE_CALIBRATION = 90; //calibration value for selected hole
-	var MIDI_SEND_HALFHOLE_MIN =    	 80; //lowerLimit
-	var MIDI_SEND_HALFHOLE_MAX =    	 81; //upperLimit
+	var MIDI_SEND_HALFHOLE_MIN =    	 80; //lowerBound
+	var MIDI_SEND_HALFHOLE_MAX =    	 81; //upperBound
 
 	var MIDI_SEND_TONE_BASELINE_0 = 90 // Calibration for hole 0
 	var MIDI_SEND_TONE_BASELINE_1 = 91 // Calibration for hole 1
@@ -137,6 +137,10 @@ var MIDI_SLOT_13 = 113; //intValue selector
 	var MIDI_SEND_TONE_READ_6 = 116 // Sensor read value for hole 6
 	var MIDI_SEND_TONE_READ_7 = 117 // Sensor read value for hole 7
 	var MIDI_SEND_TONE_READ_8 = 118 // Sensor read value for hole 8
+
+	var MIDI_SEND_BASELINE_AVERAGE       =         120 //Debug Info
+	var MIDI_SEND_BASELINE_CURRENT_AVERAGE       = 121 //Debug Info
+	var MIDI_SEND_MAX_BASELINE = 				   122; //DEbug Info
 
 var MIDI_SLOT_14 = 114; //intValue H byte
 var MIDI_SLOT_15 = 115; //intValue L byte
@@ -373,8 +377,9 @@ function showWARBLNotDetected(){
 	document.getElementById("middleControlBox").style.display = "none";
 	document.getElementById("performanceBox").style.display = "none";
 	document.getElementById("calibrationBox").style.display = "none";
-	document.getElementById("importexport").style.display = "none";
+	document.getElementById("halfHoleDetection").style.display = "none";
 
+	document.getElementById("importexport").style.display = "none";
 
 }
 
@@ -852,7 +857,7 @@ function WARBL_Receive(event) {
 			releasePianoKey(data1);
 			return;
 
-		case 0xE0: //Incoming PitchBend from Warbl - A fingering Pattern
+		case 0xE0: //Incoming PitchBend from Warbl 
 			if (parseFloat(data0 & 0x0f) == MIDI_CONF_CHANNEL -1) { //if it's channel 7 it's from WARBL 
 			
 			}
@@ -1414,7 +1419,7 @@ function WARBL_Receive(event) {
 					intValueWriteH = data2;
 				} 
 				else if (data1 == MIDI_SLOT_15) {
-					var value = parseInt((intValueWriteH << 7) | data2);
+					var value = parseInt((intValueWriteH << 7) | data2) -8192;
 
 					//current holeCovered
 					if (intValueWrite == MIDI_SEND_HOLE_COVERED) {
@@ -1593,12 +1598,26 @@ function WARBL_Receive(event) {
 						//console.log("toneholeBaseline[" + (intValueWrite - MIDI_SEND_TONE_BASELINE_0) + "]: " +value);
 					} else		
 
-										
+
+					// calibration baseline average
+					if (intValueWrite == MIDI_SEND_BASELINE_AVERAGE) {
+						console.log("toneholeBaseline Average: " +value, intValueWrite);
+					} else		
+	
+					// calibration current baseline average
+					if (intValueWrite == MIDI_SEND_BASELINE_CURRENT_AVERAGE) {
+						console.log("toneholeBaseline CURRENT Average: " +value/10);
+					} else	
+
+					// calibration current baseline average
+					if (intValueWrite == MIDI_SEND_MAX_BASELINE) {
+						console.log("toneholeBaseline MAX: " +value);
+					} else	
+
 					//current hole calibration
 					if (intValueWrite >= MIDI_SEND_TONE_COVERED_0 && intValueWrite <= MIDI_SEND_TONE_COVERED_8) {
 						// current half hole calibration selected hole
 						if ( (intValueWrite - MIDI_SEND_TONE_COVERED_0) == document.getElementById("halfHoleSelect").value) {
-							 
 							 document.getElementById("currentCalibrationOpenHH").innerHTML = value -54;
 							 document.getElementById("currentCalibrationClosedHH").innerHTML = value -50;
 							}
@@ -1606,26 +1625,26 @@ function WARBL_Receive(event) {
 
 					} else		
 
-					//current lowerLimit for hole sensors
+					//current lowerBound for hole sensors
 					if (intValueWrite == MIDI_SEND_HALFHOLE_MIN) {
-						document.getElementById("lowerLimitRangeHH").value = value;
+						document.getElementById("lowerBoundRangeHH").value = value;
 						fillSliderAuto();
 					} else
-					//current upperLimit for hole sensors
+					//current upperBound for hole sensors
 					if (intValueWrite == MIDI_SEND_HALFHOLE_MAX) {
-						//console.log("upperLimit: "+ value);	
-						if (value >= 0x3FFF) {
+						//console.log("upperBound: "+ value);	
+						if (value >= 1024) {
 							document.getElementById("halfHoleParamsDiv").style.display = 'none';
 							document.getElementById("customfingeringDotsHH").style.display = 'none';
 							document.getElementById("halfHoleToggleButton").innerHTML = 'Switch on';
-													} else {
+						} else {
 							document.getElementById("halfHoleParamsDiv").style.display = 'block';
 							document.getElementById("customfingeringDotsHH").style.display = 'block';
 							document.getElementById("halfHoleToggleButton").innerHTML = 'Switch off';
 
 						}
 
-						document.getElementById("upperLimitRangeHH").value = value;
+						document.getElementById("upperBoundRangeHH").value = value;
 						fillSliderAuto();
 
 					} 
@@ -2020,8 +2039,10 @@ function sendIntToWARBL(index, value) {
 	// if (index == MIDI_SEND_KEY_SELECT) {
 	// 	console.log("sendIntToWARBL", value);
 	// }
+	value += 8192;
+	console.log("sendIntToWARBL", index, (value >> 7) & 0x7F, value & 0x7F);
 	sendToWARBL(MIDI_SLOT_13, index);
-	sendToWARBL(MIDI_SLOT_14, value >> 7);
+	sendToWARBL(MIDI_SLOT_14, (value >> 7) & 0x7F);
 	sendToWARBL(MIDI_SLOT_15, value & 0x7F);
 }
 
@@ -2277,16 +2298,16 @@ function sendHalfHoleSelect(selection) {
 	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
-function sendHalfHoleLowerLimit (selection) {
-	blink(1);
-	selection = parseFloat(selection);
-	sendIntToWARBL(MIDI_SEND_HALFHOLE_MIN, selection);
-}
+// function sendHalfHoleLowerBound (selection) {
+// 	blink(1);
+// 	selection = parseFloat(selection);
+// 	sendIntToWARBL(MIDI_SEND_HALFHOLE_MIN, selection);
+// }
 
-function sendHalfHoleUpperLimit (selection) {
+function sendHalfHoleUpperBound (selection) {
 	blink(1);
 	selection = parseFloat(selection);
-	console.log(selection);
+	console.log("sendHalfHoleUpperBound: " + selection);
 	sendIntToWARBL(MIDI_SEND_HALFHOLE_MAX, selection);
 }
 
@@ -2781,33 +2802,34 @@ function configureHalfHoleDetection() {
 	// document.getElementById("topcontrolbox").style.height = "2085px";
 }
 
-function halfHoleAutoCalibrate() {
-	var calibValue = parseInt(document.getElementById("currentCalibrationOpenHH").innerHTML);
+// function halfHoleAutoCalibrate() {
+// 	var calibValue = parseInt(document.getElementById("currentCalibrationOpenHH").innerHTML);
 
-	document.getElementById("lowerLimitRangeHH").value = calibValue -100;
-	document.getElementById("upperLimitRangeHH").value = calibValue +5;
+// 	document.getElementById("lowerBoundRangeHH").value = calibValue -100;
+// 	document.getElementById("upperBoundRangeHH").value = calibValue +5;
 
-	slider_getVals();
-	sendHalfHoleSelect(document.getElementById("halfHoleSelect").value);
+// 	slider_getVals();
+// 	sendHalfHoleSelect(document.getElementById("halfHoleSelect").value);
 
-}
+// }
 
 function halfHoleToggle() {
-	var upperLimit = parseInt(document.getElementById("upperLimitRangeHH").value);
+	var upperBound = parseInt(document.getElementById("upperBoundRangeHH").value);
 
-	if (upperLimit >= 500) { //disabled
-		halfHoleAutoCalibrate(); //Enables it with autocalibration
+	if (upperBound >= 500) { //disabled
+		sendHalfHoleUpperBound(300); //Random value to re-enable it
 		slider_getVals();
 
 	} else {
-		document.getElementById("upperLimitRangeHH").value = 0x3FFF;
-		sendHalfHoleUpperLimit(0x3FFF);
+		document.getElementById("upperBoundRangeHH").value = 500;
+		sendHalfHoleUpperBound(1024);
 	}
-	// console.log("Toggle: half hole", parseInt(document.getElementById("upperLimitRangeHH").value))
+	console.log("Toggle: half hole", parseInt(document.getElementById("upperBoundRangeHH").value))
 
 	sendHalfHoleSelect(document.getElementById("halfHoleSelect").value);
 
 }
+
 function halfHoleDetectionOkay() {
 	var prevDirty = settingsDirty; //This sends a message, but doesn't change settings
 	sendHalfHoleSelect("99"); //disables it
@@ -2819,7 +2841,8 @@ function halfHoleDetectionOkay() {
 
 function halfHoleDetectionSave() {
 
-	sendToWARBL(MIDI_SLOT_02, MIDI_SAVE_CALIB); //Saves calibration and buffer
+	//sendToWARBL(MIDI_SLOT_02, MIDI_SAVE_CALIB); //Saves calibration and buffer
+	saveAsDefaults();
 	halfHoleDetectionOkay();
 }
 
@@ -3251,20 +3274,20 @@ function sendOverride(selection) {
 	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
-function sendBoth(selection) {
-	selection = +selection; 
-	blink(1);
-	sendToWARBL(MIDI_SLOT_04, 51);
-	sendToWARBL(MIDI_SLOT_05, selection);
-}
+// function sendBoth(selection) {
+// 	selection = +selection; 
+// 	blink(1);
+// 	sendToWARBL(MIDI_SLOT_04, 51);
+// 	sendToWARBL(MIDI_SLOT_05, selection);
+// }
 
-function sendR4flatten(selection) {
-	selection = +selection; 
-	blink(1);
-	updateCustom();
-	sendToWARBL(MIDI_SLOT_04, 52);
-	sendToWARBL(MIDI_SLOT_05, selection);
-}
+// function sendR4flatten(selection) {
+// 	selection = +selection; 
+// 	blink(1);
+// 	updateCustom();
+// 	sendToWARBL(MIDI_SLOT_04, 52);
+// 	sendToWARBL(MIDI_SLOT_05, selection);
+// }
 
 /* //curently unused--can be used for an additional switch.
 function sendInvertR4(selection) {
@@ -3562,7 +3585,6 @@ function populateSelects() {
         ["11","Harmonizer on/off (voice 2):"],
         ["12","Harmonizer on/off (voice 3)"],
         ["13","Begin autocalibration"],
-        ["14","Restart WARBL"]
     ];
 
 	//MIDI Messages

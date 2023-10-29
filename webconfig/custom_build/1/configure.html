@@ -607,7 +607,6 @@
                 <option value="18">Säckpipa (minor)</option> 
                 <option value="20">Bombarde</option>
                 <option value="21">Baroque flute</option>            
-                <option value="19">Custom</option>       
               </select>
 
             </div>
@@ -2133,7 +2132,7 @@
 
         <button type="button" class="smallbutton noTouch autoCalibrate" id="autoCalibrate" onClick="autoCalibrate()">Auto-calibrate all sensors</button>
 
-        <button type="button" class="headerbuttons noTouch" id="configureHalfHoleDetection" onClick="configureHalfHoleDetection()">Half Hole calibration</button>
+        <button type="button" class="headerbuttons noTouch" id="configureHalfHoleDetection" onClick="configureHalfHoleDetection()">Half Hole Config</button>
 
 
         <button type="button" class="smallbutton noTouch autoCalibrateBell" id="autoCalibrateBell" onClick="autoCalibrateBell()">Auto-calibrate bell sensor only</button>
@@ -2199,7 +2198,7 @@
 
      <div class="controlbox"  id="halfHoleDetection" style="display: none;">
 			
-      <h2 class="controlboxtitle noTouch" id="halfHoleHeader">Half Hole Calibration
+      <h2 class="controlboxtitle noTouch" id="halfHoleHeader">Half Hole Configuration
 
         <button type="button" class="infocircle" onClick="modal(32)"><i class="fa fa-info-circle"></i></button>
 
@@ -2210,12 +2209,11 @@
         <input type="range" min="0" max="127" value="30" class="ranger" id="bufferSizeHH" onChange="sendHalfHoleBuffer(value)" oninput="sendHalfHoleBuffer(value)">
       </div>
 
-      <div class="halfHoleTransientLabelHH noTouch">Half Hole Transient</div>
+      <div class="halfHoleTransientLabelHH noTouch">Dynamic Transient Filter</div>
 
       <div class="bufferSizeValueHH noTouch" id="bufferSizeValueHH">-</div>
 
 
-      <button type="button" class="smallbutton noTouch halfHoleAutoCalibrate" onClick="halfHoleAutoCalibrate()">Auto-calibrate</button>
       <button type="button" class="smallbutton noTouch halfHoleToggle" id="halfHoleToggleButton" onClick="halfHoleToggle()">Switch off</button>
 
      <div class="half-hole-select blue semi-square" id="halfHoleSelectDiv">
@@ -2236,11 +2234,11 @@
           <section class="double-range-slider">
             <input class="sliderBlue" id="currentReadRangeHH"  oninput="slider_getVals();" onchange="slider_getVals();" value="200" min="0" max="500" type="range" disabled>
 
-            <input class="sliderRed" id="lowerLimitRangeHH" oninput="slider_getVals();" onchange="slider_getVals();" value="0" min="0" max="500" type="range">
+            <input class="sliderRed" id="lowerBoundRangeHH" oninput="slider_getVals();" onchange="slider_getVals();" value="0" min="0" max="500" type="range">
 
-            <input class="sliderGreen" id="upperLimitRangeHH"  oninput="slider_getVals();" onchange="slider_getVals();" value="400" min="0" max="500" type="range">
+            <input class="sliderGreen" id="upperBoundRangeHH"  oninput="slider_getVals();" onchange="slider_getVals();" value="400" min="0" max="500" type="range">
 
-            <span class="rangeValues" id="double-range-label"></span>
+            <span class="rangeValues" id="double-range-label" style="display: none;"></span>
 
             <span class="rangeValues" id="currentReadLabelHH" style="display: none;">(<span class="rangeValues" id="currentCalibrationBaselineHH"></span> - <span class="rangeValues" id="currentCalibrationOpenHH"></span>&lt; <span class="rangeValues" id="currentReadValueHH"></span> &gt;<span class="rangeValues" id="currentCalibrationClosedHH"></span>)</span>
           </section>
@@ -2255,15 +2253,15 @@
         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="792px" height="650px"
         viewBox="0 0 792 612" xml:space="preserve">
           <!-- Open: fill="#C3C0C0" - Closed: fill="#262626" - Ignored: fill="#555"  425.345-->
-          <circle id="fingeringDotHH" fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="150.123" cy="35.345" r="7.56"/>
-            <path id="fingeringDotHalfAHH" d="M 150.123 28.345
-                    A 7.56 7.56 0 0 1 150.123 43.345
-                    L 150.123 28.345
+          <circle id="fingeringDotHH" fill="#C3C0C0" stroke="none" stroke-linecap="round" stroke-linejoin="round" cx="150.123" cy="75.345" r="7.56"/>
+            <path id="fingeringDotHalfAHH" d="M 150.123 68.345
+                    A 7.56 7.56 0 0 1 150.123 83.345
+                    L 150.123 68.345
                     Z" 
               fill="#262626" style="display: none;"/>
-            <path  id="fingeringDotHalfBHH"  d="M 150.123 28.345
-              A 7.56 7.56 0 0 0 150.123 43.345
-              L 150.123 28.345
+            <path  id="fingeringDotHalfBHH"  d="M 150.123 68.345
+              A 7.56 7.56 0 0 0 150.123 83.345
+              L 150.123 68.345
               Z" 
           fill="#C3C0C0" style="display: none;"/>
           
@@ -3024,33 +3022,23 @@
 
         <h2 title="Close" onClick="modalclose(32)" class="modal-close">Close</h2>
 
-        <h1>Half Hole Detection Calibration</h1>
+        <h1>Half Hole Detection</h1>
 
         <div>
           <p>
-            For each of the activated fingers, you can select the precise interval that is read as half-hole position.
+            For each selected finger, you can switch on and off the half-hole detection.
           </p>
-          <p>The "Half Hole Transient" slider selects the duration of the half-hole detection phase: the lower it is, the more glitches you will hear. If its value is too high, a small delay will become audible when changing left thumb position. </p>
+          <p>The "Dynamic Transient Filter" slider selects the duration of an additional transient delay activated during octave changes: the lower it is, the more glitches you will hear.
+            If its value is too high, a small delay will become audible during some passages. </p>
           <p>
-            To calibrate the half hole detection interval:
+            The calibration of the half-hole detection is automatic and is base on the general hole calibration. You can monitor all the related values trhough the sliders.
             </p>
-          <p>
-            <ol>
-              <li>Select the finger whose hole you want to calibrate;</li>
-              <li>Switch between open, closed and half-open position of the selected finger;</li>
-              <li>See where the vertical black line falls and adjust the upper and lower limits so that, while in the half-hole position, the vertical black line falls comfortably in the green section;</li>
-              <li>Once satisfied, press OK.</li>
-            </ol>
-          </p>
           <p> Please consider that:</p>
           <p>
             <ul>
-              <li>Calibration is saved only once you press the "Save & Exit" button or the "Save Calibration" button in the main Calibration section;</li>
+              <li>Modified values are saved only once you press the "Save & Exit" button;</li>
               <li>The position of the vertical black line is updated only when a fingering change is detected: move your fingers to update its position;</li>
-              <li>A good interval for the half-hole position is at a difference of about 100 between the lower and the upper limit;</li>
-              <li>A good transient value is between 20 and 30;</li>
-              <li>The calibration is saved for all instruments/fingering schemes.</li>
-
+              <li>A good dynamic transient value is between 20 and 30;</li>
             </ul>
           </p>
         </div>

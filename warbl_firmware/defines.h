@@ -14,8 +14,8 @@
 #define DEBUG_HALF_HOLE           0
 #define HALF_HOLE_BUFFER_SIZE    30
 #define THUMB_HOLE                8
-#define HALF_HOLE_LOWER_OFFSET -100
-#define HALF_HOLE_UPPER_OFFSET    5
+#define HALF_HOLE_LOWER_OFFSET -120
+#define HALF_HOLE_UPPER_OFFSET    2
 
 #define R4_HOLE                   1
 #define R3_HOLE                   2
@@ -93,7 +93,7 @@
 #define ACTION_HARMONIZER_2         11
 #define ACTION_HARMONIZER_3         12
 #define ACTION_CALIBRATE            13
-#define ACTION_RESTART              14
+//#define ACTION_RESTART              14
 
 
 // Fingering Patterns
@@ -116,7 +116,7 @@
 #define kModeShakuhachi 16
 #define kModeSackpipaMajor 17
 #define kModeSackpipaMinor 18
-#define kModeCustom 19
+// #define kModeCustom 19
 #define kModeBombarde 20
 #define kModeBaroqueFlute 21
 #define kModeMedievalPipes 22
@@ -164,9 +164,9 @@
 #define IMMEDIATE_PB 8
 #define LEGATO 9
 #define OVERRIDE 10
-#define THUMB_AND_OVERBLOW 11
-#define R4_FLATTEN 12
-#define kSWITCHESnVariables 13
+// #define THUMB_AND_OVERBLOW 11
+// #define R4_FLATTEN 12
+#define kSWITCHESnVariables 11
 
 //Variables in the ED array (all the settings for the Expression and Drones panels)
 #define EXPRESSION_ON 0
@@ -311,7 +311,7 @@ From 0 to 15 button actions MIDI Channel
     #define MIDI_SEND_LEARN_PRESS             41 //Offset
     #define MIDI_AUTO_CALIB_BELL              42 //Offset
     #define MIDI_SEND_LEARN_PRESS_DRONE       43 //Offset
-    #define MIDI_SAVE_CALIB_AS_FACTORY        45 //Offset
+    // #define MIDI_SAVE_CALIB_AS_FACTORY        45 //Offset
 
     // #define MIDI_SEND_DEBUG_LSB_OS            48 //Offset
     // #define MIDI_SEND_DEBUG_MSB_OS            49 //Offset
@@ -368,6 +368,11 @@ From 0 to 15 button actions MIDI Channel
     #define MIDI_SEND_TONE_READ_7            117 // Sensor read value for hole 7
     #define MIDI_SEND_TONE_READ_8            118 // Sensor read value for hole 8
 
+
+    #define MIDI_SEND_BASELINE_AVERAGE               120 //Debug Info
+    #define MIDI_SEND_BASELINE_CURRENT_AVERAGE       121 //Debug Info
+    #define MIDI_SEND_MAX_BASELINE                   122 //Debug Info
+    
     #define MIDI_SEND_DEBUG                  127 //Sends debug info
 
 
@@ -439,7 +444,7 @@ From 0 to 15 button actions MIDI Channel
                                                      // Each custom fingering takes 4 byte: Midi note, fingeringSelectr and fingering mask (16bit)
                                                      // Ends at 919
 
-#define EEPROM_HALF_HOLE_CALIBRATION            960  //Base address for half hole calibration for 8 holes * 4 bytes (lower/upper)
+#define EEPROM_HALF_HOLE_ENABLED                960  //Base address for half hole activation for 8 holes 0/1
 
 #define EEPROM_SW_VERSION                      1011 //Base Address
 #define EEPROM_HW_VERSION                      1012 //Base Address

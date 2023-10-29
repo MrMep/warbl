@@ -2262,268 +2262,10 @@ const struct barbaro_explicit_entry barbaro_explicit[128] PROGMEM = {
 {60} //01111111 C
 
 };
-// const struct barbaro_explicit_entry barbaro_explicit[256] PROGMEM = {
-// {73}, //00000000 C#
-// {73}, //00000001 C#
-// {73}, //00000010 C#
-// {73}, //00000011 C#
-// {73}, //00000100 C#
-// {73}, //00000101 C#
-// {73}, //00000110 C#
-// {73}, //00000111 C#
-// {73}, //00001000 C#
-// {73}, //00001001 C#
-// {73}, //00001010 C#
-// {73}, //00001011 C#
-// {73}, //00001100 C#
-// {73}, //00001101 C#
-// {73}, //00001110 C#
-// {73}, //00001111 C#
-// {73}, //00010000 C#
-// {73}, //00010001 C#
-// {73}, //00010010 C#
-// {73}, //00010011 C#
-// {73}, //00010100 C#
-// {73}, //00010101 C#
-// {73}, //00010110 C#
-// {73}, //00010111 C#
-// {73}, //00011000 C#
-// {73}, //00011001 C#
-// {73}, //00011010 C#
-// {73}, //00011011 C#
-// {73}, //00011100 C#
-// {73}, //00011101 C#
-// {73}, //00011110 C#
-// {73}, //00011111 C#
-// {72}, //00100000 C
-// {72}, //00100001 C
-// {72}, //00100010 C
-// {72}, //00100011 C
-// {72}, //00100100 C
-// {72}, //00100101 C
-// {72}, //00100110 C
-// {72}, //00100111 C
-// {72}, //00101000 C
-// {72}, //00101001 C
-// {72}, //00101010 C
-// {72}, //00101011 C
-// {72}, //00101100 C
-// {72}, //00101101 C
-// {72}, //00101110 C
-// {72}, //00101111 C
-// {71}, //00110000 B
-// {71}, //00110001 B
-// {71}, //00110010 B
-// {71}, //00110011 B
-// {71}, //00110100 B
-// {71}, //00110101 B
-// {75}, //00110110 Eb
-// {76}, //00110111 E
-// {0},  //00111000 -
-// {0},  //00111001 -
-// {0}, //00111010 E
-// {77}, //00111011 F
-// {64}, //00111100 E for trills
-// {0},  //00111101 -
-// {63}, //00111110 Eb
-// {78}, //00111111 F#
-// {71}, //01000000 B
-// {71}, //01000001 B
-// {71}, //01000010 B
-// {71}, //01000011 B
-// {71}, //01000100 B
-// {71}, //01000101 B
-// {71}, //01000110 B
-// {71}, //01000111 B
-// {71}, //01001000 B
-// {71}, //01001001 B
-// {71}, //01001010 B
-// {71}, //01001011 B
-// {71}, //01001100 B
-// {71}, //01001101 B
-// {71}, //01001110 B
-// {71}, //01001111 B
-// {70}, //01010000 Bb
-// {70}, //01010001 Bb
-// {70}, //01010010 Bb
-// {70}, //01010011 Bb
-// {70}, //01010100 Bb
-// {70}, //01010101 Bb
-// {70}, //01010110 Bb
-// {70}, //01010111 Bb
-// {70}, //01011000 Bb
-// {70}, //01011001 Bb
-// {70}, //01011010 Bb
-// {74}, //01011011 D
-// {70}, //01011100 Bb
-// {70}, //01011101 Bb
-// {70}, //01011110 Bb
-// {73}, //01011111 C#
-// {69}, //01100000 A
-// {69}, //01100001 A
-// {69}, //01100010 A
-// {69}, //01100011 A
-// {69}, //01100100 A
-// {69}, //01100101 A
-// {69}, //01100110 A
-// {69}, //01100111 A
-// {68}, //01101000 G#
-// {68}, //01101001 G#
-// {68}, //01101010 G#
-// {68}, //01101011 G#
-// {68}, //01101100 G#
-// {68}, //01101101 G#
-// {68}, //01101110 G#
-// {68}, //01101111 G#
-// {67}, //01110000 G
-// {67}, //01110001 G
-// {67}, //01110010 G
-// {67}, //01110011 G
-// {66}, //01110100 F#
-// {66}, //01110101 F#
-// {66}, //01110110 F#
-// {66}, //01110111 F#
-// {65}, //01111000 F
-// {65}, //01111001 F
-// {65}, //01111010 F
-// {65}, //01111011 F
-// {64}, //01111100 E
-// {61}, //01111101 C#
-// {62}, //01111110 D
-// {60}, //01111111 C
-// {85}, //10000000 C#
-// {85}, //10000001 C#
-// {85}, //10000010 C#
-// {85}, //10000011 C#
-// {85}, //10000100 C#
-// {85}, //10000101 C#
-// {85}, //10000110 C#
-// {85}, //10000111 C#
-// {85}, //10001000 C#
-// {85}, //10001001 C#
-// {85}, //10001010 C#
-// {85}, //10001011 C#
-// {85}, //10001100 C#
-// {85}, //10001101 C#
-// {85}, //10001110 C#
-// {85}, //10001111 C#
-// {85}, //10010000 C#
-// {85}, //10010001 C#
-// {85}, //10010010 C#
-// {85}, //10010011 C#
-// {85}, //10010100 C#
-// {85}, //10010101 C#
-// {85}, //10010110 C#
-// {85}, //10010111 C#
-// {85}, //10011000 C#
-// {85}, //10011001 C#
-// {85}, //10011010 C#
-// {85}, //10011011 C#
-// {85}, //10011100 C#
-// {85}, //10011101 C#
-// {85}, //10011110 C#
-// {85}, //10011111 C#
-// {84}, //10100000 C
-// {84}, //10100001 C
-// {84}, //10100010 C
-// {84}, //10100011 C
-// {84}, //10100100 C
-// {84}, //10100101 C
-// {84}, //10100110 C
-// {84}, //10100111 C
-// {84}, //10101000 C
-// {84}, //10101001 C
-// {84}, //10101010 C
-// {84}, //10101011 C
-// {84}, //10101100 C
-// {84}, //10101101 C
-// {84}, //10101110 C
-// {84}, //10101111 C
-// {83}, //10110000 B
-// {83}, //10110001 B
-// {83}, //10110010 B
-// {83}, //10110011 B
-// {83}, //10110100 B
-// {83}, //10110101 B
-// {87}, //10110110 Eb
-// {88}, //10110111 E
-// {0}, //10111000 -
-// {0}, //10111001 -
-// {0}, //10111010 E
-// {89}, //10111011 F
-// {76}, //10111100  E for trills
-// {0},  //10111101 -
-// {75}, //10111110 Eb
-// {90}, //10111111 F#
-// {83}, //11000000 B
-// {83}, //11000001 B
-// {83}, //11000010 B
-// {83}, //11000011 B
-// {83}, //11000100 B
-// {83}, //11000101 B
-// {83}, //11000110 B
-// {83}, //11000111 B
-// {83}, //11001000 B
-// {83}, //11001001 B
-// {83}, //11001010 B
-// {83}, //11001011 B
-// {83}, //11001100 B
-// {83}, //11001101 B
-// {83}, //11001110 B
-// {83}, //11001111 B
-// {82}, //11010000 Bb
-// {82}, //11010001 Bb
-// {82}, //11010010 Bb
-// {82}, //11010011 Bb
-// {82}, //11010100 Bb
-// {82}, //11010101 Bb
-// {82}, //11010110 Bb
-// {82}, //11010111 Bb
-// {82}, //11011000 Bb
-// {82}, //11011001 Bb
-// {82}, //11011010 Bb
-// {86}, //11011011 D
-// {82}, //11011100 Bb
-// {82}, //11011101 Bb
-// {82}, //11011110 Bb
-// {85}, //11011111 C#
-// {81}, //11100000 A
-// {81}, //11100001 A
-// {81}, //11100010 A
-// {81}, //11100011 A
-// {81}, //11100100 A
-// {81}, //11100101 A
-// {81}, //11100110 A
-// {81}, //11100111 A
-// {80}, //11101000 G#
-// {80}, //11101001 G#
-// {80}, //11101010 G#
-// {80}, //11101011 G#
-// {80}, //11101100 G#
-// {80}, //11101101 G#
-// {80}, //11101110 G#
-// {80}, //11101111 G#
-// {79}, //11110000 G
-// {79}, //11110001 G
-// {79}, //11110010 G
-// {79}, //11110011 G
-// {78}, //11110100 F#
-// {78}, //11110101 F#
-// {78}, //11110110 F#
-// {78}, //11110111 F#
-// {77}, //11111000 F
-// {77}, //11111001 F
-// {77}, //11111010 F
-// {77}, //11111011 F
-// {76}, //11111100 E
-// {73}, //11111101 C#
-// {74}, //11111110 D
-// {72}, //11111111 C
-// };
 
 
 //Return a MIDI note number (0-127) based on the current fingering. The analog readings of the 9 hole sensors are also stored in the tempToneholeRead variable for later use.
-int get_note(unsigned int fingerPattern) {
+int get_note(unsigned int fingerPattern, bool sendPattern) {
 
     int ret = -1;  //default for unknown fingering
 
@@ -2547,7 +2289,7 @@ int get_note(unsigned int fingerPattern) {
                 if ((0b011111110 & fingerPattern) >> 2 == 0b010011) {
                     ret = 75;
                 }
-                if ((0b011111110 & fingerPattern) >> 2 == 0b110011) {
+                else if ((0b011111110 & fingerPattern) >> 2 == 0b110011) {
                     ret = 76;
                 }
                 if (bitRead(fingerPattern, 1) == 1) {
@@ -2562,11 +2304,11 @@ int get_note(unsigned int fingerPattern) {
                 if ((0b011111110 & fingerPattern) >> 1 == 0b1111111) {
                     ret = 61;  //
                 }
-                if ((0b011111110 & fingerPattern) >> 1 == 0b0100000) {
+                else if ((0b011111110 & fingerPattern) >> 1 == 0b0100000) {
                     ret = 72;  //
                 }
             }
-            return ret;
+            break;
 
 
         case kModeUilleann:  //these two are the same, with the exception of cancelling accidentals.
@@ -2591,11 +2333,11 @@ int get_note(unsigned int fingerPattern) {
                     return 71;
                 }
 
-                if (tempCovered == 0b1101000 || tempCovered == 0b1101010) {
+                else if (tempCovered == 0b1101000 || tempCovered == 0b1101010) {
                     return 69;
                 }
             }
-            return ret;
+            break;
 
 
 
@@ -2607,7 +2349,7 @@ int get_note(unsigned int fingerPattern) {
             }
             tempCovered = (0b011111110 & fingerPattern) >> 1;  //ignore thumb hole and bell sensor
             ret = pgm_read_byte(&GHB_explicit[tempCovered].midi_note);
-            return ret;
+            break;
 
 
 
@@ -2618,8 +2360,7 @@ int get_note(unsigned int fingerPattern) {
                 if (fingerPattern >> 1 == 0b00110000) {  //special fingering for D#
                     return 77;
                 } else {
-                    return 76  //play D
-                      ;
+                    return 76;  //play D
                 }
             }
             if (fingerPattern >> 1 == 0b01011010) return 88;  //special fingering for high D
@@ -2631,7 +2372,7 @@ int get_note(unsigned int fingerPattern) {
             if ((fingerPattern & 0b100000000) == 0 && (fingerPattern >> 1) != 0b00101100) {
                 ret = ret + 12;
             }
-            return ret;
+            break;
 
 
 
@@ -2659,7 +2400,7 @@ int get_note(unsigned int fingerPattern) {
             if (ret == 0) {
                 ret = -1;
             }
-            return ret;
+            break;
 
 
 
@@ -2670,7 +2411,7 @@ int get_note(unsigned int fingerPattern) {
             if (ret == 0) {
                 ret = -1;
             }
-            return ret;
+            break;
 
 
 
@@ -2678,7 +2419,7 @@ int get_note(unsigned int fingerPattern) {
 
             tempCovered = (0b011111110 & fingerPattern) >> 1;  //ignore thumb hole and bell sensor
             ret = pgm_read_byte(&naf_explicit[tempCovered].midi_note);
-            return ret;
+            break;
 
 
 
@@ -2687,7 +2428,7 @@ int get_note(unsigned int fingerPattern) {
             tempCovered = (0b011111110 & fingerPattern) >> 1;  //ignore thumb hole and bell sensor
             ret = pgm_read_byte(&evi_explicit[tempCovered].midi_note);
             ret = ret + 4;  //transpose up to D so that key selection in the Configuration Tool works properly
-            return ret;
+            break;
 
 
 
@@ -2699,7 +2440,7 @@ int get_note(unsigned int fingerPattern) {
             }
             tempCovered = (0b011111110 & fingerPattern) >> 1;  //ignore thumb hole and bell sensor
             ret = pgm_read_byte(&kaval_explicit[tempCovered].midi_note);
-            return ret;
+            break;
 
 
 
@@ -2720,7 +2461,7 @@ int get_note(unsigned int fingerPattern) {
             //otherwise check the chart.
             tempCovered = (0b001111110 & fingerPattern) >> 1;  //ignore thumb hole, L1 hole, and bell sensor
             ret = pgm_read_byte(&xiao_explicit[tempCovered].midi_note);
-            return ret;
+            break;
 
 
 
@@ -2735,7 +2476,7 @@ int get_note(unsigned int fingerPattern) {
             if ((fingerPattern & 0b100000000) != 0 && ret > 49) {  //if the thumb hole is covered, raise the octave
                 ret = ret + 12;
             }
-            return ret;
+            break;
 
 
 
@@ -2747,7 +2488,7 @@ int get_note(unsigned int fingerPattern) {
             if ((fingerPattern & 0b100000000) != 0 && ret > 49) {  //if the thumb hole is covered, raise the octave
                 ret = ret + 12;
             }
-            return ret;
+            break;
 
 
 
@@ -2763,7 +2504,7 @@ int get_note(unsigned int fingerPattern) {
                 tempCovered = high | middle;
                 tempCovered = tempCovered | low;
                 ret = pgm_read_byte(&shakuhachi_explicit[tempCovered].midi_note);
-                return ret;
+                break;
             }
 
 
@@ -2777,16 +2518,14 @@ int get_note(unsigned int fingerPattern) {
             if ((fingerPattern & 0b111111110) >> 1 == 0b11111111) {  //play D if all holes are covered
                 return 60;                                           //play D
             }
-            if ((fingerPattern & 0b100000000) == 0) {  //if the thumb hole is open, play high E
+            else if ((fingerPattern & 0b100000000) == 0) {  //if the thumb hole is open, play high E
                 return 74;                             //play E
             }
             ret = pgm_read_byte(&sackpipa_explicit[tempCovered].midi_note);
-            if (fingeringSelector == kModeSackpipaMinor) {  //flatten the C# if we're in "minor" mode
-                if (ret == 71) {
-                    return 70;  //play C natural instead
-                }
+            if (fingeringSelector == kModeSackpipaMinor && (ret == 71) ) {  //flatten the C# if we're in "minor" mode
+                return 70;  //play C natural instead
             }
-            return ret;
+            break;
 
 
 
@@ -2801,7 +2540,7 @@ int get_note(unsigned int fingerPattern) {
             }
             tempCovered = (0b011111110 & fingerPattern) >> 1;  //ignore thumb hole and bell sensor
             ret = pgm_read_byte(&medievalPipes_explicit[tempCovered].midi_note);
-            return ret;
+            break;
 
 
 
@@ -2837,7 +2576,7 @@ int get_note(unsigned int fingerPattern) {
             }
             //END GLB
 
-            return ret;
+            break;
 
 
 
@@ -2849,64 +2588,80 @@ int get_note(unsigned int fingerPattern) {
             tempCovered = (0b011111100 & fingerPattern) >> 2;  //ignore thumb hole, R4 hole, and bell sensor
             ret = pgm_read_byte(&bansuri_explicit[tempCovered].midi_note);
 
-
             if ((fingerPattern & 0b111111110) >> 1 == 0b11111111) {  //play F# if all holes are covered
                 ret = 61;
             }
+            break;
 
 
-            return ret;
+        // case kModeCustom:
+        //     tempCovered = (0b011111110 & fingerPattern) >> 1;      //ignore thumb hole and bell sensor for now
+        //     uint8_t leftmost = findleftmostunsetbit(tempCovered);  //here we find the index of the leftmost uncovered hole, which will be used to determine the note from the chart.
+
+        //     for (uint8_t i = 0; i < 6; i++) {  //look only at leftmost uncovered hole for lower several notes
+        //         if (leftmost == i) {
+        //             customScalePosition = 47 - i;
+        //         }
+        //     }
+
+        //     //several ugly special cases
+        //     if (tempCovered >> 3 == 0b0111) {
+        //         customScalePosition = 39;
+        //     }
+
+        //     else if (tempCovered >> 3 == 0b0110) {
+        //         customScalePosition = 41;
+        //     }
+
+        //     else if (tempCovered >> 5 == 0b00) {
+        //         customScalePosition = 40;
+        //     }
+
+        //     if (tempCovered == 0b1111111) {
+        //         if (!switches[R4_FLATTEN]) {  //all holes covered but not R4 flatten
+        //             customScalePosition = 48;
+        //         } else {
+        //             customScalePosition = 47;
+        //         }
+        //     }
 
 
+        //     if (fingerPattern >> 8 == 0 && !switches[THUMB_AND_OVERBLOW] && breathMode != kPressureThumb && ED[38] != 0) {  //thumb hole is open and we're not using it for register
+        //         customScalePosition = 38;
+        //     }
 
+        //     ret = ED[customScalePosition];
 
-        case kModeCustom:
-            tempCovered = (0b011111110 & fingerPattern) >> 1;      //ignore thumb hole and bell sensor for now
-            uint8_t leftmost = findleftmostunsetbit(tempCovered);  //here we find the index of the leftmost uncovered hole, which will be used to determine the note from the chart.
+        //     if (bitRead(tempCovered, 0) == 1 && switches[R4_FLATTEN] && ret != 0) {  //flatten one semitone if using R4 for that purpose
+        //         ret = ret - 1;
+        //     }
 
-            for (uint8_t i = 0; i < 6; i++) {  //look only at leftmost uncovered hole for lower several notes
-                if (leftmost == i) {
-                    customScalePosition = 47 - i;
-                }
-            }
-
-            //several ugly special cases
-            if (tempCovered >> 3 == 0b0111) {
-                customScalePosition = 39;
-            }
-
-            else if (tempCovered >> 3 == 0b0110) {
-                customScalePosition = 41;
-            }
-
-            else if (tempCovered >> 5 == 0b00) {
-                customScalePosition = 40;
-            }
-
-            if (tempCovered == 0b1111111) {
-                if (!switches[R4_FLATTEN]) {  //all holes covered but not R4 flatten
-                    customScalePosition = 48;
-                } else {
-                    customScalePosition = 47;
-                }
-            }
-
-
-            if (fingerPattern >> 8 == 0 && !switches[THUMB_AND_OVERBLOW] && breathMode != kPressureThumb && ED[38] != 0) {  //thumb hole is open and we're not using it for register
-                customScalePosition = 38;
-            }
-
-            ret = ED[customScalePosition];
-
-            if (bitRead(tempCovered, 0) == 1 && switches[R4_FLATTEN] && ret != 0) {  //flatten one semitone if using R4 for that purpose
-                ret = ret - 1;
-            }
-
-            return ret;
+        //     break;
 
 
 
         default:
-            return ret;
+            break;
     }
+
+    //20231028 GLB - MAnages customFingering
+    int8_t customNewNote = getCustomFingeringNote(fingerPattern);
+
+    if (toneholeHalfCovered[THUMB_HOLE]) {  //Half left thumb
+        if (customNewNote < 0x7f) customNewNote += 12;
+        if (ret >= 0) ret +=12;
+    }
+
+    if (sendPattern) {send_fingers(ret, customNewNote); } //send new fingering pattern to the Configuration Tool
+
+    //Overrides default note
+    if (customNewNote < 0x7f && customNewNote != ret) {
+        if (customNewNote == 0) { //Silent position
+            ret = -1;
+        } else {
+            ret = customNewNote;
+        }
+    }
+
+    return ret;
 }

@@ -41,9 +41,6 @@ byte currentPreset = 0;         // The current currentPreset (instrument), from 
 byte defaultPreset = 0;  // The default currentPreset, from 0-2.
 int8_t noteShift = 0;                        
 
-/* Moved to settings
-
-*/
 byte pitchBendMode = kPitchBendSlideVibrato;  //0 means slide and vibrato are on. 1 means only vibrato is on. 2 is all pitchbend off, 3 is legato slide/vibrato.
 byte senseDistance = 10;                      //the sensor value above which the finger is sensed for bending notes. Needs to be higher than the baseline sensor readings, otherwise vibrato will be turned on erroneously.
 byte breathMode = kPressureBreath;            //the desired presure sensor behavior: single register, overblow, thumb register control, bell register control.
@@ -85,9 +82,10 @@ byte switches[kSWITCHESnVariables] =  //[MODE_NUMBER][kSWITCHESnVariables] =  //
         1,  // force maximum velocity (127)
         0,  // send pitchbend immediately before Note On (recommnded for MPE)
         1,  // send legato (Note On message before Note Off for previous note)
-        0,  //override pitch expression pressure range
-        0,  //use both thumb and overblowing for register control with custom fingering chart
-        0   //use R4 finger to flatten any note one semitone with custom fingering chart
+        0
+        // ,  //override pitch expression pressure range
+        // 0,  //use both thumb and overblowing for register control with custom fingering chart
+        // 0   //use R4 finger to flatten any note one semitone with custom fingering chart
       };
       /*
       ,
@@ -280,6 +278,11 @@ int toneholeBaseline[TONEHOLE_SENSOR_NUMBER] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };   
 volatile int tempToneholeRead[TONEHOLE_SENSOR_NUMBER] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };   //temporary storage for tonehole sensor readings with IR LED on, written during the timer ISR
 int toneholeRead[TONEHOLE_SENSOR_NUMBER] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };                //storage for tonehole sensor readings, transferred from the above volatile variable
 int toneholeReadForPB[TONEHOLE_SENSOR_NUMBER] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };           //storage for tonehole sensor readings compensated with baseline
+
+//20231028 GLB
+int toneholeLastRead[TONEHOLE_SENSOR_NUMBER] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 }; //Last read for confirmed note for the config Tool and debounceFingers
+
+
 volatile int tempToneholeReadA[TONEHOLE_SENSOR_NUMBER] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };  //temporary storage for ambient light tonehole sensor readings, written during the timer ISR
 bool toneholesReady = false;                                       // Indicates when a fresh reading of the tone holes is available
 bool toneholesReadyInterupt = false;
@@ -287,6 +290,9 @@ unsigned int holeCovered = 0;      //whether each hole is covered-- each bit cor
 uint8_t tempCovered = 0;           //used when masking holeCovered to ignore certain holes depending on the fingering pattern.
 bool fingersChanged = 1;           //keeps track of when the fingering pattern has changed.
 unsigned int prevHoleCovered = 1;  //so we can track changes.
+//20231028 GLB
+unsigned int lastHoleCovered = 1;  //original holeCovered at the start of debouncing
+
 volatile int tempNewNote = 0;
 byte prevNote;
 byte newNote = -1;             //the next note to be played, based on the fingering chart (does not include transposition).
@@ -294,6 +300,14 @@ byte notePlaying;              //the actual MIDI note being played, which we rem
 volatile bool firstTime = 1;   // we have the LEDs off ~50% of the time. This bool keeps track of whether each LED is off or on at the end of each timer cycle
 volatile byte timerCycle = 0;  //the number of times we've entered the timer ISR with the new sensors.
 byte transientFilter = 1;      // small delay for filtering out transient notes
+
+//20231026 GLB baseline Auto calibration
+unsigned long baselineTimer = 0;                                                                //to keep track of the last time we sent a baseline message
+int toneholeBaselineCurrent[TONEHOLE_SENSOR_NUMBER] = { 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024 };            //baseline (uncovered) hole tonehole sensor readings
+float baselineAverage = 0;
+float baselineCurrentAverage = 0;
+float baselinePreviousAverage = 0;
+int maxBaseline = 10;
 
 //pitchbend variables
 unsigned long pitchBendTimer = 0;                                             //to keep track of the last time we sent a pitchbend message
@@ -400,7 +414,7 @@ void setup() {
     if (EEPROM.read(EEPROM_SW_CUSTOM_BUILD) != BUILD_VERSION) {
         EEPROM.update(EEPROM_SW_CUSTOM_BUILD, BUILD_VERSION);
         manageCustomFingerings(customFingeringOperations::ResetAll, 0, 0);//Zeroes the EEPROM section
-        resetHalfHoleCalibration(); //Zeroes the EEPROM section
+        fingering.halfHole.correction = 0;
     }
     
     if (EEPROM.read(EEPROM_SW_VERSION) < 23) {
@@ -468,35 +482,53 @@ void loop() {
 
     get_fingers();  //find which holes are covered
 
-    for (byte i = 0; i < TONEHOLE_SENSOR_NUMBER; i++) {
-        if (calibration == 0) {  //if we're not calibrating, compensate for baseline sensor offset (the stored sensor reading with the hole completely uncovered)
+    unsigned long nowtime = millis();  //get the current time for the timers used below
+
+    if (calibration == 0) {  //if we're not calibrating, compensate for baseline sensor offset (the stored sensor reading with the hole completely uncovered)
+        for (byte i = 0; i < TONEHOLE_SENSOR_NUMBER; i++) {
             toneholeReadForPB[i] = toneholeRead[i] - toneholeBaseline[i];
+            if (toneholeReadForPB[i] < 0) {  //in rare cases the adjusted readings can end up being negative.
+                toneholeReadForPB[i] = 0;
+            }
+
+            if (toneholeBaselineCurrent[i] > toneholeRead[i]) {  //baseline calibration
+                toneholeBaselineCurrent[i] = toneholeRead[i];
+            }
         }
-        if (toneholeReadForPB[i] < 0) {  //in rare cases the adjusted readings can end up being negative.
-            toneholeReadForPB[i] = 0;
+
+        if ((nowtime - baselineTimer) >= 1000) {  //check baseline every so often
+            baselineTimer = nowtime;
+            byte counter = 0;
+            baselineCurrentAverage = 0;
+            for (byte i = 0; i<TONEHOLE_SENSOR_NUMBER; i++) {
+
+                if (toneholeBaselineCurrent[i] > 0 && toneholeBaselineCurrent[i] <= maxBaseline)  { //LPF
+                    baselineCurrentAverage += toneholeBaselineCurrent[i];
+                    counter++;
+                }
+                toneholeBaselineCurrent[i] = 1024; //Resets for next run
+            }
+            if (counter > 0 ) {
+                baselineCurrentAverage = (baselineCurrentAverage / (float) counter )*10.0;
+                if (baselinePreviousAverage != baselineCurrentAverage) {
+                    baselinePreviousAverage = baselineCurrentAverage;
+                    fingering.halfHole.correction = (baselineCurrentAverage - baselineAverage)/10.0;
+                    if (communicationMode) {
+                        sendIntValue(MIDI_SEND_BASELINE_CURRENT_AVERAGE, baselineCurrentAverage - baselineAverage);
+                    }
+                }
+            }
         }
     }
 
-
-    unsigned long nowtime = millis();  //get the current time for the timers used below
-
-
     if (debounceFingerHoles()) {
         fingersChanged = 1;
-
-
-        tempNewNote = get_note(holeCovered);  //get the next MIDI note from the fingering pattern if it has changed
-        int8_t customNewNote = getCustomFingeringNote(holeCovered);
-        send_fingers(tempNewNote, customNewNote);  //send new fingering pattern to the Configuration Tool
-
-        //Overrides default note
-        if (customNewNote < 0x7f && customNewNote != tempNewNote) {
-            if (customNewNote == 0) { //Silent position
-                tempNewNote = -1;
-            } else {
-                tempNewNote = customNewNote;
-            }
+        lastHoleCovered = holeCovered;
+        for (byte i = 0; i < TONEHOLE_SENSOR_NUMBER; i++) {
+            toneholeLastRead[i] = toneholeRead[i];
         }
+
+        tempNewNote = get_note(holeCovered, true);  //get the next MIDI note from the fingering pattern if it has changed
 
         //20230924 GLB - Didn't manage return = -1 correctly
         if (tempNewNote != -1) {

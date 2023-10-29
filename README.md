@@ -71,16 +71,9 @@ This new section in the Configuration tool will show you some real time informat
 - When the diatonic harmonizer is selected, it will color code the notes on the piano keyboard to indicate whether they are diatonic or chromatic in the current context. This could be useful for learning purposes also!
 
 
-## New Fingering: Barbaro's EWI
-
-I have added a new fingering pattern of my own invention that allows for a two and a half octaves full chromatic range.
-
-You can download [the chart here](readme_files/Barbaro_s_EWI_Fingering%20Chart.pdf).
-
-
 ## Half-hole Detection
 
-Experimentally ~~, and only for the Barbaro's EWI fingering scheme,~~ I have activated an half-hole detection function.
+Experimentally, I have activated an half-hole detection function.
 
 This function is active on three holes only: thumb, R4 and R3.
 
@@ -89,19 +82,30 @@ This function is active on three holes only: thumb, R4 and R3.
 - Half thumb hole will raise all pitches by one octave, effectively adding a third register to the instrument.
 
 ### Half-hole Calibration
-Half hole detection auto-calibrates whenever you auto-calibrate the sensors.
+Half hole detection auto-calibrates continously based on auto-calibration of the sensors and the current ambient light conditions.
 
-In the "Calibration" section of the Configuration tools there is a new "Half Hole Calibration" button that shows the following section:
+In the "Calibration" section of the Configuration tools there is a new "Half Hole Config" button that shows the following section:
 
-![Half Hole Calibration](readme_files/half_hole_calib.png)
+![Half Hole Configuration](readme_files/half_hole_calib.png)
 
-Basically, you can select the exact interval for each hole to be detected as half-open, while a real-time vertical bar shows you where the current value is.
+Basically, you can  de-activate the half-hole detection for the selected tone hole.
 
-You can also de-activate the half-hole detection for the selected tone hole.
+You can also observe the exact interval for each hole to be detected as half-open, while a real-time vertical bar shows you where the current value is.
 
-There is a configurable small delay in the detection to make it more accurate. You can change its duration with the "Half Hole Transient" control.
+There is a configurable small delay in finger detection to make it more accurate. You can change its duration with the "Dynamic Transient Filter" control. This delay is applied only when a few gestures are detected:
+- Left thumb is moving
+- The interval between notes is an octave or more
+- 4 or more fingers are changing positions
+This additional dynamic filter should avoid twiches and glitches and is added to the normal Transient filter.
 
-The detection depends upon the hole calibration value.
+
+
+
+## New Fingering: Barbaro's EWI
+
+I have added a new fingering pattern of my own invention that allows for a two and a half octaves full chromatic range.
+
+You can download [the chart here](readme_files/Barbaro_s_EWI_Fingering%20Chart.pdf).
 
 
 

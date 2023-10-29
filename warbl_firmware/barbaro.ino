@@ -18,7 +18,7 @@
 /*
     Mods by Gianluca Barbaro - 2023
 
-    - Added Half hole management for left thumb and R3-R4, with calibration in the config tool.
+    - Added Half hole management for left thumb and R3-R4, with configuration in the config tool.
     - Added General Tranposer (substitutes previous semitone and octave actions)
     - Added a Fixed note action (to keep the current note always on - not a drone, it switches off with the main note)
     - Added a 3-voice harmonizer where you can select the interval and a reference scale. If you activate the harmonizer while playing a note,
@@ -42,7 +42,6 @@
 
 //Globals
 bool toneholeHalfCovered[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };         //storage for half-covered tonehole
-int toneholeLastRead[TONEHOLE_SENSOR_NUMBER] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 }; //Last read before modification from half hole detection, for the config Tool
 
 
 const uint16_t harmonizer_scales [S_SCALE_NUMBER] = {
@@ -68,18 +67,13 @@ void rt_init() {
     // bytes[RT_BYTE_BLINK_NUMBER] = 1;
     fingering.halfHole.currentHoleSettings = 99; //disabled
 
-    fingering.halfHole.halfHoleBuffer = HALF_HOLE_BUFFER_SIZE;
+    resetHalfHoleConfig();
 
     //Harmonizer
     for (byte i = 0; i <HARMONIZER_VOICES; i++) {
         harmonizer.harmonizers[i] = {0,-1,-1,-1, harmonizer_scales[S_MAJOR],0,7 };
     }
 
-}
-
-void sendAsPitchBend(int value) {
-    value += 8192;
-    sendUSBMIDI(PITCH_BEND, mainMidiChannel,  lowByte(value << 1) >> 1, highByte(value << 1)) ;
 }
 
 //EEPROM Utils for ints
@@ -89,78 +83,55 @@ int readIntFromEEPROM(uint16_t address) {
 void writeIntToEEPROM(uint16_t address, int value) {
     EEPROM.update(address, highByte(value));
     EEPROM.update(address + 1, lowByte(value));
-}
+} 
 
+//Util to send int values to the config tool between -8192 and + 8192
 void sendIntValue(byte valueIndex, int value) {
     if (communicationMode) {
+        value += 8192;
         sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_13, valueIndex);
-        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_14, value >> 7);
-        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_15, lowByte(value));
+        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_14, (value >> 7) &0x7F);
+        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_15, lowByte(value) & 0x7F);
     }
 }
 
 //Resets saved Half Hole Calibration values
-void resetHalfHoleCalibration() {
+void resetHalfHoleConfig() {
+    fingering.halfHole.buffer = HALF_HOLE_BUFFER_SIZE;
     for (byte i = 0; i < TONEHOLE_SENSOR_NUMBER; i++) {
-        for (byte j = 0; j<4; j++) {
-            EEPROM.update(EEPROM_HALF_HOLE_CALIBRATION + i*4 + j, 0xFF);
-        }
+        fingering.halfHole.enabled[i] = false;
     }
+    fingering.halfHole.enabled[THUMB_HOLE] = true;
+    fingering.halfHole.enabled[R3_HOLE] = true;
+    fingering.halfHole.enabled[R4_HOLE] = true;
+    
 }
 
-
-//Save all Half Hole Calibration values
-void saveHalfHoleCalibration() {
+//Loads Half Hole Detection parameters
+void  loadHalfHoleConfig() {
+    fingering.halfHole.buffer = EEPROM.read(EEPROM_HALF_HOLE_BUFFER_SIZE);
     for (byte i = 0; i < TONEHOLE_SENSOR_NUMBER; i++) {
-        saveHalfHoleLowerLimit(i);
-        saveHalfHoleUpperLimit(i);
+        fingering.halfHole.enabled[i] = EEPROM.read(EEPROM_HALF_HOLE_ENABLED + i);
     }
 }
-//Loads from EEPROM
-void loadHalfHoleCalibration() {
-
+//Saves Half Hole Detection parameters
+void  saveHalfHoleConfig() {
+    EEPROM.update(EEPROM_HALF_HOLE_BUFFER_SIZE, fingering.halfHole.buffer);
     for (byte i = 0; i < TONEHOLE_SENSOR_NUMBER; i++) {
-
-        //null calibration == 0xFFFF == Disabled
-        //Read upper limit
-        fingering.halfHole.lower_limit[i] = readIntFromEEPROM(EEPROM_HALF_HOLE_CALIBRATION + i*4);
-        // if (fingering.halfHole.lower_limit[i] == 0xFFFF) { //null calibration
-        //     fingering.halfHole.lower_limit[i] = fingering.halfHole.upper_limit[i] + HALF_HOLE_LOWER_OFFSET;
-        //     // fingering.halfHole.lower_limit[i] =  senseDistance/2; //Default value
-        // }
-
-        fingering.halfHole.upper_limit[i] = readIntFromEEPROM(EEPROM_HALF_HOLE_CALIBRATION + i*4 +2);
-        // if (fingering.halfHole.upper_limit[i] == 0xFFFF) { //null calibration
-        //     fingering.halfHole.upper_limit[i] = toneholeCovered[i] - HOLE_OPEN_OFFSET + HALF_HOLE_UPPER_OFFSET;
-        //     // fingering.halfHole.upper_limit[i] = toneholeCovered[i] - senseDistance/2; //Default value
-        // }
+        EEPROM.update(EEPROM_HALF_HOLE_ENABLED + i, fingering.halfHole.enabled[i]);
     }
 }
 
-void saveHalfHoleLowerLimit(byte hole) {
-    if (hole < TONEHOLE_SENSOR_NUMBER) {
-        writeIntToEEPROM(EEPROM_HALF_HOLE_CALIBRATION + hole*4, fingering.halfHole.lower_limit[hole]);
+//Always call UpperBound first, to calculate correction
+uint16_t getHalfHoleLowerBound(byte hole) {
+    return getHalfHoleUpperBound(hole) + HALF_HOLE_LOWER_OFFSET;
+}
 
+uint16_t getHalfHoleUpperBound(byte hole) {
+    if (!fingering.halfHole.enabled[hole]) {
+        return 1024;
     }
-}
-
-void saveHalfHoleUpperLimit(byte hole) {
-    if (hole < TONEHOLE_SENSOR_NUMBER) {
-        writeIntToEEPROM(EEPROM_HALF_HOLE_CALIBRATION + hole*4 + 2, fingering.halfHole.upper_limit[hole]);
-
-    }
-}
-
-
-void calibrateHalfHoleDetection() {
-        for (byte i = 0; i < TONEHOLE_SENSOR_NUMBER; i++) {
-            fingering.halfHole.upper_limit[i] = toneholeCovered[i] - HOLE_OPEN_OFFSET + HALF_HOLE_UPPER_OFFSET;
-            fingering.halfHole.lower_limit[i] = fingering.halfHole.upper_limit[i] + HALF_HOLE_LOWER_OFFSET;
-        }
-}
-
-void sendHoleCovered(uint16_t holes) {
-    sendIntValue(MIDI_SEND_HOLE_COVERED, holes);
+    return toneholeCovered[hole] - HOLE_OPEN_OFFSET + HALF_HOLE_UPPER_OFFSET + fingering.halfHole.correction*(float)HALF_HOLE_UPPER_OFFSET;
 }
 
 //Sends the calculated limit and other paramenters for Half hole detection
@@ -172,12 +143,11 @@ void sendHalfHoleParams( int hole) {
         sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_04, MIDI_SEND_HALFHOLE_CURRENT);
         sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_05, fingering.halfHole.currentHoleSettings);
 
+        //Sends current Hole upperLimit
+        sendIntValue(MIDI_SEND_HALFHOLE_MAX, getHalfHoleUpperBound(hole) );
 
         //Sends current Hole lowerLimit
-        sendIntValue(MIDI_SEND_HALFHOLE_MIN, fingering.halfHole.lower_limit[hole] );
-
-        //Sends current Hole upperLimit
-        sendIntValue(MIDI_SEND_HALFHOLE_MAX, fingering.halfHole.upper_limit[hole] );
+        sendIntValue(MIDI_SEND_HALFHOLE_MIN, getHalfHoleLowerBound(hole) );
 
         //Sends current Hole Read 
         sendIntValue(MIDI_SEND_TONE_READ_0 + hole, toneholeLastRead[hole]);
@@ -188,166 +158,45 @@ void sendHalfHoleParams( int hole) {
         //Sends current hole Calibration
         sendIntValue(MIDI_SEND_TONE_COVERED_0 + hole, toneholeCovered[hole]);
 
-
-        
     }
 }
 
 //returns if the selected hole is half covered
 bool isHalfHole(int hole) {
-    if (fingering.halfHole.upper_limit[hole] >=  0x3FFF ) return false; //disabled
-
-    return toneholeRead[hole] > fingering.halfHole.lower_limit[hole] && toneholeRead[hole] <  fingering.halfHole.upper_limit[hole];
-}
-//Returns true if the status of the thumb hole is clear, otherwise false
-bool debounceHalfHole(int hole) {
-
-    bool halfHoleNow =   isHalfHole(hole);
-
-    if (halfHoleNow != toneholeHalfCovered[hole] || fingering.halfHole.halfHoleSamples != 0) { //A change is detected or we are in detection
-
-        if (fingering.halfHole.halfHoleSamples == 0) { //Entering Half hole detection
-            fingering.halfHole.prevSampleValue = toneholeRead[hole];
-            fingering.halfHole.sampleDirection = 0;
-
-#if DEBUG_HALF_HOLE
-            sendUSBMIDI(CC, mainMidiChannel,  12, halfHoleNow);
-            sendAsPitchBend(toneholeRead[hole]);
-            if (!fingering.halfHole.debugSent) {
-                fingering.halfHole.debugSent = true;
-                sendAsPitchBend((senseDistance*2));
-                sendAsPitchBend(toneholeCovered[hole] -senseDistance/2 +20);
-            }
-#endif
-            ++fingering.halfHole.halfHoleSamples; //Entering detection mode
-            return false; //half hole still to be determined
-        } else { //Detection Phase
-
-            //Gesture Detection
-            if (toneholeRead[hole] == fingering.halfHole.prevSampleValue && fingering.halfHole.halfHoleSamples < fingering.halfHole.halfHoleBuffer ) { //no change, we skip detection
-                return false;
-            }
-
-            fingering.halfHole.sampleDirection += toneholeRead[hole] - fingering.halfHole.prevSampleValue;
-            fingering.halfHole.prevSampleValue = toneholeRead[hole];
-
-#if DEBUG_HALF_HOLE_DISAB
-                    sendUSBMIDI(CC, mainMidiChannel,  14, halfHoleNow) ;
-                    sendAsPitchBend(fingering.halfHole.halfHoleSamples);
-                    sendAsPitchBend(fingering.halfHole.sampleDirection);
-#endif
-
-            if (toneholeHalfCovered[hole]) { //Previously Half-Covered
-                //The value is increasing - going to covered - we can exit detection
-                //value is decreasing - going to open - we can exit detection
-                if (fingering.halfHole.sampleDirection > HALF_HOLE_DIRECTION_LIMIT || fingering.halfHole.sampleDirection < -HALF_HOLE_DIRECTION_LIMIT) { 
-#if DEBUG_HALF_HOLE
-                    sendUSBMIDI(CC, mainMidiChannel,  15, halfHoleNow) ;
-                    sendAsPitchBend(fingering.halfHole.halfHoleSamples);
-                    sendAsPitchBend(fingering.halfHole.sampleDirection);
-                    sendAsPitchBend(toneholeRead[hole]);
-
-#endif
-                    fingering.halfHole.halfHoleSamples = 0; //Exit half hole detection
-                    toneholeHalfCovered[hole] = false;
-                    goto end;
-                } //else we go on with detection
-            } else if (bitRead(holeCovered, hole)) { //Previously Covered
-                if (fingering.halfHole.sampleDirection > HALF_HOLE_DIRECTION_LIMIT) { //The value is increasing - still covered - we can exit detection
-#if DEBUG_HALF_HOLE
-                    sendUSBMIDI(CC, mainMidiChannel,  16, halfHoleNow) ;
-                    sendAsPitchBend(fingering.halfHole.halfHoleSamples);
-                    sendAsPitchBend(fingering.halfHole.sampleDirection);
-                    sendAsPitchBend(toneholeRead[hole]);
-
-#endif
-                    fingering.halfHole.halfHoleSamples = 0; //Exit half hole detection
-                    toneholeHalfCovered[hole] = false;
-                    goto end;
-                } //if value is decreasing, no way to know if it's going to half or open yet
-                  // we go on with detection
-            } else { //Previously Open
-                    //if value is increasing, no way to know if it's going to half or covered yet
-                if (fingering.halfHole.sampleDirection < -HALF_HOLE_DIRECTION_LIMIT) { //value is decreasing - still opened - we can exit detection
-#if DEBUG_HALF_HOLE
-                    sendUSBMIDI(CC, mainMidiChannel,  17, halfHoleNow) ;
-                    sendAsPitchBend(fingering.halfHole.halfHoleSamples);
-                    sendAsPitchBend(fingering.halfHole.sampleDirection);
-                    sendAsPitchBend(toneholeRead[hole]);
-#endif
-                    fingering.halfHole.halfHoleSamples = 0; //Exit half hole detection
-                    toneholeHalfCovered[hole] = false;
-                    goto end;
-                }  //else we go on with detection
-            }
-
-            if (++fingering.halfHole.halfHoleSamples > fingering.halfHole.halfHoleBuffer) { //Exiting detection mode
-#if DEBUG_HALF_HOLE
-                sendUSBMIDI(CC, mainMidiChannel,  18, halfHoleNow) ;
-                sendAsPitchBend(fingering.halfHole.halfHoleSamples);
-                sendAsPitchBend(toneholeRead[hole]);
-#endif
-                fingering.halfHole.halfHoleSamples = 0; //Exit half hole detection
-                toneholeHalfCovered[hole] = halfHoleNow;
-
-            } else {
-                return false; //half thumb still to be determined
-            } 
-        }
-    } else {
-        fingering.halfHole.halfHoleSamples = 0; //Exit half hole detection
-    }
-
-    end:
-    toneholeLastRead[hole] = toneholeRead[hole];
-    if (toneholeHalfCovered[hole]) { 
-        bitWrite(holeCovered, hole, 1); //To determine the base note to be altered in fingerings
-        toneholeRead[hole] = toneholeCovered[hole]; //Force read as covered
-    }
-    bitWrite(holeCovered, 9, toneholeHalfCovered[hole] ? 1 : 0); //To trigger fingering change
-
-    return true; //Debounced
-
+    if (!fingering.halfHole.enabled[hole]) return false; //disabled
+    return toneholeRead[hole] <  getHalfHoleUpperBound(hole) && toneholeRead[hole] > getHalfHoleLowerBound(hole);
 }
 
-//Generic tools
-//20230927 GLB
-void sendMIDIPanic() {
-    for (byte i = 1; i < 17; i++) {  //send MIDI panic
-        sendUSBMIDI(CC, i, 123, 0);
-        dronesOn = 0;  //remember that drones are off, because MIDI panic will have most likely turned them off in all apps.
-        HarmonizerReset(); //remember that harmonizer is off, because MIDI panic will have most likely turned them off in all apps.
-    }
-}
 
-//END GLB
+
 
 //Harmonizer / Tranpose / Fixed note generic functions
 
 //Sends the whole current configuration
 void sendHarmonizerConfiguration() {
 
-    //Tranpose shift
-    sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_04, MIDI_SEND_TRANSPOSE_SHIFT);
-    sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_05, harmonizer.transposeShift +12);
-    //Fixed note 1
-    sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_04, MIDI_SEND_HARMONIZER_FIXED_NOTE);
-    sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_05, harmonizer.fixedNote);
+    if (communicationMode) {
+        //Tranpose shift
+        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_04, MIDI_SEND_TRANSPOSE_SHIFT);
+        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_05, harmonizer.transposeShift +12);
+        //Fixed note 1
+        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_04, MIDI_SEND_HARMONIZER_FIXED_NOTE);
+        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_05, harmonizer.fixedNote);
 
-    for (uint8_t i = 0; i<HARMONIZER_VOICES; i++) {
+        for (uint8_t i = 0; i<HARMONIZER_VOICES; i++) {
 
+            //Harmonizer intervals
+            sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_04, MIDI_SEND_HARMONIZER_INTERVAL +i);
+            sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_05, harmonizer.harmonizers[i].interval +12);
 
-        //Harmonizer intervals
-        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_04, MIDI_SEND_HARMONIZER_INTERVAL +i);
-        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_05, harmonizer.harmonizers[i].interval +12);
+            //Harmonizer tonic
+            sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_04, MIDI_SEND_HARMONIZER_TONIC +i);
+            sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_05, harmonizer.harmonizers[i].tonic);
 
-        //Harmonizer tonic
-        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_04, MIDI_SEND_HARMONIZER_TONIC +i);
-        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_05, harmonizer.harmonizers[i].tonic);
-
-        //Harmonizer scales
-        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_04, MIDI_SEND_HARMONIZER_SCALE +i);
-        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_05, harmonizer.harmonizers[i].scaleIndex);
+            //Harmonizer scales
+            sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_04, MIDI_SEND_HARMONIZER_SCALE +i);
+            sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_05, harmonizer.harmonizers[i].scaleIndex);
+        }
     }
 }
 
@@ -396,10 +245,7 @@ bool isNoteDiatonic(byte voice, byte note) {
 //Wrapper to set the base harmonizer shift interval
 void setHarmonizerInterval(byte voice, int8_t value) {
     harmonizer.harmonizers[voice].interval = value;
-    if (communicationMode) {
-        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_04, MIDI_SEND_HARMONIZER_INTERVAL + voice);
-        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_05, harmonizer.harmonizers[voice].interval +12);
-    }
+    sendHarmonizerConfiguration();
 }
 
 //Wrapper to set the base harmonizer diatonic scale
@@ -408,10 +254,7 @@ void setHarmonizerScale(byte voice, int8_t value) {
     harmonizer.harmonizers[voice].scale = harmonizer_scales[value];
     harmonizer.harmonizers[voice].scaleSteps = __builtin_popcount(harmonizer.harmonizers[voice].scale); //countSteps(harmonizer.harmonizers[voice].scale);
 
-    if (communicationMode) {
-        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_04, MIDI_SEND_HARMONIZER_SCALE + voice);
-        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_05, harmonizer.harmonizers[voice].scaleIndex);
-    }
+    sendHarmonizerConfiguration();
 }
 
 //Wrapper to set the fixed Note
@@ -422,24 +265,18 @@ void setHarmonizerFixedNote(int8_t value) {
     }
     harmonizer.fixedNote = value;
 
-    if (communicationMode) {
-        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_04, MIDI_SEND_HARMONIZER_FIXED_NOTE);
-        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_05, harmonizer.fixedNote);
-    }
+    sendHarmonizerConfiguration();
 }
 
 //Wrapper to set the harmonizer tonic note
 void setHarmonizerTonic(byte voice, byte value) {
     harmonizer.harmonizers[voice].tonic = value;
-    if (communicationMode) {
-        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_04, MIDI_SEND_HARMONIZER_TONIC + voice);
-        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_05, harmonizer.harmonizers[voice].tonic);
-    }
+    sendHarmonizerConfiguration();
 }
 
 //20231021
-//is note currently used by the harmonizer?
-bool isNoteOkToClose(byte note) {
+//is note currently used by the harmonizer? If not, closes it
+bool noteOFFIfOK(byte note) {
     if (harmonizer.fixedNote == note) {
         return false;
     }
@@ -448,6 +285,8 @@ bool isNoteOkToClose(byte note) {
             return false;
         }
     }
+
+    sendUSBMIDI(NOTE_OFF, mainMidiChannel, note, 64);
     return true;
 }
 
@@ -469,9 +308,8 @@ void HarmonizerReset() {
     }
     harmonizer.fixedNote = -1;
     harmonizer.fixedNoteON = false;
-    if (communicationMode) {
-        sendHarmonizerConfiguration();
-    }
+    
+    sendHarmonizerConfiguration();
 }
 
 void harmonizerNoteON (byte voice, byte baseNote, byte velocity) {
@@ -485,19 +323,6 @@ void harmonizerNoteON (byte voice, byte baseNote, byte velocity) {
         harmonizer.harmonizers[voice].currentNote = baseNote + harmonizer.harmonizers[voice].interval;
 
         bool baseNoteDiatonic = isNoteDiatonic(voice, baseNote);
-
-
-        #if DEBUG_HARMONIZER
-            sendUSBMIDI(CC, mainMidiChannel,  12, harmonizer.harmonizers[voice].tonic);
-            sendUSBMIDI(CC, mainMidiChannel,  13, harmonizer.harmonizers[voice].scaleSteps);
-            sendAsPitchBend(harmonizer.harmonizers[voice].interval);
-            sendUSBMIDI(CC, mainMidiChannel,  14, baseNote);
-            sendUSBMIDI(CC, mainMidiChannel,  15, harmonizer.harmonizers[voice].currentNote);
-            sendUSBMIDI(CC, mainMidiChannel,  16, baseNoteDiatonic);
-            sendUSBMIDI(CC, mainMidiChannel,  17, harmonizer.harmonizers[voice].tonic + harmonizer.harmonizers[voice].interval);
-
-        #endif
-
 
         //If baseNote or interval are not diatonic, no need to adjust the harmonizer (it goes chromatic)
         //Otherwise calculates the shifted note.
@@ -569,20 +394,6 @@ void harmonizerNoteON (byte voice, byte baseNote, byte velocity) {
                     new_note -= 12;
             }
 
-            #if DEBUG_HARMONIZER
-                sendUSBMIDI(CC, mainMidiChannel,  12, harmonizer.harmonizers[voice].tonic);
-                sendUSBMIDI(CC, mainMidiChannel,  13, harmonizer.harmonizers[voice].scaleSteps);
-                sendAsPitchBend(harmonizer.harmonizers[voice].interval);
-                sendUSBMIDI(CC, mainMidiChannel,  14, base_interval_step);
-                sendUSBMIDI(CC, mainMidiChannel,  15, baseNote);
-                sendUSBMIDI(CC, mainMidiChannel,  16, current_note_step);
-                sendUSBMIDI(CC, mainMidiChannel,  17, step_from_tonic);
-                sendUSBMIDI(CC, mainMidiChannel,  18, chromatic_interval_from_tonic);
-                sendAsPitchBend(chromatic_interval_tonic_current);
-                sendUSBMIDI(CC, mainMidiChannel,  19, chromatic_interval_landing_current);
-                sendUSBMIDI(CC, mainMidiChannel,  20, new_note);
-            #endif
-
             harmonizer.harmonizers[voice].currentNote = new_note;
         }
         sendUSBMIDI(NOTE_ON, mainMidiChannel, harmonizer.harmonizers[voice].currentNote, (uint8_t)((float)velocity*HARMONIZER_VELOCITY));
@@ -604,17 +415,13 @@ void harmonizerNoteON (byte voice, byte baseNote, byte velocity) {
             sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_04, MIDI_SEND_HARMONIZER_CURRENT_NOTE_DIATONIC + voice);
             sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_05, isNoteDiatonic(voice, harmonizer.harmonizers[voice].currentNote) ? 1 : 0);
 
-
         }
     }
     if (harmonizer.fixedNote >= 0 && !harmonizer.fixedNoteON) { //Send the fixed note too
         sendUSBMIDI(NOTE_ON, mainMidiChannel, harmonizer.fixedNote, (uint8_t)((float)velocity*HARMONIZER_VELOCITY));
         harmonizer.fixedNoteON = true;
-        if (communicationMode) {
-            //Harmonizer harmonizer.fixedNote
-            sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_04, MIDI_SEND_HARMONIZER_FIXED_NOTE);
-            sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_05, harmonizer.fixedNote);
-        }
+
+        sendHarmonizerConfiguration();
     }
 }
 
@@ -709,8 +516,6 @@ bool manageCustomFingerings(byte operation, byte midiNote, uint16_t fingerPatter
     }
 
     return result;
-
-
 }
 
 int8_t getCustomFingeringNote(uint16_t fingerPattern) {
@@ -729,7 +534,7 @@ bool saveCustomFingering(byte midiNote, uint16_t fingerPattern) {
         return false;
     }
 
-    if (midiNote == get_note(fingerPattern)) { // it's not different from default We delete it
+    if (midiNote == get_note(fingerPattern, false)) { // it's not different from default We delete it
         return manageCustomFingerings(customFingeringOperations::Delete, 0, fingerPattern);
 
         return false;
@@ -753,21 +558,22 @@ bool saveCustomFingering(byte midiNote, uint16_t fingerPattern) {
 
 //Sends all custom fingerings
 void sendCustomFingering() {
-        if (communicationMode) {
-            sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_02, MIDI_SEND_CUSTOM_FINGERING); //Entering custom fingering trasmission mode
-            for (byte i = 0; i < fingering.customFingeringCurrentNumber; i++) {
-                sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_09, fingering.custom_fingering[i].midi_note);
-                sendHoleCovered(fingering.custom_fingering[i].holeCovered);
-            }
-            sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_02, MIDI_SEND_CUSTOM_FINGERING); //Exiting custom fingering trasmission mode
-
-            //Sends the number for current scheme
-            sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_02, MIDI_SEND_CUSTOM_FINGERING_CURRENT);
-            sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_09, fingering.customFingeringCurrentNumber);
-
-            //Sends the total number of custom fingerings
-            sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_02, MIDI_SEND_CUSTOM_FINGERING_TOTAL);
-            sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_09, fingering.customFingeringTotalNumber);
+    if (communicationMode) {
+        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_02, MIDI_SEND_CUSTOM_FINGERING); //Entering custom fingering trasmission mode
+        
+        for (byte i = 0; i < fingering.customFingeringCurrentNumber; i++) {
+            sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_09, fingering.custom_fingering[i].midi_note);
+            sendIntValue(MIDI_SEND_HOLE_COVERED, fingering.custom_fingering[i].holeCovered);
         }
+        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_02, MIDI_SEND_CUSTOM_FINGERING); //Exiting custom fingering trasmission mode
+
+        //Sends the number for current scheme
+        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_02, MIDI_SEND_CUSTOM_FINGERING_CURRENT);
+        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_09, fingering.customFingeringCurrentNumber);
+
+        //Sends the total number of custom fingerings
+        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_02, MIDI_SEND_CUSTOM_FINGERING_TOTAL);
+        sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_09, fingering.customFingeringTotalNumber);
+    }
 }
 

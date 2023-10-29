@@ -25,20 +25,16 @@ struct custom_fingering_t {
 //HALF HOLE DETECTION
 struct rt_half_hole_detection_t {
 
-    byte halfHoleBuffer;
-    byte halfHoleSamples = 0;
+    byte buffer;
+    byte samples = 0;
     
     uint16_t prevSampleValue = 0;
 
     int sampleDirection = 0;
     byte currentHoleSettings = -1;
 
-    uint16_t lower_limit[TONEHOLE_SENSOR_NUMBER];
-    uint16_t upper_limit[TONEHOLE_SENSOR_NUMBER];
-
-    #if DEBUG_HALF_HOLE
-    bool debugSent = false;
-    #endif
+    float correction = 0;
+    bool enabled[TONEHOLE_SENSOR_NUMBER];
 };
 
 struct rt_fingering_t {

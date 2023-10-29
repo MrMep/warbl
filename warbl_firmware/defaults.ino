@@ -37,7 +37,7 @@ void setDefaultConfiguration(byte preset) {
                 fingeringSelector = kModeWhistle;
                 noteShiftSelector = 0;
 
-                byte tmp_switches[] = { 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0 };
+                byte tmp_switches[] = { 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0 };
                 for (byte n = 0; n < kSWITCHESnVariables; n++) {
                     switches[n] = tmp_switches[n];
                 }
@@ -57,7 +57,7 @@ void setDefaultConfiguration(byte preset) {
             {
                 fingeringSelector = kModeUilleann;
                 noteShiftSelector = 0;
-                byte tmp_switches[] = { 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0 };
+                byte tmp_switches[] = { 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0 };
                 for (byte n = 0; n < kSWITCHESnVariables; n++) {
                     switches[n] = tmp_switches[n];
                 }
@@ -75,7 +75,7 @@ void setDefaultConfiguration(byte preset) {
             {
                 fingeringSelector = kModeGHB;
                 noteShiftSelector = 8;
-                byte tmp_switches[] = { 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0 };
+                byte tmp_switches[] = { 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0 };
                 for (byte n = 0; n < kSWITCHESnVariables; n++) {
                     switches[n] = tmp_switches[n];
                 }
@@ -96,6 +96,7 @@ void setDefaultConfiguration(byte preset) {
 //This is used the first time the software is run, to copy all the default settings to EEPROM, and is also used to restore factory settings.
 void saveFactorySettings() {
 
+    resetHalfHoleConfig();
 
     for (byte i = 0; i < 3; i++) {  //save all the current settings for all three instruments.
         setDefaultConfiguration(i);

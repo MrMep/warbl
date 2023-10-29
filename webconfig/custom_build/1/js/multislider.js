@@ -1,10 +1,10 @@
 
 function fillSliderAuto() {
 
-    slide1 = parseFloat(document.getElementById("lowerLimitRangeHH").value);
-    slide2 = parseFloat( document.getElementById("upperLimitRangeHH").value );
-    from = document.querySelector('#lowerLimitRangeHH');
-    to =  document.querySelector('#upperLimitRangeHH');
+    slide1 = parseFloat(document.getElementById("lowerBoundRangeHH").value);
+    slide2 = parseFloat( document.getElementById("upperBoundRangeHH").value );
+    from = document.querySelector('#lowerBoundRangeHH');
+    to =  document.querySelector('#upperBoundRangeHH');
     sliderColor = '#999999';
     rangeColor = 'rgb(105, 183, 10)';
     const rangeDistance = to.max-to.min;
@@ -28,38 +28,43 @@ function fillSliderAuto() {
 }
 
 
-var slide1 = parseFloat(document.getElementById("lowerLimitRangeHH").value);
+var slide1 = parseFloat(document.getElementById("lowerBoundRangeHH").value);
 
-var slide2 = parseFloat( document.getElementById("upperLimitRangeHH").value );
+var slide2 = parseFloat( document.getElementById("upperBoundRangeHH").value );
 
 function slider_getVals(){
+
+    //Disables user intervention
+    document.getElementById("lowerBoundRangeHH").value = slide1;
+    document.getElementById("upperBoundRangeHH").value = slide2;
+    return;
     // Get slider values
-    var slide1_now = parseFloat(document.getElementById("lowerLimitRangeHH").value);
-    var slide2_now = parseFloat( document.getElementById("upperLimitRangeHH").value );
+    var slide1_now = parseFloat(document.getElementById("lowerBoundRangeHH").value);
+    var slide2_now = parseFloat( document.getElementById("upperBoundRangeHH").value );
 
     if (slide1_now != slide1) {
         if ( slide1_now > slide2_now-50 ){
-            document.getElementById("lowerLimitRangeHH").value = slide1;
-            //  console.log(slide1, slide2);
+            document.getElementById("lowerBoundRangeHH").value = slide1;
+             // console.log(slide1, slide2);
             return;
         } else {
             slide1 = slide1_now;
-            sendHalfHoleLowerLimit (slide1);
+            // sendHalfHoleLowerBound (slide1);
         }
     }
 
     if (slide2_now != slide2) {
-        var slide1_now = parseFloat(document.getElementById("lowerLimitRangeHH").value);
+        var slide1_now = parseFloat(document.getElementById("lowerBoundRangeHH").value);
         if ( slide2_now < slide1_now+50 ){
-            document.getElementById("upperLimitRangeHH").value = slide2;
-            //  console.log(slide1, slide2);
+            document.getElementById("upperBoundRangeHH").value = slide2;
+              console.log(slide1, slide2);
             return;
         } if ( slide2_now > 499) {
-            document.getElementById("upperLimitRangeHH").value = 499;
+            document.getElementById("upperBoundRangeHH").value = 499;
             return;
         } else {
             slide2 = slide2_now;
-            sendHalfHoleUpperLimit (slide2);
+            sendHalfHoleUpperBound (slide2);
         }
     }
 
