@@ -11,27 +11,30 @@
 
 //GLB Specific
 //Half Thumb hole detection
-#define DEBUG_HALF_HOLE           0
-#define HALF_HOLE_BUFFER_SIZE    30
-#define THUMB_HOLE                8
-#define HALF_HOLE_LOWER_OFFSET -120
-#define HALF_HOLE_UPPER_OFFSET    2
+// #define DEBUG_HALF_HOLE           0
+#define HALF_HOLE_BUFFER_SIZE    30 //Default additional transitional delay for special gestures
+#define HALF_HOLE_LOWER_OFFSET -120 //Size of the window for Half hole detection
+#define HALF_HOLE_UPPER_OFFSET    2 //Correction factor based on baseline moving average difference with calibration baseline average
+#define BASELINE_AVRG_INTERVAL 1000 //ms/ticks for calculating baseline moving average / Window size
+#define BASELINE_AVRG_SPEED     0.2 //0-1 the lower the slower the moving average is
+#define BASELINE_MACRO_FACTOR  10.0 //Number of decimals to be sent to the Config tool - Debug
 
+#define THUMB_HOLE                8
 #define R4_HOLE                   1
 #define R3_HOLE                   2
 
-#define HOLE_COVERED_OFFSET      50
-#define HOLE_OPEN_OFFSET         54
+#define HOLE_COVERED_OFFSET      50 //For determining hole closed // from original firmware
+#define HOLE_OPEN_OFFSET         54  //For determining hole open // from original firmware
 
-#define HALF_HOLE_DIRECTION_LIMIT    HALF_HOLE_BUFFER_SIZE/2
+// #define HALF_HOLE_DIRECTION_LIMIT    HALF_HOLE_BUFFER_SIZE/2
 
 //Harmonizer
 #define DEBUG_HARMONIZER    0
-#define HARMONIZER_VOICES   3
+#define HARMONIZER_VOICES   3 //Number of harmonizer voices
 #define HARMONIZER_VOICE_1    0
 #define HARMONIZER_VOICE_2    1
 #define HARMONIZER_VOICE_3    2
-#define HARMONIZER_VELOCITY    0.5
+#define HARMONIZER_VELOCITY    0.5 //Volume/Velocity of the harmonizer notes 0-1
 
 //Harmonizer Scales Types
 #define S_MAJOR                 0
@@ -74,7 +77,7 @@
 
 #define PRESET_NUMBER                             3 //Number of instruments
 #define SENSOR_NUMBER                            10 //Number of thone hole sensors + bell
-#define TONEHOLE_SENSOR_NUMBER                    9 //Number of thone hole sensors + bell
+#define TONEHOLE_SENSOR_NUMBER                    9 //Number of thone hole sensors
 #define BUTTONS_MAX_ACTIONS                      18 //Number of maximum actions associated to buttons
 #define CUSTOM_FINGERING_MAX                     30 //Max number of custom fingering
 
@@ -105,7 +108,7 @@
 #define kModeGaita 5
 #define kModeNAF 6
 #define kModeKaval 7
-#define kModeRecorder 8
+#define kModeBarbaroRecorder 8
 #define kModeBansuriWARBL 9       //only used for a custom regulators implementation, not the "official" software, or BansuriWARBL
 #define kModeUilleannStandard 10  //contains no accidentals
 #define kModeXiao 11
@@ -120,8 +123,9 @@
 #define kModeBombarde 20
 #define kModeBaroqueFlute 21
 #define kModeMedievalPipes 22
-#define kModeBarbaro 23
+#define kModeBarbaroEWI 23
 #define kModeNModes 24
+
 
 // Pitch bend modes
 #define kPitchBendSlideVibrato 0
@@ -164,8 +168,8 @@
 #define IMMEDIATE_PB 8
 #define LEGATO 9
 #define OVERRIDE 10
-// #define THUMB_AND_OVERBLOW 11
-// #define R4_FLATTEN 12
+// #define THUMB_AND_OVERBLOW 11 //From old custom fingering
+// #define R4_FLATTEN 12 //From old custom fingering
 #define kSWITCHESnVariables 11
 
 //Variables in the ED array (all the settings for the Expression and Drones panels)

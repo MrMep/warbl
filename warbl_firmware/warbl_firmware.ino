@@ -425,10 +425,12 @@ void setup() {
         loadCalibration();  //If there has been a calibration saved, reload it at startup.
     }
 
-    loadFingering();
+
  
     defaultPreset = EEPROM.read(EEPROM_DEFAULT_PRESET);  //load default currentPreset
     currentPreset = defaultPreset;  //set the startup instrument
+
+    loadFingering();
     loadSettings();
 
 
@@ -496,28 +498,9 @@ void loop() {
             }
         }
 
-        if ((nowtime - baselineTimer) >= 1000) {  //check baseline every so often
+        if ((nowtime - baselineTimer) >= BASELINE_AVRG_INTERVAL) {  //check baseline every so often
             baselineTimer = nowtime;
-            byte counter = 0;
-            baselineCurrentAverage = 0;
-            for (byte i = 0; i<TONEHOLE_SENSOR_NUMBER; i++) {
-
-                if (toneholeBaselineCurrent[i] > 0 && toneholeBaselineCurrent[i] <= maxBaseline)  { //LPF
-                    baselineCurrentAverage += toneholeBaselineCurrent[i];
-                    counter++;
-                }
-                toneholeBaselineCurrent[i] = 1024; //Resets for next run
-            }
-            if (counter > 0 ) {
-                baselineCurrentAverage = (baselineCurrentAverage / (float) counter )*10.0;
-                if (baselinePreviousAverage != baselineCurrentAverage) {
-                    baselinePreviousAverage = baselineCurrentAverage;
-                    fingering.halfHole.correction = (baselineCurrentAverage - baselineAverage)/10.0;
-                    if (communicationMode) {
-                        sendIntValue(MIDI_SEND_BASELINE_CURRENT_AVERAGE, baselineCurrentAverage - baselineAverage);
-                    }
-                }
-            }
+            baselineUpdate();
         }
     }
 

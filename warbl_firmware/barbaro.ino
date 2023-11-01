@@ -134,6 +134,33 @@ uint16_t getHalfHoleUpperBound(byte hole) {
     return toneholeCovered[hole] - HOLE_OPEN_OFFSET + HALF_HOLE_UPPER_OFFSET + fingering.halfHole.correction*(float)HALF_HOLE_UPPER_OFFSET;
 }
 
+//Calculates the baseline moving average for readings in the current time window and applies an eventual correction factor to half hole detection
+void baselineUpdate() {
+    byte counter = 0;
+    baselineCurrentAverage = 0;
+    for (byte i = 0; i<TONEHOLE_SENSOR_NUMBER; i++) {
+
+        if (toneholeBaselineCurrent[i] >= 0 && toneholeBaselineCurrent[i] <= maxBaseline)  { //LPF
+            baselineCurrentAverage += toneholeBaselineCurrent[i];
+            counter++;
+        }
+        toneholeBaselineCurrent[i] = 1024; //Resets for next run
+
+        //Updates baseline too with previous average - Useful for PB
+        toneholeBaseline[i] = ((float) toneholeBaseline[i] * baselinePreviousAverage/baselineAverage);
+    }
+    if (counter > 0 ) { //Found usable values
+        baselineCurrentAverage = BASELINE_AVRG_SPEED*((baselineCurrentAverage / (float) counter)*BASELINE_MACRO_FACTOR) + (1.0-BASELINE_AVRG_SPEED)*baselinePreviousAverage;
+        if (baselinePreviousAverage != baselineCurrentAverage) {
+            fingering.halfHole.correction = (baselineCurrentAverage - baselineAverage)/BASELINE_MACRO_FACTOR;
+            baselinePreviousAverage = baselineCurrentAverage;
+            if (communicationMode) {
+                sendIntValue(MIDI_SEND_BASELINE_CURRENT_AVERAGE, baselineCurrentAverage - baselineAverage);
+            }
+        }
+    }
+}
+
 //Sends the calculated limit and other paramenters for Half hole detection
 void sendHalfHoleParams( int hole) {
 

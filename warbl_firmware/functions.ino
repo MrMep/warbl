@@ -277,7 +277,8 @@ void get_shift() {
 
     //END GLB
 
-    if (newState == 3 && !(fingeringSelector == kModeEVI || (fingeringSelector == kModeSax && newNote < 62) || (fingeringSelector == kModeSaxBasic && newNote < 74) || (fingeringSelector == kModeRecorder && newNote < 76)) && !(newNote == 62 && (fingeringSelector == kModeUilleann || fingeringSelector == kModeUilleannStandard))) {    //if overblowing (except EVI, sax in the lower register, and low D with uilleann fingering, which can't overblow)
+    //if (newState == 3 && !(fingeringSelector == kModeEVI || (fingeringSelector == kModeSax && newNote < 62) || (fingeringSelector == kModeSaxBasic && newNote < 74) || (fingeringSelector == kModeRecorder && newNote < 76)) && !(newNote == 62 && (fingeringSelector == kModeUilleann || fingeringSelector == kModeUilleannStandard))) {    //if overblowing (except EVI, sax in the lower register, and low D with uilleann fingering, which can't overblow)
+    if (newState == 3 && !(fingeringSelector == kModeEVI || (fingeringSelector == kModeSax && newNote < 62) || (fingeringSelector == kModeSaxBasic && newNote < 74)) && !(newNote == 62 && (fingeringSelector == kModeUilleann || fingeringSelector == kModeUilleannStandard))) {    //if overblowing (except EVI, sax in the lower register, and low D with uilleann fingering, which can't overblow)
         shift = shift + 12;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    //add a register jump to the transposition if overblowing.
         if (fingeringSelector == kModeKaval) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             //Kaval only plays a fifth higher in the second register.
             shift = shift - 5;
@@ -306,7 +307,7 @@ void get_shift() {
         shift = shift - 1;
     }
 
-    if (fingeringSelector == kModeSax || fingeringSelector == kModeBarbaro) {
+    if (fingeringSelector == kModeSax || fingeringSelector == kModeBarbaroEWI || fingeringSelector == kModeBarbaroRecorder) {
         shift = shift + 2;
     }
 
@@ -1324,19 +1325,6 @@ void receiveMIDI() {
                                     }
                                 }
 
-                                // for (byte i = 0; i < 3; i++) {    //update noteshift
-                                // if (rx.byte2 == MIDI_SLOT_12) {
-                                //         if (rx.byte3 < 50) {
-                                //                 noteShiftSelector = rx.byte3;
-                                //         } else {
-                                //                 noteShiftSelector = -127 + rx.byte3;
-                                //         }
-                                //         loadPrefs();
-                                // }
-                                // }
-
-
-
 
                                 if (rx.byte2 == MIDI_SLOT_04) {    //update receive mode, used for advanced pressure range sliders, switches, and expression and drones panel settings (this indicates the variable for which the next received byte on CC 105 will be).
                                     pressureReceiveMode = rx.byte3 - 1;
@@ -1643,11 +1631,7 @@ void sendSettings(bool dump) {
 
         //Sends fingering pattern for all three presets, for TAB names
         for (byte i = 0; i < PRESET_NUMBER; i++) {
-            if (i == currentPreset) {
-                sendIntValue(MIDI_SEND_MODE_SELECTOR + i, fingeringSelector);
-            } else {    //For other tabs on the config tool
-                sendIntValue(MIDI_SEND_MODE_SELECTOR + i, EEPROM.read(EEPROM_FINGERING_SELECTOR + i));
-            }
+            sendIntValue(MIDI_SEND_MODE_SELECTOR + i, EEPROM.read(EEPROM_FINGERING_SELECTOR + i));
         }
 
         sendUSBMIDI(CC, MIDI_CONF_CHANNEL, MIDI_SLOT_02, MIDI_BELL_SENSOR_OS + bellSensor);    //send bell sensor state
@@ -2240,7 +2224,7 @@ void loadPrefs() {
         }
     }
 
-    baselineAverage = (baselineAverage / (float)TONEHOLE_SENSOR_NUMBER) * 10.0;
+    baselineAverage = (baselineAverage / (float)TONEHOLE_SENSOR_NUMBER) * BASELINE_MACRO_FACTOR;
 
 
     if (switches[CUSTOM] && pitchBendMode != kPitchBendNone) {

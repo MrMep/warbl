@@ -109,6 +109,16 @@ You can download [the chart here](readme_files/Barbaro_s_EWI_Fingering%20Chart.p
 
 
 
+## New Fingering: Barbaroque Recorder
+
+I have substituted the old Baroque Soprano fingering with a new and improved version.
+
+It supports half holes (thumb, r4 and r3) and many trill fingerings.
+
+
+
+
+
 ---
 
 # Original README:

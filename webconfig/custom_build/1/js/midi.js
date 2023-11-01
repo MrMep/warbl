@@ -358,6 +358,7 @@ function showWARBLNotDetected(){
 	communicationMode = false; //make sure we know we're not connected
 	document.getElementById("status").innerHTML = "WARBL not detected.";
 	document.getElementById("status").style.color = "#F78339";
+	document.getElementById("version").innerHTML = "";
 	document.getElementById("version").style.color = "#F78339";
 	document.getElementById("connect").innerHTML = "Connect to WARBL";	//make sure the connect button shows the correct text
 	document.getElementById("pressure").innerHTML = "";
@@ -1576,6 +1577,7 @@ function WARBL_Receive(event) {
 					//Current fingering schema
 					if (intValueWrite >= MIDI_SEND_MODE_SELECTOR && intValueWrite <= MIDI_SEND_MODE_SELECTOR+2) {
 						var presetSelected = intValueWrite - MIDI_SEND_MODE_SELECTOR;
+						//console.log("MIDI_SEND_MODE_SELECTOR", presetSelected, value);
 						document.getElementById("fingeringSelect" + presetSelected).value = value;
 						updateCells();
 					}
@@ -1606,7 +1608,7 @@ function WARBL_Receive(event) {
 	
 					// calibration current baseline average
 					if (intValueWrite == MIDI_SEND_BASELINE_CURRENT_AVERAGE) {
-						console.log("toneholeBaseline CURRENT Average: " +value/10);
+						console.log("toneholeBaseline CURRENT Difference: " +value/10);
 					} else	
 
 					// calibration current baseline average
@@ -1743,7 +1745,7 @@ function WARBL_Receive(event) {
 							  option.text = "Barbaro's EWI";
 							  option.value = 23;
 							z.add(option);
-							
+
 							var x = document.getElementById("fingeringSelect0"); 		
 							  var option = document.createElement("option");
 							  option.text = "Bansuri";

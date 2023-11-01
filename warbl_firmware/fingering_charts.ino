@@ -1394,139 +1394,139 @@ struct recorder_explicit_entry {
     uint8_t midi_note;
 };
 
-const struct recorder_explicit_entry recorder_explicit[128] PROGMEM = {
-    //thumb and left index finger aren't shown, they are accounted for in getNote().
-    { 75 },  //0000000 C#
-    { 74 },  //0000001 C
-    { 74 },  //0000010 C
-    { 74 },  //0000011 C
-    { 74 },  //0000100 C
-    { 74 },  //0000101 C
-    { 74 },  //0000110 C
-    { 74 },  //0000111 C
-    { 74 },  //0001000 C
-    { 74 },  //0001001 C
-    { 74 },  //0001010 C
-    { 74 },  //0001011 C
-    { 74 },  //0001100 C
-    { 74 },  //0001101 C
-    { 74 },  //0001110 C
-    { 74 },  //0001111 C
-    { 74 },  //0010000 C
-    { 74 },  //0010001 C
-    { 74 },  //0010010 C
-    { 74 },  //0010011 C
-    { 74 },  //0010100 C
-    { 74 },  //0010101 C
-    { 74 },  //0010110 C
-    { 74 },  //0010111 C
-    { 74 },  //0011000 C
-    { 74 },  //0011001 C
-    { 74 },  //0011010 C
-    { 74 },  //0011011 C
-    { 74 },  //0011100 C
-    { 74 },  //0011101 C
-    { 74 },  //0011110 C
-    { 74 },  //0011111 C
-    { 74 },  //0100000 C
-    { 74 },  //0100001 C
-    { 74 },  //0100010 C
-    { 74 },  //0100011 C
-    { 74 },  //0100100 C
-    { 74 },  //0100101 C
-    { 74 },  //0100110 C
-    { 74 },  //0100111 C
-    { 74 },  //0101000 C
-    { 74 },  //0101001 C
-    { 74 },  //0101010 C
-    { 74 },  //0101011 C
-    { 75 },  //0101100 C# alternative, added in 1.7 (only works in lower octave with thumb hole covered)
-    { 74 },  //0101101 C
-    { 74 },  //0101110 C
-    { 74 },  //0101111 C
-    { 73 },  //0110000 B added in 1.7
-    { 74 },  //0110001 C
-    { 74 },  //0110010 C
-    { 74 },  //0110011 C
-    { 74 },  //0110100 C
-    { 74 },  //0110101 C
-    { 74 },  //0110110 C
-    { 74 },  //0110111 C
-    { 74 },  //0111000 C
-    { 74 },  //0111001 C
-    { 74 },  //0111010 C
-    { 74 },  //0111011 C
-    { 74 },  //0111100 C
-    { 74 },  //0111101 C
-    { 74 },  //0111110 C
-    { 74 },  //0111111 C
-    { 73 },  //1000000 B
-    { 73 },  //1000001 B
-    { 73 },  //1000010 B
-    { 73 },  //1000011 B
-    { 73 },  //1000100 B
-    { 73 },  //1000101 B
-    { 73 },  //1000110 B
-    { 73 },  //1000111 B
-    { 73 },  //1001000 B
-    { 73 },  //1001001 B
-    { 73 },  //1001010 B
-    { 73 },  //1001011 B
-    { 73 },  //1001100 B
-    { 73 },  //1001101 B
-    { 73 },  //1001110 B
-    { 73 },  //1001111 B
-    { 73 },  //1010000 B
-    { 73 },  //1010001 B
-    { 73 },  //1010010 B
-    { 73 },  //1010011 B
-    { 73 },  //1010100 B
-    { 73 },  //1010101 B
-    { 73 },  //1010110 B
-    { 73 },  //1010111 B
-    { 72 },  //1011000 Bb
-    { 72 },  //1011001 Bb
-    { 72 },  //1011010 Bb
-    { 72 },  //1011011 Bb
-    { 72 },  //1011100 Bb
-    { 72 },  //1011101 Bb
-    { 72 },  //1011110 Bb
-    { 72 },  //1011111 Bb
-    { 71 },  //1100000 A
-    { 71 },  //1100001 A
-    { 71 },  //1100010 A
-    { 71 },  //1100011 A
-    { 71 },  //1100100 A
-    { 71 },  //1100101 A
-    { 71 },  //1100110 A
-    { 71 },  //1100111 A
-    { 71 },  //1101000 A
-    { 71 },  //1101001 A
-    { 71 },  //1101010 A
-    { 71 },  //1101011 A
-    { 70 },  //1101100 G# added in 1.7
-    { 71 },  //1101101 A
-    { 70 },  //1101110 G# added in 1.7
-    { 63 },  //1101111 C# added in 1.7
-    { 69 },  //1110000 G
-    { 69 },  //1110001 G
-    { 69 },  //1110010 G
-    { 69 },  //1110011 G
-    { 68 },  //1110100 F#
-    { 69 },  //1110101 G
-    { 68 },  //1110110 F#
-    { 68 },  //1110111 F#
-    { 67 },  //1111000 F
-    { 68 },  //1111001 F
-    { 69 },  //1111010 F
-    { 67 },  //1111011 F
-    { 66 },  //1111100 E
-    { 65 },  //1111101 D#
-    { 64 },  //1111110 D
-    { 62 }   //1111111 C
+// const struct recorder_explicit_entry recorder_explicit[128] PROGMEM = {
+//     //thumb and left index finger aren't shown, they are accounted for in getNote().
+//     { 75 },  //0000000 C#
+//     { 74 },  //0000001 C
+//     { 74 },  //0000010 C
+//     { 74 },  //0000011 C
+//     { 74 },  //0000100 C
+//     { 74 },  //0000101 C
+//     { 74 },  //0000110 C
+//     { 74 },  //0000111 C
+//     { 74 },  //0001000 C
+//     { 74 },  //0001001 C
+//     { 74 },  //0001010 C
+//     { 74 },  //0001011 C
+//     { 74 },  //0001100 C
+//     { 74 },  //0001101 C
+//     { 74 },  //0001110 C
+//     { 74 },  //0001111 C
+//     { 74 },  //0010000 C
+//     { 74 },  //0010001 C
+//     { 74 },  //0010010 C
+//     { 74 },  //0010011 C
+//     { 74 },  //0010100 C
+//     { 74 },  //0010101 C
+//     { 74 },  //0010110 C
+//     { 74 },  //0010111 C
+//     { 74 },  //0011000 C
+//     { 74 },  //0011001 C
+//     { 74 },  //0011010 C
+//     { 74 },  //0011011 C
+//     { 74 },  //0011100 C
+//     { 74 },  //0011101 C
+//     { 74 },  //0011110 C
+//     { 74 },  //0011111 C
+//     { 74 },  //0100000 C
+//     { 74 },  //0100001 C
+//     { 74 },  //0100010 C
+//     { 74 },  //0100011 C
+//     { 74 },  //0100100 C
+//     { 74 },  //0100101 C
+//     { 74 },  //0100110 C
+//     { 74 },  //0100111 C
+//     { 74 },  //0101000 C
+//     { 74 },  //0101001 C
+//     { 74 },  //0101010 C
+//     { 74 },  //0101011 C
+//     { 75 },  //0101100 C# alternative, added in 1.7 (only works in lower octave with thumb hole covered)
+//     { 74 },  //0101101 C
+//     { 74 },  //0101110 C
+//     { 74 },  //0101111 C
+//     { 73 },  //0110000 B added in 1.7
+//     { 74 },  //0110001 C
+//     { 74 },  //0110010 C
+//     { 74 },  //0110011 C
+//     { 74 },  //0110100 C
+//     { 74 },  //0110101 C
+//     { 74 },  //0110110 C
+//     { 74 },  //0110111 C
+//     { 74 },  //0111000 C
+//     { 74 },  //0111001 C
+//     { 74 },  //0111010 C
+//     { 74 },  //0111011 C
+//     { 74 },  //0111100 C
+//     { 74 },  //0111101 C
+//     { 74 },  //0111110 C
+//     { 74 },  //0111111 C
+//     { 73 },  //1000000 B
+//     { 73 },  //1000001 B
+//     { 73 },  //1000010 B
+//     { 73 },  //1000011 B
+//     { 73 },  //1000100 B
+//     { 73 },  //1000101 B
+//     { 73 },  //1000110 B
+//     { 73 },  //1000111 B
+//     { 73 },  //1001000 B
+//     { 73 },  //1001001 B
+//     { 73 },  //1001010 B
+//     { 73 },  //1001011 B
+//     { 73 },  //1001100 B
+//     { 73 },  //1001101 B
+//     { 73 },  //1001110 B
+//     { 73 },  //1001111 B
+//     { 73 },  //1010000 B
+//     { 73 },  //1010001 B
+//     { 73 },  //1010010 B
+//     { 73 },  //1010011 B
+//     { 73 },  //1010100 B
+//     { 73 },  //1010101 B
+//     { 73 },  //1010110 B
+//     { 73 },  //1010111 B
+//     { 72 },  //1011000 Bb
+//     { 72 },  //1011001 Bb
+//     { 72 },  //1011010 Bb
+//     { 72 },  //1011011 Bb
+//     { 72 },  //1011100 Bb
+//     { 72 },  //1011101 Bb
+//     { 72 },  //1011110 Bb
+//     { 72 },  //1011111 Bb
+//     { 71 },  //1100000 A
+//     { 71 },  //1100001 A
+//     { 71 },  //1100010 A
+//     { 71 },  //1100011 A
+//     { 71 },  //1100100 A
+//     { 71 },  //1100101 A
+//     { 71 },  //1100110 A
+//     { 71 },  //1100111 A
+//     { 71 },  //1101000 A
+//     { 71 },  //1101001 A
+//     { 71 },  //1101010 A
+//     { 71 },  //1101011 A
+//     { 70 },  //1101100 G# added in 1.7
+//     { 71 },  //1101101 A
+//     { 70 },  //1101110 G# added in 1.7
+//     { 63 },  //1101111 C# added in 1.7
+//     { 69 },  //1110000 G
+//     { 69 },  //1110001 G
+//     { 69 },  //1110010 G
+//     { 69 },  //1110011 G
+//     { 68 },  //1110100 F#
+//     { 69 },  //1110101 G
+//     { 68 },  //1110110 F#
+//     { 68 },  //1110111 F#
+//     { 67 },  //1111000 F
+//     { 68 },  //1111001 F
+//     { 69 },  //1111010 F
+//     { 67 },  //1111011 F
+//     { 66 },  //1111100 E
+//     { 65 },  //1111101 D#
+//     { 64 },  //1111110 D
+//     { 62 }   //1111111 C
 
 
-};
+// };
 
 
 
@@ -2353,26 +2353,26 @@ int get_note(unsigned int fingerPattern, bool sendPattern) {
 
 
 
-        case kModeRecorder:  //this is especially messy, should be cleaned up
+        // case kModeRecorder:  //this is especially messy, should be cleaned up
 
-            //If back thumb and L1 are open
-            if ((((fingerPattern & 0b110000000) == 0) && (fingerPattern & 0b011111111) != 0) && (fingerPattern >> 1) != 0b00101100) {
-                if (fingerPattern >> 1 == 0b00110000) {  //special fingering for D#
-                    return 77;
-                } else {
-                    return 76;  //play D
-                }
-            }
-            if (fingerPattern >> 1 == 0b01011010) return 88;  //special fingering for high D
-            if (fingerPattern >> 1 == 0b01001100) return 86;  //special fingering for high C
-            //otherwise check the chart.
-            tempCovered = (0b011111110 & fingerPattern) >> 1;  //ignore thumb hole and bell sensor
-            ret = pgm_read_byte(&recorder_explicit[tempCovered].midi_note);
-            //If back thumb is open
-            if ((fingerPattern & 0b100000000) == 0 && (fingerPattern >> 1) != 0b00101100) {
-                ret = ret + 12;
-            }
-            break;
+        //     //If back thumb and L1 are open
+        //     if ((((fingerPattern & 0b110000000) == 0) && (fingerPattern & 0b011111111) != 0) && (fingerPattern >> 1) != 0b00101100) {
+        //         if (fingerPattern >> 1 == 0b00110000) {  //special fingering for D#
+        //             return 77;
+        //         } else {
+        //             return 76;  //play D
+        //         }
+        //     }
+        //     if (fingerPattern >> 1 == 0b01011010) return 88;  //special fingering for high D
+        //     if (fingerPattern >> 1 == 0b01001100) return 86;  //special fingering for high C
+        //     //otherwise check the chart.
+        //     tempCovered = (0b011111110 & fingerPattern) >> 1;  //ignore thumb hole and bell sensor
+        //     ret = pgm_read_byte(&recorder_explicit[tempCovered].midi_note);
+        //     //If back thumb is open
+        //     if ((fingerPattern & 0b100000000) == 0 && (fingerPattern >> 1) != 0b00101100) {
+        //         ret = ret + 12;
+        //     }
+        //     break;
 
 
 
@@ -2544,8 +2544,8 @@ int get_note(unsigned int fingerPattern, bool sendPattern) {
 
 
 
-
-        case kModeBarbaro:
+        case kModeBarbaroRecorder:
+        case kModeBarbaroEWI:
 
             // tempCovered = fingerPattern >> 1;  //bitshift once to ignore bell sensor reading
             tempCovered = (0b011111110 & fingerPattern) >> 1;  //ignore thumb hole and bell sensor
@@ -2569,8 +2569,116 @@ int get_note(unsigned int fingerPattern, bool sendPattern) {
                         ret += 1;
                     }
 
-                if (bitRead(holeCovered, 8)) { //thumb hole covered
-                    ret += 12;
+                if (fingeringSelector == kModeBarbaroRecorder) {
+                     if (bitRead(holeCovered, 9)) { //thumb hole half covered - 2nd and 3rd register
+                     
+                        switch (tempCovered) {
+                            case 0b1101110: //Bb
+                            case 0b1101111: //Bb
+                                ret = 70;
+                            break;
+
+                            case 0b1101100: //B
+                                ret = 71;
+                            break;
+
+                            case 0b1001100: //C
+                                ret = 72;
+                            break;
+
+                            case 0b1111111: //C#
+                                ret = 73;
+                            break;
+
+                            default:
+                                break;
+                        }
+                    } else if (!bitRead(holeCovered, 8)) { //thumb hole uncovered
+                        //Lots of homophonic positions here :)
+                        switch (tempCovered) {
+                            case 0b1111000: //B
+                                ret = 71;
+                            break;
+                            case 0b1101110: //C
+                            case 0b1110000: //C
+                                ret = 72;
+                            break;
+                            case 0b1101000: //C#
+                            case 0b1100100: //C#
+                            case 0b1100010: //C#
+                            case 0b1100001: //C#
+                            case 0b1100110: //C#
+                            case 0b1100111: //C#
+                            case 0b1100011: //C#
+                            case 0b1101100: //C#
+                            case 0b1100000: //C#
+                                ret = 73;
+                            break;
+                            case 0b0101000: //D
+                            case 0b0100100: //D
+                            case 0b0100010: //D
+                            case 0b0100001: //D
+                            case 0b0101100: //D
+                            case 0b0100000: //D
+                            case 0b1111111: //D
+                            case 0b0101111: //D
+                                ret = 74;
+                            break;
+                            case 0b0111110: //D#
+                            case 0b1111110: //D#
+                            case 0b0101110: //D#
+                            case 0b0000000: //D# - trill
+                                ret = 75;
+                            break;
+                            case 0b1111011: //E
+                            case 0b1111100: //E
+                                ret = 76;
+                            break;
+                            case 0b1111010: //F
+                                ret = 77;
+                            break;
+                            default:
+                            break;
+                                // ret = -1;
+                        }
+                        // if ( ((tempCovered | ~0b1111000) == ~0) ) { //B
+                        //     ret = 71;
+                        // } else if ((tempCovered | ~0b1110000) == ~0) { //C
+                        //     ret = 72;
+                        // } else if ((tempCovered | ~0b1100000) == ~0) { //C#
+                        //     ret = 73;
+                        // } else if ( ((tempCovered | ~0b0100000) == ~0) ||  ((tempCovered | ~0b1111111) == ~0)) { //D
+                        //     ret = 74;
+                        // } else if ( ((tempCovered | ~0b0111110) == ~0) ||  ((tempCovered | ~0b1111110) == ~0)) { //D#
+                        //     ret = 75;
+                        // } else if ( ((tempCovered | ~0b1111011) == ~0) ||  ((tempCovered | ~0b1111100) == ~0)) { //E
+                        //     ret = 76;
+                        // } else if ( ((tempCovered | ~0b1111010) == ~0) ) { //F
+                        //     ret = 77;
+                        // } else {
+                        //     ret = -1;
+                        // }
+                    } else if (bitRead(holeCovered, 8)) { //thumb hole covered
+                        switch (tempCovered) {
+                            case 0b1101111: //G trill position
+                                ret = 67;
+                            break;
+                            case 0b1011110: //G# trill position
+                                ret = 68;
+                            break;
+                             case 0b0011000: //C trill position
+                                ret = 72;
+                            break;
+                        }
+                    }
+                    if (ret > 0) {
+                        ret += 12;
+                    }
+                    
+                } else {
+                    if (bitRead(holeCovered, 8)) { //thumb hole covered
+                        ret += 12;
+                    }
                 }
 
             }
@@ -2592,52 +2700,6 @@ int get_note(unsigned int fingerPattern, bool sendPattern) {
                 ret = 61;
             }
             break;
-
-
-        // case kModeCustom:
-        //     tempCovered = (0b011111110 & fingerPattern) >> 1;      //ignore thumb hole and bell sensor for now
-        //     uint8_t leftmost = findleftmostunsetbit(tempCovered);  //here we find the index of the leftmost uncovered hole, which will be used to determine the note from the chart.
-
-        //     for (uint8_t i = 0; i < 6; i++) {  //look only at leftmost uncovered hole for lower several notes
-        //         if (leftmost == i) {
-        //             customScalePosition = 47 - i;
-        //         }
-        //     }
-
-        //     //several ugly special cases
-        //     if (tempCovered >> 3 == 0b0111) {
-        //         customScalePosition = 39;
-        //     }
-
-        //     else if (tempCovered >> 3 == 0b0110) {
-        //         customScalePosition = 41;
-        //     }
-
-        //     else if (tempCovered >> 5 == 0b00) {
-        //         customScalePosition = 40;
-        //     }
-
-        //     if (tempCovered == 0b1111111) {
-        //         if (!switches[R4_FLATTEN]) {  //all holes covered but not R4 flatten
-        //             customScalePosition = 48;
-        //         } else {
-        //             customScalePosition = 47;
-        //         }
-        //     }
-
-
-        //     if (fingerPattern >> 8 == 0 && !switches[THUMB_AND_OVERBLOW] && breathMode != kPressureThumb && ED[38] != 0) {  //thumb hole is open and we're not using it for register
-        //         customScalePosition = 38;
-        //     }
-
-        //     ret = ED[customScalePosition];
-
-        //     if (bitRead(tempCovered, 0) == 1 && switches[R4_FLATTEN] && ret != 0) {  //flatten one semitone if using R4 for that purpose
-        //         ret = ret - 1;
-        //     }
-
-        //     break;
-
 
 
         default:
