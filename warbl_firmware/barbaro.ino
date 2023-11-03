@@ -131,7 +131,7 @@ uint16_t getHalfHoleUpperBound(byte hole) {
     if (!fingering.halfHole.enabled[hole]) {
         return 1024;
     }
-    return toneholeCovered[hole] - HOLE_OPEN_OFFSET + HALF_HOLE_UPPER_OFFSET + fingering.halfHole.correction*(float)HALF_HOLE_UPPER_OFFSET;
+    return toneholeCovered[hole] - HOLE_OPEN_OFFSET + HALF_HOLE_UPPER_OFFSET + fingering.halfHole.correction*5.0;
 }
 
 //Calculates the baseline moving average for readings in the current time window and applies an eventual correction factor to half hole detection

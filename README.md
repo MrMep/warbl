@@ -58,6 +58,11 @@ When you activate it while playing a note, that note will be kept active.
 It is not a drone: the fixed note will switch on/off along with the main note.
 
 
+## Double clicks
+
+I noticed that while playing, often button 1 gets clicked by mistake. I have added an option that activates double clicks instead of single ones.
+
+
 ## Performance Monitor
 ![Performance Monitor 2](readme_files/p_monitor_2.png)
 ![Performance Monitor](readme_files/p_monitor.png)

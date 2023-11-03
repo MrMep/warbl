@@ -37,7 +37,7 @@ void setDefaultConfiguration(byte preset) {
                 fingeringSelector = kModeWhistle;
                 noteShiftSelector = 0;
 
-                byte tmp_switches[] = { 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0 };
+                byte tmp_switches[] = { 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0 };
                 for (byte n = 0; n < kSWITCHESnVariables; n++) {
                     switches[n] = tmp_switches[n];
                 }
@@ -57,7 +57,7 @@ void setDefaultConfiguration(byte preset) {
             {
                 fingeringSelector = kModeUilleann;
                 noteShiftSelector = 0;
-                byte tmp_switches[] = { 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0 };
+                byte tmp_switches[] = { 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0 };
                 for (byte n = 0; n < kSWITCHESnVariables; n++) {
                     switches[n] = tmp_switches[n];
                 }
@@ -75,7 +75,7 @@ void setDefaultConfiguration(byte preset) {
             {
                 fingeringSelector = kModeGHB;
                 noteShiftSelector = 8;
-                byte tmp_switches[] = { 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0 };
+                byte tmp_switches[] = { 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0 };
                 for (byte n = 0; n < kSWITCHESnVariables; n++) {
                     switches[n] = tmp_switches[n];
                 }

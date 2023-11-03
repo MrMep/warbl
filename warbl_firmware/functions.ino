@@ -6,6 +6,11 @@
 void checkButtons() {
     for (byte j = 0; j < 3; j++) {
 
+        //20231101 GLB Timer for doubleclock
+        if (waitingSecondClick[j] && doubleClickTimer++ > DOUBLE_CLICK_MAX_WAIT) { //We were waiting for a second click, but timer has exipired
+            waitingSecondClick[j] = false;
+        }
+
         if (digitalRead2f(buttons[j]) == 0) {    //if the button reads low, reduce the integrator by 1
             if (integrator[j] > 0) {
                 integrator[j]--;
@@ -1199,7 +1204,7 @@ void receiveMIDI() {
                                         }
                                     }
 
-                                    for (byte i = 0; i < 3; i++) {    //update momentary
+                                    for (byte i = 0; i < 3; i++) {    //update momentary /doubleClick
                                         if (buttonReceiveMode == i) {
                                             if (rx.byte3 == MIDI_MOMENTARY_OFF_OS) {
                                                 momentary[i] = 0;
@@ -1528,7 +1533,7 @@ void saveSettings(byte i) {
 
     for (byte h = 0; h < 3; h++) {
         EEPROM.update(EEPROM_MOMENTARY_ACTIONS + (i * 3) + h, momentary[h]);
-    }
+    } 
 
     for (byte q = 0; q < 12; q++) {
         EEPROM.update((EEPROM_PRESSURE_SELECTOR + q + (i * EEPROM_PRESSURE_SELECTOR_SLOT)), pressureSelector[q]);
@@ -1801,14 +1806,28 @@ void handleButtons() {
 
     for (byte i = 0; i < 3; i++) {
 
-
         if (released[i] && (momentary[i] || (pressed[0] + pressed[1] + pressed[2] == 0))) {    //do action for a button release ("click") NOTE: button array is zero-indexed, so "button 1" in all documentation is button 0 here (same for others).
-            if (!specialPressUsed[i]) {                                                                                                                //we ignore it if the button was just used for a hard-coded command involving a combination of fingerholes.
-                performAction(i);
+            if (!specialPressUsed[i]) { //we ignore it if the button was just used for a hard-coded command involving a combination of fingerholes.
+
+                //20231101 GLB DoubleClick handling
+                if (switches[BUTTONS_DOUBLECLICK]) { //Double click is active on button
+                    if (waitingSecondClick[i]) { //We already had a first clic
+                        waitingSecondClick[i] = false;
+                        if (doubleClickTimer < DOUBLE_CLICK_MAX_WAIT)  { //Timer has not expired yet, we had second clic
+                            performAction(i);
+                        } //The else is managed above
+                    } else { //This is the first clic, activate timer
+                        waitingSecondClick[i] = true;
+                        doubleClickTimer = 0;
+                    }
+                } else {
+                    performAction(i);
+                }
             }
             released[i] = 0;
             specialPressUsed[i] = 0;
         }
+
 
 
         if (longPress[i] && (pressed[0] + pressed[1] + pressed[2] == 1) && !momentary[i]) {    //do action for long press, assuming no other button is pressed.
@@ -1844,7 +1863,7 @@ void handleButtons() {
     }
 
 
-    buttonUsed = 0;    // Now that we've caught any important button acticity, clear the flag so we won't enter this function again until there's been new activity.
+    buttonUsed = 0;    // Now that we've caught any important button activity, clear the flag so we won't enter this function again until there's been new activity.
 }
 
 
@@ -2067,6 +2086,8 @@ void changeInstrument() {
     if (currentPreset == 3) {
         currentPreset = 0;
     }
+    loadFingering();
+    loadSettings(); 
     play = 0;
     loadPrefs();    //load the correct user settings based on current instrument.
     blinkNumber = abs(currentPreset) + 1;

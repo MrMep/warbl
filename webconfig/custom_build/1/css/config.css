@@ -1805,6 +1805,12 @@ input:disabled + .vibratoSlider:before {
 	left: 840px;
 }
 
+#switchDoubleClick {
+	top: 27px;
+	left: 55px;
+}
+
+
 #switch4 {
 	visibility:hidden;
 	top: 68px;
@@ -2029,6 +2035,15 @@ input:disabled + .vibratoSlider:before {
 	display: block;
 	position: absolute;
 	left: 635px;
+	top: 29px;
+	z-index: 99;
+	font-size: 14px;
+}
+
+.doubleClickLabel  {
+	display: block;
+	position: absolute;
+	left: 117px;
 	top: 29px;
 	z-index: 99;
 	font-size: 14px;
@@ -3641,7 +3656,7 @@ select option {
 	display: block;
 	position: absolute;
 	height: 200px;
-	left: 100px;
+	left: 115px;
 	top: 130px;
 }
 

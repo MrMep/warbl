@@ -82,6 +82,7 @@
 #define CUSTOM_FINGERING_MAX                     30 //Max number of custom fingering
 
 //Button Actions
+#define DOUBLE_CLICK_MAX_WAIT     200 //Check button is every 5 ticks, so this hould be about 1 second
 #define ACTION_NONE                 0
 #define ACTION_MIDI                 1
 #define ACTION_VIBRATO_MODE         2
@@ -168,9 +169,10 @@
 #define IMMEDIATE_PB 8
 #define LEGATO 9
 #define OVERRIDE 10
+#define BUTTONS_DOUBLECLICK 11
 // #define THUMB_AND_OVERBLOW 11 //From old custom fingering
 // #define R4_FLATTEN 12 //From old custom fingering
-#define kSWITCHESnVariables 11
+#define kSWITCHESnVariables 12
 
 //Variables in the ED array (all the settings for the Expression and Drones panels)
 #define EXPRESSION_ON 0
@@ -251,7 +253,7 @@
     #define MIDI_DELETE_CUSTOM_FINGERING         89 //Delete all custom fingerings
 
     #define MIDI_TURN_OFF_COMM                90 //Offset Was 99
-    #define MIDI_BUTTON_PREF_ACTION_OS        91 //Offset Was 100 *** MAX 18 *** ->109
+    #define MIDI_BUTTON_PREF_ACTION_OS        91 //Offset Was 100 *** MAX 18 *** ->107
 
     #define MIDI_BUTTON_PREF_MIDI_CMD_OS     110 //Offset Was 112
     #define MIDI_MOMENTARY_OFF_OS            115 //Offset Was 117

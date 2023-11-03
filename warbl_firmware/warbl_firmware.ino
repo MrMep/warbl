@@ -68,6 +68,10 @@ byte midiChannelSelector = 1; //[] = { 1, 1, 1 };
 
 bool momentary[3] = { 0, 0, 0 }; //[MODE_NUMBER][3] = { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };  //whether momentary click behavior is desired for selected button actions. Dimension 0 is currentPreset (instrument), dimension 1 is button 0,1,2.
 
+//20231101 GLB - Doublec click Action
+bool waitingSecondClick[3] = { 0 , 0, 0};
+unsigned int doubleClickTimer = 0;
+
 byte switches[kSWITCHESnVariables] =  //[MODE_NUMBER][kSWITCHESnVariables] =  //the settings for the five switches in the vibrato/slide and register control panels
                         //instrument 0
 //   {
@@ -82,7 +86,8 @@ byte switches[kSWITCHESnVariables] =  //[MODE_NUMBER][kSWITCHESnVariables] =  //
         1,  // force maximum velocity (127)
         0,  // send pitchbend immediately before Note On (recommnded for MPE)
         1,  // send legato (Note On message before Note Off for previous note)
-        0
+        0,
+        1 //Buttons double click
         // ,  //override pitch expression pressure range
         // 0,  //use both thumb and overblowing for register control with custom fingering chart
         // 0   //use R4 finger to flatten any note one semitone with custom fingering chart
@@ -176,7 +181,7 @@ byte pressureSelector[12] = //[MODE_NUMBER][12] =  //a selector array for all th
         3, 7, 20, 0, 12, 50 }
   }; */
 
-uint8_t buttonPrefs[8][5] =  //[MODE_NUMBER][8][5] =  //The button configuration settings (no default actions as of formware 2.1 to avoid confusion with beginning users). Dimension 1 is the three instruments. Dimension 2 is the button combination: click 1, click 2, click3, hold 2 click 1, hold 2 click 3, longpress 1, longpress2, longpress3
+uint8_t buttonPrefs[8][5] =  //[MODE_NUMBER][8][5] =  //The button configuration settings (no default actions as of formware 2.1 to avoid confusion with beginning users). Dimension 1 is the button combination: click 1, click 2, click3, hold 2 click 1, hold 2 click 3, longpress 1, longpress2, longpress3
                                 //Dimension 3 is the desired action: Action, MIDI command type (noteon/off, CC, PC), MIDI channel, MIDI byte 2, MIDI byte 3.
                                 //20231001 GLB
                                 //instrument 0---the actions are: 0 none, 1 send MIDI message, 2 change pitchbend mode, 3 instrument, 4 play/stop (bagless mode), 5 transposer, 6 fixed note, 7 MIDI panic, 8 change register control mode, 9 drones on/off, 10 Harmonizer voice 1, 11 Harmonizer voice 2, 12 HArmonizer voice 3 19 begin autocalibration
@@ -461,6 +466,7 @@ void loop() {
         checkButtons();
         buttonReadTimer = millis();
     }
+
 
     if (buttonUsed) {
         handleButtons();  //if a button had been used, process the command. We only do this when we need to, so we're not wasting time.

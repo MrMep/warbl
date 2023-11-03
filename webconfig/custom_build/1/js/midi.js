@@ -27,6 +27,11 @@ var MIDI_DELETE_CUSTOM_FINGERING  = 89; //Delete all custom fingerings
 var MIDI_TURN_OFF_COMM =90; //Offset
 var MIDI_BUTTON_PREF_ACTION_OS = 91; //Offset
 var MIDI_BUTTON_PREF_MIDI_CMD_OS = 110; //Offset
+
+var MIDI_DOUBLE_CLICK_OFF_OS = 115; //Offset
+
+var MIDI_DOUBLE_CLICK_ON_OS = 115; //Offset
+
 var MIDI_MOMENTARY_OFF_OS = 115; //Offset
 var MIDI_MOMENTARY_ON_OS = 116; //Offset
 var MIDI_BUTTON_AUTO_CALIB_OS = 117; //Offset
@@ -1233,19 +1238,21 @@ function WARBL_Receive(event) {
 						document.getElementById("checkbox16").checked = data2;
 					} //override expression pressure range
 					
-					else if (jumpFactorWrite == 51) {
-						document.getElementById("checkbox17").checked = data2;
-					} //both thumb and overblow
+					else if (jumpFactorWrite == 51) { //Buttons Double Click
+						// document.getElementById("checkbox17").checked = data2;
+						document.getElementById("cbDoubleClick").checked = data2;
+						updateDoubleClick();
+					} 
 					
-					else if (jumpFactorWrite == 52) {
-						document.getElementById("checkbox18").checked = data2;
-						updateCustom();
-					} //R4 flattens
+					// else if (jumpFactorWrite == 52) {
+					// 	document.getElementById("checkbox18").checked = data2;
+					// 	updateCustom();
+					// } //R4 flattens
 					
-					else if (jumpFactorWrite == 53) {
-						document.getElementById("checkbox19").checked = data2;
-						updateCustom();
-					} //R4 Invert
+					// else if (jumpFactorWrite == 53) {
+					// 	document.getElementById("checkbox19").checked = data2;
+					// 	updateCustom();
+					// } //R4 Invert
 						
 					else if (jumpFactorWrite == 61) {
 						document.getElementById("midiBendRange").value = data2;
@@ -2684,16 +2691,15 @@ function updateCustom() { //keep correct settings enabled/disabled with respect 
 		}
 	}
 	
-		if (document.getElementById("checkbox18").checked == true) {
-			document.getElementById("fingeringInput11").disabled = true;
-			document.getElementById("fingeringInput11").style.cursor = "default";
+	// 	if (document.getElementById("checkbox18").checked == true) {
+	// 		document.getElementById("fingeringInput11").disabled = true;
+	// 		document.getElementById("fingeringInput11").style.cursor = "default";
 		
-	} else {
+	// } else {
 	
-			document.getElementById("fingeringInput11").disabled = false;
-			document.getElementById("fingeringInput11").style.cursor = "pointer";
+			// document.getElementById("fingeringInput11").disabled = false;
+			// document.getElementById("fingeringInput11").style.cursor = "pointer";
 		
-	}
 }
 
 function sendBreathmodeRadio(selection) {
@@ -2792,7 +2798,7 @@ function customFingeringOkay() {
 	document.getElementById("box8").style.top = "900px";
 	document.getElementById("buttonBox").style.top = "1390px";
 	document.getElementById("topcontrolbox").style.height = "1785px";
-	document.getElementById("customFingeringFill").value = "12";
+	//document.getElementById("customFingeringFill").value = "12";
 }
 
 function configureHalfHoleDetection() {
@@ -3174,6 +3180,10 @@ function sendMomentary(rowNum) { //send momentary
 	}
 }
 
+
+
+
+
 //switches
 
 function sendVented(selection) {
@@ -3269,10 +3279,31 @@ function sendHack2(selection) {
 	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
+
+
 function sendOverride(selection) {
 	selection = +selection; 
 	blink(1);
 	sendToWARBL(MIDI_SLOT_04, 50);
+	sendToWARBL(MIDI_SLOT_05, selection);
+}
+
+function updateDoubleClick() {
+	if (document.getElementById("cbDoubleClick").checked) {
+		document.getElementById("click1").innerHTML = "Double-click 1";
+		document.getElementById("click2").innerHTML = "Double-click 2";
+		document.getElementById("click3").innerHTML = "Double-click 3";
+	} else {
+		document.getElementById("click1").innerHTML = "Click 1";
+		document.getElementById("click2").innerHTML = "Click 2";
+		document.getElementById("click3").innerHTML = "Click 3";
+	}
+}
+function sendDoubleClick(selection) {
+	updateDoubleClick();
+	selection = +selection; 
+	blink(1);
+	sendToWARBL(MIDI_SLOT_04, MIDI_SEND_SWITCH_VARS_OS + 11);
 	sendToWARBL(MIDI_SLOT_05, selection);
 }
 
